@@ -1,6 +1,6 @@
 # Bilibili 公开资料读取与 WBI 请求审计
 
-本模块是只读 Provider 原型。B站绑定入口仍未开放，公开接口可用性与文学签名词库审校通过后，才可进入挑战与账户绑定阶段。
+本模块是普通 Worker fetch 的只读 Provider 原型，不参与生产绑定。2026-10-23 Cloudflare 受控 Chromium 读取公开接口成功，生产采用独立浏览器服务和明确标注 Nexa 账户的一次性挑战，见 [B站签名绑定](bilibili-binding.md)。下文保留早期 fetch / WBI 调查记录。
 
 ## 两条资料读取路径
 

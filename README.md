@@ -114,7 +114,7 @@ pnpm exec wrangler secret put AFDIAN_API_TOKEN
 
 代码在授权及换取身份时传递 redirect_uri=https://auth.pcln.top/auth/v1/connections/afdian/callback。只请求 basic，接受官方只返回 user_id 的响应，不强求 access_token、邮箱或昵称，不保存第三方访问令牌。10 分钟单次 state 同时绑定当前 Nexa 会话与 HttpOnly Cookie；退出、解绑、过期或重放都会拒绝。数据库唯一约束防止跨账户抢占第三方身份。
 
-B站签名绑定暂未开放：2026-10-01 本机公开资料读取成功，但 Cloudflare 实测返回 412。公开资料适配层和 80-bit 文学编码器作为原型保留；词库仍待人工审校，不收集 Cookie/SESSDATA、不模拟扫码登录。需公开资料读取稳定、签名更新延迟测试和词库审校通过后，才推进挑战与绑定页面。编码容量与证明见 `docs/bilibili-encoder.md`。
+B站采用 Cloudflare Browser Rendering 受控浏览器核对一次性签名，不接受客户端自报资料。部署前应用 migration 0018，并配置 `BILIBILI_VERIFIER` 服务绑定及共享 Secret `BILIBILI_VERIFIER_TOKEN`；开关为 `BILIBILI_BINDING_ENABLED=true`。入口在账户 → 关联的账号 → 社区与赞助账户。挑战绑定确切用户、会话和 UID，15 分钟过期、最多 5 次尝试，成功后可恢复原签名。流程、上线顺序和回退见 [`docs/bilibili-binding.md`](docs/bilibili-binding.md)。旧公开资料 fetch、80-bit 文学编码器及客户端 TLSNotary 保留为原型，不参与生产验证。
 
 ## 政策版本与隐私记录
 

@@ -1,5 +1,6 @@
 import { randomBytes } from 'node:crypto';
 import { digest } from './password.mjs';
+import { bilibiliBindingConfigured } from './bilibili-binding.mjs';
 const fail = (status, message) => { throw Object.assign(new Error(message), { status }); };
 const providers = {
   bilibili: { name: 'B站', method: 'signature', available: false },
@@ -15,9 +16,10 @@ const cookieName = provider => 'nexa_link_' + provider;
 const cookie = (env, provider, value, age) => `${cookieName(provider)}=${value}; HttpOnly; SameSite=Lax; Path=/auth/v1/connections/${provider}; Max-Age=${age}${env.LOCAL_DEV === 'true' ? '' : '; Secure'}`;
 const audit = (env, actor, action, detail, conditional = false) => env.DB.prepare(`INSERT INTO auth_audit(actor,action,created_at,detail) SELECT ?,?,?,?${conditional ? ' WHERE changes()=1' : ''}`).bind(actor, action, new Date().toISOString(), detail);
 export async function listConnections(env, userId) {
-  const rows = await env.DB.prepare('SELECT provider,subject,display_name AS name,followers,connected_at AS connectedAt,checked_at AS checkedAt FROM external_connections WHERE user_id=?').bind(userId).all();
+  const rows = await env.DB.prepare('SELECT provider,subject,display_name AS name,followers,profile_level AS level,connected_at AS connectedAt,checked_at AS checkedAt FROM external_connections WHERE user_id=?').bind(userId).all();
   return { connections: Object.keys(providers).map(provider => {
     const config = providers[provider];
+    if (provider === 'bilibili') return { provider, label: config.name, method: 'signature', configured: bilibiliBindingConfigured(env), account: rows.results.find(row => row.provider === provider) ?? null };
     if (config.available === false) return { provider, label: config.name, method: config.method, configured: false, account: null };
     const credentials = providerConfig(env, provider);
     return { provider, label: config.name, method: 'oauth', configured: Boolean(credentials.clientId && credentials.clientSecret), account: rows.results.find(row => row.provider === provider) ?? null };
@@ -91,6 +93,7 @@ export async function unlinkConnection(env, userId, provider) {
   await env.DB.batch([
     env.DB.prepare('DELETE FROM external_connections WHERE user_id=? AND provider=?').bind(userId, provider),
     audit(env, userId, 'connection.unlinked', provider, true),
-    env.DB.prepare('DELETE FROM connection_authorizations WHERE user_id=? AND provider=?').bind(userId, provider)
+    env.DB.prepare('DELETE FROM connection_authorizations WHERE user_id=? AND provider=?').bind(userId, provider),
+    ...(provider === 'bilibili' ? [env.DB.prepare('DELETE FROM bilibili_binding_challenges WHERE user_id=?').bind(userId)] : [])
   ]);
 }

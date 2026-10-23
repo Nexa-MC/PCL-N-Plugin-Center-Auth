@@ -10,6 +10,7 @@ import { XBOX_SCOPE, XBOX_AUTHORIZE, XBOX_TOKEN, exchangeMicrosoftToken } from '
 import { AuthFlowError, safeAuthDiagnostic, gameAuthorizationMessage } from './auth-flow-errors.mjs';
 import { computeLevel, loadLevel, loadProgression, selectLevelDisplay, recordActivity, readActivity, validateVerification } from './progression.mjs';
 import { syncAfdianDonations } from './afdian-donations.mjs';
+import { createBilibiliChallenge, verifyBilibiliChallenge, cancelBilibiliChallenge } from './bilibili-binding.mjs';
 import { listConnections, createConnectionAuthorization, completeConnectionAuthorization, unlinkConnection } from './connections.mjs';
 class Failure extends Error { constructor(status, detail) { super(detail); this.status = status; } }
 const fail = (status, detail) => { throw new Failure(status, detail); };
@@ -346,6 +347,7 @@ export async function finalizeAccountDeletion(env, requestId, userId) {
     env.DB.prepare('DELETE FROM badge_verifications WHERE user_id=?').bind(userId),
     env.DB.prepare('DELETE FROM user_level_display WHERE user_id=?').bind(userId),
     env.DB.prepare('DELETE FROM external_connections WHERE user_id=?').bind(userId),
+    env.DB.prepare('DELETE FROM bilibili_binding_challenges WHERE user_id=?').bind(userId),
     env.DB.prepare('DELETE FROM connection_authorizations WHERE user_id=?').bind(userId),
     env.DB.prepare("UPDATE users SET name=?, display_name=NULL, email=NULL, user_handle=NULL, password_hash='system:deleted', password_set_at=NULL, disabled=1, staff=0, developer=0, trusted_developer=0 WHERE id=? AND disabled=0").bind('deleted:' + userId, userId),
     env.DB.prepare("UPDATE account_deletion_requests SET state='finalized', finalized_at=?, version=version+1 WHERE id=? AND state='pending'").bind(now, requestId),
@@ -362,6 +364,7 @@ export async function runAuthMaintenance(env) {
     env.DB.prepare('DELETE FROM rate_limits WHERE expires<?').bind(now),
     env.DB.prepare('DELETE FROM launcher_activity_events WHERE occurred_at<?').bind(new Date(now - 30 * 86400000).toISOString()),
     env.DB.prepare('DELETE FROM connection_authorizations WHERE expires<? OR consumed=1').bind(now),
+    env.DB.prepare('DELETE FROM bilibili_binding_challenges WHERE expires_at<?').bind(now - 86400000),
     env.DB.prepare('DELETE FROM login_challenges WHERE expires<?').bind(now - 86400000),
     env.DB.prepare('DELETE FROM mfa_totp WHERE confirmed=0 AND created_at<?').bind(new Date(now - 900000).toISOString()),
     env.DB.prepare('DELETE FROM users WHERE confirmed_at IS NULL AND created_at<?').bind(new Date(now - 86400000).toISOString())
@@ -451,6 +454,26 @@ export default {
           auditEvent(env, user.id, 'minecraft.revoked', null)
         ]);
         return new Response(null, { status: 204, headers: { 'cache-control': 'no-store', ...cors(env) } });
+      }
+      const bilibiliChallengePath = path.match(/^\/auth\/v1\/connections\/bilibili\/challenges(?:\/([\da-f-]{36})(?:\/(verify))?)?$/i);
+      if (bilibiliChallengePath) {
+        const user = await sessionUser(env, request, 'console'), sessionToken = credential(request, 'console');
+        if (!bilibiliChallengePath[1] && request.method === 'POST') {
+          await rateLimit(env, 'bilibili-create:' + user.id, 5, 3600000, 'B站验证请求过于频繁，请稍后重试');
+          await rateLimit(env, 'bilibili-create-ip:' + clientIp(request), 30, 3600000, 'B站验证请求过于频繁，请稍后重试');
+          return json(env, await createBilibiliChallenge(env, user, sessionToken, await body(request)), 201);
+        }
+        if (bilibiliChallengePath[1] && bilibiliChallengePath[2] && request.method === 'POST') {
+          await rateLimit(env, 'bilibili-verify:' + user.id, 10, 3600000, 'B站验证请求过于频繁，请稍后重试');
+          await rateLimit(env, 'bilibili-verify-ip:' + clientIp(request), 60, 3600000, 'B站验证请求过于频繁，请稍后重试');
+          await rateLimit(env, 'bilibili-verify-global', 30, 60000, 'B站核验服务繁忙，请稍后重试');
+          return json(env, await verifyBilibiliChallenge(env, user, sessionToken, bilibiliChallengePath[1], await body(request)));
+        }
+        if (bilibiliChallengePath[1] && !bilibiliChallengePath[2] && request.method === 'DELETE') {
+          await cancelBilibiliChallenge(env, user.id, sessionToken, bilibiliChallengePath[1]);
+          return new Response(null, { status: 204, headers: { 'cache-control': 'no-store', ...cors(env) } });
+        }
+        fail(405, '方法不支持');
       }
       const connectionPath = path.match(/^\/auth\/v1\/connections\/(bilibili|afdian)(?:\/(authorizations|callback))?$/);
       if (connectionPath?.[2] === 'callback' && request.method === 'GET') return await completeConnectionAuthorization(request, env, connectionPath[1]);
@@ -1074,7 +1097,7 @@ export default {
           env.DB.prepare('SELECT owned, profile_id, profile_name, error, checked_at FROM minecraft_profiles WHERE user_id=?').bind(user.id).first(),
           loadProgression(env, user),
           env.DB.prepare('SELECT badge_id,verified_value,source_account,evidence,verified_at FROM badge_verifications WHERE user_id=?').bind(user.id).all(),
-          env.DB.prepare('SELECT provider,subject,private_subject,display_name,followers,connected_at,checked_at FROM external_connections WHERE user_id=?').bind(user.id).all(),
+          env.DB.prepare('SELECT provider,subject,private_subject,display_name,followers,profile_level,connected_at,checked_at FROM external_connections WHERE user_id=?').bind(user.id).all(),
           env.DB.prepare('SELECT day,logged_in,game_started,launcher_ms,game_ms,xp_earned FROM launcher_activity_days WHERE user_id=? ORDER BY day').bind(user.id).all(),
           env.DB.prepare('SELECT id,type,certificate,xp,occurred_at FROM launcher_activity_events WHERE user_id=? ORDER BY occurred_at').bind(user.id).all()
         ]);
