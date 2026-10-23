@@ -8,7 +8,7 @@ import { verifyRegistration, verifyAssertion, webauthnUserId } from './webauthn.
 import { fetchMinecraftStatus } from './minecraft.mjs';
 import { XBOX_SCOPE, XBOX_AUTHORIZE, XBOX_TOKEN, exchangeMicrosoftToken } from './microsoft.mjs';
 import { AuthFlowError, safeAuthDiagnostic, gameAuthorizationMessage } from './auth-flow-errors.mjs';
-import { loadLevel, loadProgression, selectLevelDisplay, recordActivity, readActivity, validateVerification } from './progression.mjs';
+import { computeLevel, loadLevel, loadProgression, selectLevelDisplay, recordActivity, readActivity, validateVerification } from './progression.mjs';
 import { listConnections, createConnectionAuthorization, completeConnectionAuthorization, unlinkConnection } from './connections.mjs';
 class Failure extends Error { constructor(status, detail) { super(detail); this.status = status; } }
 const fail = (status, detail) => { throw new Failure(status, detail); };
@@ -18,7 +18,15 @@ const token = (request, scope) => cookieValue(request, cookieName(scope));
 const bearer = request => (request.headers.get('authorization') || '').match(/^Bearer ([^\s]+)$/)?.[1] || '';
 const credential = (request, scope) => bearer(request) || token(request, scope);
 const scopeOf = scope => ['console', 'operations'].includes(scope) ? scope : fail(400, '无效会话范围');
-const cors = env => ({ 'access-control-allow-origin': env.WEB_ORIGIN, 'access-control-allow-credentials': 'true' });
+const webOrigins = env => [env.WEB_ORIGIN, env.MANAGE_ORIGIN].filter(Boolean);
+const cors = env => ({ 'access-control-allow-origin': env.responseOrigin || env.WEB_ORIGIN, 'access-control-allow-credentials': 'true', vary: 'Origin' });
+export function validReturnUrl(value, env) {
+  if (typeof value !== 'string' || value.includes('\\') || /[\r\n]/.test(value)) return null;
+  try {
+    const target = new URL(value, env.WEB_ORIGIN);
+    return webOrigins(env).includes(target.origin) && !target.username && !target.password ? target.href : null;
+  } catch { return null; }
+}
 const json = (env, data, status = 200, headers = {}) => Response.json(data, { status, headers: { 'cache-control': 'no-store', ...cors(env), ...headers } });
 const oauthStateCookie = 'nexa_oauth_state';
 const oauthProviders = {
@@ -35,7 +43,9 @@ const configFor = (provider, env) => {
 const b64json = value => JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(value.replaceAll('-', '+').replaceAll('_', '/') + '='.repeat((4 - value.length % 4) % 4)), c => c.charCodeAt(0))));
 const xboxConfig = env => ({ ...configFor('microsoft', env), authorize: XBOX_AUTHORIZE, token: XBOX_TOKEN, scope: XBOX_SCOPE });
 const oauthError = (env, detail, stateRow) => {
-  const target = new URL(stateRow?.user_id ? '/account?section=linked' : '/login', env.WEB_ORIGIN);
+  const returnUrl = validReturnUrl(stateRow?.return_to, env);
+  const target = new URL(stateRow?.user_id ? '/account?section=linked' : '/login', !stateRow?.user_id && returnUrl ? new URL(returnUrl).origin : env.WEB_ORIGIN);
+  if (!stateRow?.user_id && returnUrl) target.searchParams.set('return', new URL(returnUrl).pathname + new URL(returnUrl).search);
   target.searchParams.set(stateRow?.purpose === 'minecraft' ? 'minecraft_error' : 'oauth_error', detail);
   return new Response(null, { status: 303, headers: { location: target.href, 'cache-control': 'no-store' } });
 };
@@ -44,7 +54,7 @@ const auditEvent = (env, actor, action, detail) => env.DB.prepare('INSERT INTO a
 const auditOnChange = (env, actor, action, detail) => env.DB.prepare('INSERT INTO auth_audit(actor,action,created_at,detail) SELECT ?,?,?,? WHERE changes()=1').bind(actor, action, new Date().toISOString(), detail ?? null);
 // ---------- 账户身份与 MFA 基础设施 ----------
 const RP_ID = env => env.RP_ID || (env.LOCAL_DEV === 'true' ? 'localhost' : 'pcln.top');
-const webauthnOrigins = env => [env.WEB_ORIGIN, 'https://auth.pcln.top', ...(env.LOCAL_DEV === 'true' ? ['http://127.0.0.1:5730', 'http://localhost:5730'] : [])].filter(Boolean);
+const webauthnOrigins = env => [...webOrigins(env), 'https://auth.pcln.top', ...(env.LOCAL_DEV === 'true' ? ['http://127.0.0.1:5730', 'http://localhost:5730'] : [])].filter(Boolean);
 const clientIp = request => request.headers.get('cf-connecting-ip') || 'unknown';
 const hasRealPassword = hash => Boolean(hash) && !hash.startsWith('oauth:') && !hash.startsWith('system:');
 const serviceAuth = (request, env) => {
@@ -131,7 +141,7 @@ async function createSession(env, user, scope, now, secure) {
 async function oauthStart(request, env, provider) {
   const config = configFor(provider, env), url = new URL(request.url);
   const returnPath = url.searchParams.get('return_to') || '/';
-  if (!returnPath.startsWith('/') || returnPath.startsWith('//')) fail(400, '无效返回地址');
+  if (!validReturnUrl(returnPath, env)) fail(400, '无效返回地址');
   const mode = url.searchParams.get('mode') === 'link' ? 'link' : 'login';
   let userId = null, termsPolicyId = null, sessionHash = null, sessionScope = null;
   if (mode === 'link') {
@@ -277,7 +287,7 @@ async function oauthCallback(request, env, provider, secure) {
     }
     if (!user || user.disabled) throw new Error('account disabled');
     await env.DB.prepare('UPDATE oauth_identities SET email=?,updated_at=? WHERE provider=? AND subject=?').bind(email, new Date().toISOString(), provider, subject).run();
-    const headers = new Headers({ location: new URL(stateRow.return_to, env.WEB_ORIGIN).toString(), 'cache-control': 'no-store' });
+    const headers = new Headers({ location: validReturnUrl(stateRow.return_to, env) || env.WEB_ORIGIN, 'cache-control': 'no-store' });
     headers.append('set-cookie', `${oauthStateCookie}=; HttpOnly; SameSite=Lax; Path=/auth/v1/oauth; Max-Age=0${secure ? '; Secure' : ''}`);
     if (stateRow.user_id) {
       return new Response(null, { status: 303, headers });
@@ -362,6 +372,8 @@ export async function runAuthMaintenance(env) {
 export default {
   async scheduled(controller, env, ctx) { await ctx.waitUntil(runAuthMaintenance(env)); },
   async fetch(request, env, ctx) {
+    const origin = request.headers.get('origin');
+    env = { ...env, responseOrigin: webOrigins(env).includes(origin) ? origin : env.WEB_ORIGIN };
     const id = crypto.randomUUID(), url = new URL(request.url), path = url.pathname;
     const mailer = createMailer(env);
     // 邮件等旁路任务：未配置服务商时 mailer 可能返回非 Promise，统一包裹后再 waitUntil。
@@ -369,9 +381,59 @@ export default {
     try {
       const secure = env.LOCAL_DEV !== 'true';
       if (!env.WEB_ORIGIN || (secure && !env.WEB_ORIGIN.startsWith('https://'))) fail(503, '身份服务尚未配置');
-      if (request.method === 'OPTIONS' && path.startsWith('/auth/v1/')) return new Response(null, { status: 204, headers: { ...cors(env), 'access-control-allow-methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS', 'access-control-allow-headers': 'content-type, x-nexa-request, authorization', 'access-control-max-age': '600' } });
+      if (request.method === 'OPTIONS' && path.startsWith('/auth/v1/')) {
+        if (!webOrigins(env).includes(origin)) fail(403, '请求来源无效');
+        return new Response(null, { status: 204, headers: { ...cors(env), 'access-control-allow-methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS', 'access-control-allow-headers': 'content-type, x-nexa-request, authorization', 'access-control-max-age': '600' } });
+      }
       // /internal/* 为服务间通道,以 SERVICE_TOKEN 鉴权,不适用浏览器 Origin 检查。
-      if (!path.startsWith('/internal/') && !['GET', 'HEAD'].includes(request.method) && (request.headers.get('origin') !== env.WEB_ORIGIN || request.headers.get('x-nexa-request') !== '1')) fail(403, '请求来源无效');
+      if (!path.startsWith('/internal/') && !['GET', 'HEAD'].includes(request.method) && (!webOrigins(env).includes(origin) || request.headers.get('x-nexa-request') !== '1')) fail(403, '请求来源无效');
+      if (path.startsWith('/auth/v1/manage/')) {
+        const user = await sessionUser(env, request, 'console');
+        if (user.staff !== 1) fail(403, '仅网站管理员可访问后台');
+        const limit = Number(url.searchParams.get('limit') ?? 25), offset = Number(url.searchParams.get('offset') ?? 0);
+        if (!Number.isInteger(limit) || limit < 1 || limit > 100 || !Number.isSafeInteger(offset) || offset < 0) fail(400, '分页参数无效');
+        if (path === '/auth/v1/manage/summary' && request.method === 'GET') {
+          const counts = await env.DB.prepare(`SELECT count(*) AS users, sum(disabled=1) AS disabledUsers,
+            (SELECT count(*) FROM applications WHERE state='pending') AS pendingApplications FROM users`).first();
+          return json(env, { ...counts, disabledUsers: counts.disabledUsers || 0 });
+        }
+        if (path === '/auth/v1/manage/users' && request.method === 'GET') {
+          const search = url.searchParams.get('search') || '';
+          if (search.length > 120) fail(400, '搜索词过长');
+          const where = "(?='' OR instr(lower(id||' '||name||' '||COALESCE(display_name,'')||' '||COALESCE(user_handle,'')||' '||COALESCE(email,'')),lower(?))>0)";
+          const [rows, count] = await env.DB.batch([
+            env.DB.prepare(`SELECT id,COALESCE(display_name,name) AS name,user_handle AS handle,email,staff,developer,trusted_developer AS trustedDeveloper,disabled,created_at AS createdAt FROM users WHERE ${where} ORDER BY created_at DESC,id LIMIT ? OFFSET ?`).bind(search, search, limit, offset),
+            env.DB.prepare(`SELECT count(*) AS total FROM users WHERE ${where}`).bind(search, search)
+          ]);
+          return json(env, { data: rows.results, pagination: { limit, offset, total: count.results[0].total } });
+        }
+        if (path === '/auth/v1/manage/audit' && request.method === 'GET') {
+          const [rows, count] = await env.DB.batch([
+            env.DB.prepare('SELECT id,actor,action,created_at,detail FROM auth_audit ORDER BY id DESC LIMIT ? OFFSET ?').bind(limit, offset),
+            env.DB.prepare('SELECT count(*) AS total FROM auth_audit')
+          ]);
+          return json(env, { data: rows.results, pagination: { limit, offset, total: count.results[0].total } });
+        }
+        const managedUser = path.match(/^\/auth\/v1\/manage\/users\/([^/]+)$/);
+        if (managedUser && request.method === 'PATCH') {
+          const target = decodeURIComponent(managedUser[1]), input = await body(request);
+          if (!input || typeof input.disabled !== 'boolean' || typeof input.expectedDisabled !== 'boolean' || Object.keys(input).some(k => !['disabled', 'expectedDisabled'].includes(k))) fail(422, '需要账户状态与原状态');
+          if (target === user.id) fail(403, '不能停用自己的账户');
+          const account = await env.DB.prepare('SELECT staff FROM users WHERE id=?').bind(target).first();
+          if (!account) fail(404, '账户不存在');
+          if (account.staff) fail(403, '不能在此更改管理员账户状态');
+          await rateLimit(env, 'manage-users:' + user.id, 60, 60000, '管理操作过于频繁');
+          const statements = [
+            env.DB.prepare('UPDATE users SET disabled=? WHERE id=? AND staff=0 AND disabled=? AND disabled<>?').bind(Number(input.disabled), target, Number(input.expectedDisabled), Number(input.disabled)),
+            auditOnChange(env, user.id, input.disabled ? 'user.disabled' : 'user.enabled', target)
+          ];
+          if (input.disabled) statements.push(env.DB.prepare('DELETE FROM sessions WHERE user_id=? AND EXISTS(SELECT 1 FROM users WHERE id=? AND disabled=1)').bind(target, target));
+          const [result] = await env.DB.batch(statements);
+          if (result.meta.changes !== 1) fail(409, '账户状态已变化，请刷新后重试');
+          return json(env, { id: target, disabled: input.disabled });
+        }
+        fail(404, '管理接口不存在或方法不支持');
+      }
       const oauthMatch = path.match(/^\/auth\/v1\/oauth\/(github|microsoft|google)\/(start|callback)$/);
       if (oauthMatch && request.method === 'GET') return await (oauthMatch[2] === 'start' ? oauthStart(request, env, oauthMatch[1]) : oauthCallback(request, env, oauthMatch[1], secure));
       if (path === '/auth/v1/minecraft/authorizations') {
