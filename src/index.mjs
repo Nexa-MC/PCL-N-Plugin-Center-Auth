@@ -10,7 +10,7 @@ import { XBOX_SCOPE, XBOX_AUTHORIZE, XBOX_TOKEN, exchangeMicrosoftToken } from '
 import { AuthFlowError, safeAuthDiagnostic, gameAuthorizationMessage } from './auth-flow-errors.mjs';
 import { computeLevel, loadLevel, loadProgression, selectLevelDisplay, recordActivity, readActivity, validateVerification } from './progression.mjs';
 import { syncAfdianDonations } from './afdian-donations.mjs';
-import { createBilibiliChallenge, verifyBilibiliChallenge, cancelBilibiliChallenge } from './bilibili-binding.mjs';
+import { readBilibiliBindingProfile, createBilibiliChallenge, selectBilibiliCandidate, verifyBilibiliChallenge, cancelBilibiliChallenge } from './bilibili-binding.mjs';
 import { listConnections, createConnectionAuthorization, completeConnectionAuthorization, unlinkConnection } from './connections.mjs';
 class Failure extends Error { constructor(status, detail) { super(detail); this.status = status; } }
 const fail = (status, detail) => { throw new Failure(status, detail); };
@@ -455,7 +455,14 @@ export default {
         ]);
         return new Response(null, { status: 204, headers: { 'cache-control': 'no-store', ...cors(env) } });
       }
-      const bilibiliChallengePath = path.match(/^\/auth\/v1\/connections\/bilibili\/challenges(?:\/([\da-f-]{36})(?:\/(verify))?)?$/i);
+      if (path === '/auth/v1/connections/bilibili/profile' && request.method === 'POST') {
+        const user = await sessionUser(env, request, 'console');
+        await rateLimit(env, 'bilibili-profile:' + user.id, 10, 3600000, 'B站验证请求过于频繁，请稍后重试');
+        await rateLimit(env, 'bilibili-profile-ip:' + clientIp(request), 30, 3600000, 'B站验证请求过于频繁，请稍后重试');
+        await rateLimit(env, 'bilibili-verify-global', 30, 60000, 'B站核验服务繁忙，请稍后重试');
+        return json(env, await readBilibiliBindingProfile(env, user, await body(request)));
+      }
+      const bilibiliChallengePath = path.match(/^\/auth\/v1\/connections\/bilibili\/challenges(?:\/([\da-f-]{36})(?:\/(verify|select))?)?$/i);
       if (bilibiliChallengePath) {
         const user = await sessionUser(env, request, 'console'), sessionToken = credential(request, 'console');
         if (!bilibiliChallengePath[1] && request.method === 'POST') {
@@ -463,7 +470,10 @@ export default {
           await rateLimit(env, 'bilibili-create-ip:' + clientIp(request), 30, 3600000, 'B站验证请求过于频繁，请稍后重试');
           return json(env, await createBilibiliChallenge(env, user, sessionToken, await body(request)), 201);
         }
-        if (bilibiliChallengePath[1] && bilibiliChallengePath[2] && request.method === 'POST') {
+        if (bilibiliChallengePath[1] && bilibiliChallengePath[2] === 'select' && request.method === 'POST') {
+          return json(env, await selectBilibiliCandidate(env, user, sessionToken, bilibiliChallengePath[1], await body(request)));
+        }
+        if (bilibiliChallengePath[1] && bilibiliChallengePath[2] === 'verify' && request.method === 'POST') {
           await rateLimit(env, 'bilibili-verify:' + user.id, 10, 3600000, 'B站验证请求过于频繁，请稍后重试');
           await rateLimit(env, 'bilibili-verify-ip:' + clientIp(request), 60, 3600000, 'B站验证请求过于频繁，请稍后重试');
           await rateLimit(env, 'bilibili-verify-global', 30, 60000, 'B站核验服务繁忙，请稍后重试');
@@ -1097,7 +1107,7 @@ export default {
           env.DB.prepare('SELECT owned, profile_id, profile_name, error, checked_at FROM minecraft_profiles WHERE user_id=?').bind(user.id).first(),
           loadProgression(env, user),
           env.DB.prepare('SELECT badge_id,verified_value,source_account,evidence,verified_at FROM badge_verifications WHERE user_id=?').bind(user.id).all(),
-          env.DB.prepare('SELECT provider,subject,private_subject,display_name,followers,profile_level,connected_at,checked_at FROM external_connections WHERE user_id=?').bind(user.id).all(),
+          env.DB.prepare('SELECT provider,subject,private_subject,display_name,followers,profile_level,avatar_url,connected_at,checked_at FROM external_connections WHERE user_id=?').bind(user.id).all(),
           env.DB.prepare('SELECT day,logged_in,game_started,launcher_ms,game_ms,xp_earned FROM launcher_activity_days WHERE user_id=? ORDER BY day').bind(user.id).all(),
           env.DB.prepare('SELECT id,type,certificate,xp,occurred_at FROM launcher_activity_events WHERE user_id=? ORDER BY occurred_at').bind(user.id).all()
         ]);

@@ -1,0 +1,1000 @@
+0001 [zh; 80 bit; 39 chars] 清晨游人并肩踏过翠绿荒原，暮间故人忽然走向空旷长桥，昨夜牧人并肩穿过静谧街角。
+0002 [zh; 80 bit; 39 chars] 黄昏乐师仍旧走进微凉林间，暮春友人轻轻走过静谧松林，雨夜路人缓缓越过古老旧城。
+0003 [en; 64 bit; 70 chars] There isles gleam; lakes freeze then; soon terns sing; bays cool then.
+0004 [en; 64 bit; 66 chars] Grey doves soar; still words rest; today dawns come; no birds fly.
+0005 [zh; 80 bit; 39 chars] 清晨过客随风越过恬静山谷，长夜学子徐徐越过苍茫竹林，晨间少年安然行经迷离亭台。
+0006 [zh; 80 bit; 39 chars] 黄昏文人趁夜进入寂静小镇，黎明樵夫静静返回清冷稻田，初夏画师偶尔走向熟悉巷口。
+0007 [en; 64 bit; 66 chars] Just days wake; faint songs wait; old dawns come; winds hum today.
+0008 [en; 64 bit; 68 chars] Beams there fade; tales fall soon; navy tides swell; terns sing now.
+0009 [zh; 80 bit; 39 chars] 清晨青年悠悠路过苍翠麦田，深冬老翁轻轻穿过迷离渡口，拂晓歌者轻轻路过幽静田野。
+0010 [zh; 80 bit; 39 chars] 黄昏青年自在越过迷蒙山坡，雨夜佳人缓缓返回遥远沙洲，日间游子翩翩走过清冷故里。
+0011 [en; 64 bit; 67 chars] Stags here sleep; those oaks lean; small fogs fall; old rivers hum.
+0012 [en; 64 bit; 65 chars] Hopes still go; light hares roam; then deer wait; most fogs rise.
+0013 [zh; 80 bit; 39 chars] 清晨少年踏雪来到开阔田野，黄昏青年静静奔向迷蒙山林，盛夏路人结伴踏过安静小路。
+0014 [zh; 80 bit; 39 chars] 黄昏乐师终于步入迷蒙花间，盛夏旅人乘月路过遥远溪边，正午书生静静奔向清冷山谷。
+0015 [en; 64 bit; 69 chars] Slowly words wait; hills even fade; deep roses sing; wild rivers hum.
+0016 [en; 64 bit; 66 chars] Firs only grow; our brooks run; now chimes echo; bays rest softly.
+0017 [zh; 80 bit; 39 chars] 清晨书生自在走过寂静山坡，拂晓诗人徐徐途经微凉竹林，初春茶农迎风越过清幽山巅。
+0018 [zh; 80 bit; 39 chars] 黄昏少年依旧踏过幽深长廊，清晨老翁轻轻路过朦胧楼台，午后画师静静走进悠远田野。
+0019 [en; 64 bit; 69 chars] Tides then warm; streams hum today; now rhymes wake; again notes hum.
+0020 [en; 64 bit; 65 chars] Lone hares wake; small gales hum; old stars rise; dim dusks fade.
+0021 [zh; 80 bit; 39 chars] 清晨舞者踏雪行经明净苔原，清晨路人从容行经青葱旷野，初春学子终于返回静谧小巷。
+0022 [zh; 80 bit; 39 chars] 黄昏过客终于穿过幽静回廊，薄暮渔人默默路过苍茫丘陵，暮春游人踏雪越过寂静丘陵。
+0023 [en; 64 bit; 70 chars] Again moons wane; reeds only lean; quiet rhymes sing; calm winds rise.
+0024 [en; 64 bit; 66 chars] Often flies rest; both fogs glow; no sparks dim; often winds sing.
+0025 [zh; 80 bit; 39 chars] 清晨学子翩翩穿过清幽稻田，雪夜老翁徐徐途经朦胧平原，拂晓少年欣然途经微凉山径。
+0026 [zh; 80 bit; 39 chars] 黄昏故人缓缓返回清寂街角，黎明故人悠悠来到熟悉稻田，仲春乐师趁夜进入静谧长街。
+0027 [en; 64 bit; 66 chars] No beams shine; dry wrens sleep; oaks grow here; seas always wake.
+0028 [en; 64 bit; 69 chars] Dim tides rest; snows freely fall; those suns glow; rich rivers glow.
+0029 [zh; 80 bit; 39 chars] 清晨常客依旧踏过安静旧城，雨夜渔人趁夜奔向遥远山巅，晚夏游人徐徐返回青葱草甸。
+0030 [zh; 80 bit; 39 chars] 黄昏归人踏雪走过悠远荒原，雨夜茶农静静踏过悠远林间，黄昏少年缓缓经过隐约渡口。
+0031 [en; 64 bit; 69 chars] Pink brooks run; even rivers glow; tides today drift; far waves rest.
+0032 [en; 64 bit; 68 chars] Some winds sigh; red wrens turn; tides warm then; gently waves stir.
+0033 [zh; 80 bit; 39 chars] 清晨花农随风走过清寂海边，初冬舞者自在走进平静草地，深秋少年踏雪越过苍翠山巅。
+0034 [zh; 80 bit; 39 chars] 黄昏佳人欣然走进迷离山谷，盛夏游子徐徐走进恬静绿洲，昨夜常客翩翩行经明净泉边。
+0035 [en; 64 bit; 66 chars] Long days go; winds often sing; rays freely fall; grey isles fade.
+0036 [en; 64 bit; 69 chars] Only trees sing; firs today sing; elms bow gently; just sparks gleam.
+0037 [zh; 80 bit; 39 chars] 清晨文人随风经过苍茫海边，深夜文人终于经过幽深山径，傍晚来客忽然返回遥远山林。
+0038 [zh; 80 bit; 39 chars] 黄昏来客轻轻踏过沉静泉边，仲秋行人欣然路过安静旧城，初秋友人仍旧返回迷蒙山间。
+0039 [en; 64 bit; 67 chars] Larks rest still; just bays shine; soon winds sigh; our deer sleep.
+0040 [en; 64 bit; 70 chars] Small lakes freeze; vines softly bow; fresh rills run; birds fly soon.
+0041 [zh; 80 bit; 39 chars] 清晨来客踏雪走向翠绿山巅，清晨归人默默经过宁静桥头，初秋少年怡然进入沉静山间。
+0042 [zh; 80 bit; 39 chars] 黄昏旅人仍旧踏过翠绿麦田，傍晚歌者悠然奔向清寂河畔，拂晓书生沿途经过清冷故里。
+0043 [en; 64 bit; 70 chars] Few rills ebb; dark snows glow; light gleams wake; light brooks shine.
+0044 [en; 64 bit; 69 chars] Mists always rise; here harts nap; softly doves nap; grey owls drift.
+0045 [zh; 80 bit; 39 chars] 清晨旅人结伴进入微凉旷野，黄昏行人自在路过苍翠河畔，盛夏旅人随风奔向平静石桥。
+0046 [zh; 80 bit; 39 chars] 黄昏画师沿途进入明净长街，初春花农缓缓行经平静村落，晚夏游人忽然走过辽阔原野。
+0047 [en; 64 bit; 67 chars] Calm gulls wake; fresh leaves gleam; dry wrens nap; firs grow then.
+0048 [en; 64 bit; 67 chars] These birds fly; fogs glow softly; slow firs grow; blue ponds cool.
+0049 [zh; 80 bit; 39 chars] 清晨青年慢慢返回清冷荒野，午后常客忽然步入宁静荒野，昨夜旅人依旧来到悠远庭院。
+0050 [zh; 80 bit; 39 chars] 黄昏画师迎风穿过迷离长桥，薄暮佳人沿途走进温柔草甸，初夏老翁终于穿过遥远山岭。
+0051 [en; 64 bit; 69 chars] Teal bays thaw; often dawns sleep; lakes there rest; some seas drift.
+0052 [en; 64 bit; 69 chars] Wrens just nap; only terns wait; those echoes hum; brooks there sigh.
+0053 [zh; 80 bit; 39 chars] 清晨书生再次走过安静长街，雨夜乐师依旧越过静谧村落，拂晓游人缓缓来到幽静麦田。
+0054 [zh; 80 bit; 39 chars] 黄昏来客悠悠走向温柔麦田，午夜老者依旧走进古老竹林，初夏乐师依旧走过陌生河畔。
+0055 [en; 64 bit; 70 chars] Tonight snows glow; few tales sing; wide rills roll; firs always lean.
+0056 [en; 64 bit; 69 chars] Gently suns wane; these tides roll; pure seas glide; owls soar today.
+0057 [zh; 80 bit; 39 chars] 清晨农人慢慢来到沉静长桥，暮春书生再次穿过熟悉村落，仲春来客轻轻走过熟悉溪边。
+0058 [zh; 80 bit; 39 chars] 黄昏故人偶尔经过迷蒙村庄，长夜茶农再次路过沉静小路，初秋游子慢慢踏入平静草甸。
+0059 [en; 64 bit; 69 chars] Softly bays cool; icy woods sleep; now lakes thaw; buds sleep softly.
+0060 [en; 64 bit; 70 chars] Deep rills swell; today waves move; small hares run; lights then wait.
+0061 [zh; 80 bit; 39 chars] 清晨游子默默踏过古老老街，子夜来客趁夜走过青葱山岭，子夜行人悠然奔向恬静小镇。
+0062 [zh; 80 bit; 39 chars] 黄昏文人欣然走过微凉长街，初夏老者仍旧返回静谧草原，初夏故人自在行经平静庭院。
+0063 [en; 64 bit; 68 chars] Skies calmly fade; birds turn then; new woods wait; red brooks sigh.
+0064 [en; 64 bit; 67 chars] Damp firs bend; now streams fall; lone rains pass; old hares pause.
+0065 [zh; 80 bit; 39 chars] 清晨乐师终于走过熟悉山林，清晨游子随风途经迷蒙古城，雪夜樵夫默默来到隐约草甸。
+0066 [zh; 80 bit; 39 chars] 黄昏农人沿途越过隐约松林，日间文人迎风奔向幽静山间，深秋游子迎风走向静谧江畔。
+0067 [en; 64 bit; 66 chars] Bare elms wake; soft oaks sigh; slow coves fade; often roses wake.
+0068 [en; 64 bit; 69 chars] Tales only wake; our reeds lean; harts pause slowly; lone clouds dim.
+0069 [zh; 80 bit; 39 chars] 清晨乐师翩翩经过幽深林间，昨夜歌者翩翩途经悠远古城，午夜旅人再次越过清幽小巷。
+0070 [zh; 80 bit; 39 chars] 黄昏樵夫趁夜经过静谧林间，深秋茶农依旧来到安静街角，今夜归人悠悠来到隐约湖畔。
+0071 [en; 64 bit; 67 chars] No dusks come; mild songs rest; few mists gleam; today vines bloom.
+0072 [en; 64 bit; 67 chars] There gulls nap; blue fogs fade; hills then wait; tides hum calmly.
+0073 [zh; 80 bit; 39 chars] 清晨归人安然走进清幽栈道，雪夜花农悠然奔向沉静小路，仲秋故人慢慢行经寂静沙滩。
+0074 [zh; 80 bit; 39 chars] 黄昏来客默默穿过迷蒙山岭，初秋路人乘月走过温柔庭院，仲夏牧人欣然走向隐约泉边。
+0075 [en; 64 bit; 67 chars] Hares softly wake; again gulls soar; some oaks nod; our tales echo.
+0076 [en; 64 bit; 67 chars] Rays blink freely; navy rivers ebb; trees then rest; wet elms sing.
+0077 [zh; 80 bit; 39 chars] 清晨舞者再次经过明净山岭，仲春友人悄悄路过隐约丘陵，仲春牧人轻轻经过清寂沙洲。
+0078 [zh; 80 bit; 39 chars] 黄昏少年并肩经过迷蒙原野，暮春花农结伴走过迷离旧城，初秋花农沿途走进明净楼台。
+0079 [en; 64 bit; 70 chars] Hills gleam today; there firs sigh; lush coves rest; soft chimes wait.
+0080 [en; 64 bit; 68 chars] Faint elms bloom; airy dusks end; those deer rest; today bays gleam.
+0081 [zh; 80 bit; 39 chars] 清晨过客偶尔奔向幽静桥头，暮间学子轻轻步入明净长廊，仲春老人踏雪返回安静渡口。
+0082 [zh; 80 bit; 39 chars] 黄昏樵夫翩翩奔向悠远庭院，初冬老翁欣然踏入悠远古道，日间归人随风走过寂静渡口。
+0083 [en; 64 bit; 68 chars] Pale vines sleep; low rills sleep; seeds again drift; wet elms sway.
+0084 [en; 64 bit; 70 chars] These winds wake; pines there wake; wet reeds bloom; still terns soar.
+0085 [zh; 80 bit; 39 chars] 清晨行人怡然经过平静长廊，雨夜樵夫悠然奔向开阔长桥，仲秋常客独自踏过明净长廊。
+0086 [zh; 80 bit; 39 chars] 黄昏樵夫趁夜经过翠绿溪边，晨间茶农坦然行经清寂回廊，仲夏舞者终于来到葱茏湖畔。
+0087 [en; 64 bit; 70 chars] Dreams fall there; those songs sleep; now rills rest; pure roses bend.
+0088 [en; 64 bit; 70 chars] Bells today wait; deer quietly wait; just notes echo; all gulls sleep.
+0089 [zh; 80 bit; 39 chars] 清晨渔人安然奔向清冷绿洲，长夜游人依旧行经陌生桥头，仲春茶农怡然穿过隐约山间。
+0090 [zh; 80 bit; 39 chars] 黄昏过客迎风踏过沉静稻田，深冬老人从容走向清寂沙洲，暮春过客结伴进入宁静古道。
+0091 [en; 64 bit; 69 chars] Red seas gleam; rich rivers hum; red shores fade; sparks blink again.
+0092 [en; 64 bit; 67 chars] Pale doves rest; dark bees wake; small vines bow; brooks only flow.
+0093 [zh; 80 bit; 39 chars] 清晨农人并肩步入悠远山径，晌午行人慢慢路过迷蒙故里，黎明舞者安然奔向幽深稻田。
+0094 [zh; 80 bit; 39 chars] 黄昏农人依旧走进宁静稻田，暮间学子忽然经过清冷山岭，正午佳人依旧奔向熟悉平原。
+0095 [en; 64 bit; 69 chars] Red dawns rise; songs wake freely; navy nights fall; often bays warm.
+0096 [en; 64 bit; 68 chars] Harts pause now; gently snows fade; owls sing now; light roses grow.
+0097 [zh; 80 bit; 39 chars] 清晨农人默默奔向清冷田野，初秋游子并肩踏过古老长廊，今夜书生翩翩进入温柔竹林。
+0098 [zh; 80 bit; 39 chars] 黄昏学子安然走向青葱山林，初春老翁终于经过遥远石桥，初春茶农相携走进恬静老街。
+0099 [en; 64 bit; 70 chars] Calmly gales sing; our tides hum; clear seeds fall; lone lights glint.
+0100 [en; 64 bit; 69 chars] Rills glow again; faint notes sing; suns soon wane; clear bells fade.
+0101 [zh; 80 bit; 39 chars] 清晨老翁偶尔越过朦胧草地，午后游子踏雪行经翠绿溪边，子夜农人终于走过青葱草甸。
+0102 [zh; 80 bit; 39 chars] 黄昏文人并肩奔向宁静草原，今夜游子默默步入开阔花园，仲春过客悄悄奔向遥远山林。
+0103 [en; 64 bit; 70 chars] Cold gulls wake; isles rest freely; terns nap freely; dews only glint.
+0104 [en; 64 bit; 70 chars] Dews even glow; most clouds glow; tonight seeds grow; dark bells wake.
+0105 [zh; 80 bit; 39 chars] 清晨舞者默默行经遥远旧城，午夜青年怡然走进恬静山径，盛夏茶农沿途踏过古老小巷。
+0106 [zh; 80 bit; 39 chars] 黄昏游子欣然越过陌生高原，今夜归人慢慢踏过恬静小镇，午后舞者默默走过寂静花园。
+0107 [en; 64 bit; 69 chars] Calm stags move; quietly seas rest; clear tales echo; mild elms sing.
+0108 [en; 64 bit; 70 chars] Tales then rest; coves slowly glow; streams sing often; new deer move.
+0109 [zh; 80 bit; 39 chars] 清晨歌者迎风路过平静溪边，晚夏舞者徐徐走过迷离山岭，晌午过客随风踏过熟悉高原。
+0110 [zh; 80 bit; 39 chars] 黄昏歌者终于踏入清幽竹林，暮间故人乘月返回恬静绿洲，黎明老翁随风走向幽静高原。
+0111 [en; 64 bit; 67 chars] Songs wait now; wild hills shine; elms soon lean; cold ponds sleep.
+0112 [en; 64 bit; 66 chars] Airy rays wake; soon skies fade; reeds lean again; pink seas warm.
+0113 [zh; 80 bit; 39 chars] 清晨长者静静走过翠绿草原，今夜老翁随风经过安静亭台，黎明舞者怡然返回寂静旷野。
+0114 [zh; 80 bit; 39 chars] 黄昏乐师终于经过古老绿洲，晚夏来客忽然穿过温柔长街，盛夏农人悠然踏过微凉原野。
+0115 [en; 64 bit; 67 chars] Old songs wait; soon coves fade; dews today fade; few sparks glint.
+0116 [en; 64 bit; 69 chars] Lone woods fade; fresh mists float; pools only cool; most gulls wait.
+0117 [zh; 80 bit; 39 chars] 清晨花农终于途经清冷麦田，清晨书生迎风走向恬静山间，深冬花农欣然走向静谧长街。
+0118 [zh; 80 bit; 39 chars] 黄昏乐师随风途经清幽松林，初春书生随风穿过平静故里，日间行人随风踏过清冷绿洲。
+0119 [en; 64 bit; 70 chars] New harts pause; firs gently lean; damp coves glow; brooks rise today.
+0120 [en; 64 bit; 66 chars] Wet bees fly; ponds always dim; snows glow then; near fields glow.
+0121 [zh; 80 bit; 39 chars] 清晨老翁忽然踏入幽深古道，仲夏渔人沿途走向辽阔高原，初夏歌者慢慢途经迷蒙河畔。
+0122 [zh; 80 bit; 39 chars] 黄昏游人随风路过微凉松林，午后文人并肩经过静谧回廊，今夜牧人轻轻走向葱茏麦田。
+0123 [en; 64 bit; 68 chars] Cold larks wake; no woods wait; only songs wake; bright lights fall.
+0124 [en; 64 bit; 69 chars] Wrens nap quietly; few stars fall; pools fade then; warm words sleep.
+0125 [zh; 80 bit; 39 chars] 清晨归人自在越过清冷山巅，清晨归人沿途步入空旷栈道，日间茶农静静路过幽深沙丘。
+0126 [zh; 80 bit; 39 chars] 黄昏画师乘月路过熟悉故里，初秋归人缓缓返回沉静街角，暮间路人依旧路过清冷竹林。
+0127 [en; 64 bit; 68 chars] Fogs always rise; new words fall; deep streams sigh; bare pools dim.
+0128 [en; 64 bit; 67 chars] Quiet ponds fade; wet pools dim; navy brooks sing; then tales fall.
+0129 [zh; 80 bit; 39 chars] 清晨常客静静来到微凉水畔，子夜行人再次奔向陌生回廊，午夜游人怡然走进温柔绿洲。
+0130 [zh; 80 bit; 39 chars] 黄昏归人缓缓途经宁静苔原，初冬游人再次踏过葱茏山间，午后路人悠悠穿过明净老街。
+0131 [en; 64 bit; 70 chars] Hares pause softly; low streams glint; even rivers rise; few oaks bow.
+0132 [en; 64 bit; 68 chars] Seeds then fall; thin oaks bloom; all gulls glide; wide tides drift.
+0133 [zh; 80 bit; 39 chars] 清晨故人迎风进入微凉稻田，深秋友人轻轻经过平静松林，日间渔人悄悄返回清幽长廊。
+0134 [zh; 80 bit; 39 chars] 黄昏佳人踏雪来到隐约原野，薄暮老者悠悠经过安静山谷，雪夜歌者坦然行经辽阔平原。
+0135 [en; 64 bit; 67 chars] Gold buds grow; oaks today nod; calmly terns turn; dark rivers run.
+0136 [en; 64 bit; 70 chars] Waves freely swell; often crows rest; near fields wait; cold suns set.
+0137 [zh; 80 bit; 39 chars] 清晨牧人沿途走进熟悉旷野，午后茶农结伴踏过悠远旧城，盛夏舞者慢慢途经遥远原野。
+0138 [zh; 80 bit; 39 chars] 黄昏老人沿途进入隐约草原，正午茶农缓缓走过沉静长廊，拂晓过客依旧踏入古老村落。
+0139 [en; 64 bit; 68 chars] Gold oaks grow; dews glint soon; faint bells fade; waves again stir.
+0140 [en; 64 bit; 67 chars] Calm shores glow; low words echo; there rills fall; jade buds rest.
+0141 [zh; 80 bit; 39 chars] 清晨行人偶尔途经清幽山坡，深夜文人终于返回空旷山林，初夏牧人翩翩路过宁静山麓。
+0142 [zh; 80 bit; 39 chars] 黄昏行人随风走过迷蒙荒野，仲秋老者慢慢经过迷离山麓，雨夜老者迎风走向幽深湖畔。
+0143 [en; 64 bit; 68 chars] Clear rivers fall; suns here wake; firs now bend; freely crows wake.
+0144 [en; 64 bit; 67 chars] Fields even wake; far rills drift; cold bays shine; low rivers hum.
+0145 [zh; 80 bit; 39 chars] 清晨花农偶尔踏过青葱河畔，长夜渔人默默来到悠远原野，深夜歌者自在返回苍翠江畔。
+0146 [zh; 80 bit; 39 chars] 黄昏来客趁夜走过寂静古道，正午老者踏雪步入宁静回廊，初秋农人自在返回微凉花间。
+0147 [en; 64 bit; 69 chars] Still waves drift; mild ferns sleep; warm rills swell; no vines sway.
+0148 [en; 64 bit; 66 chars] Tides sleep again; some owls fly; these deer nap; blue skies wait.
+0149 [zh; 80 bit; 39 chars] 清晨老人默默踏过平静亭台，晨间游人自在踏过迷蒙草原，仲秋文人坦然走进微凉庭院。
+0150 [zh; 80 bit; 39 chars] 黄昏长者轻轻途经沉静溪边，深夜少年结伴走过开阔山麓，仲夏来客欣然走向开阔山间。
+0151 [en; 64 bit; 70 chars] Sands just wake; pale rivers wake; then winds fall; mild seeds sprout.
+0152 [en; 64 bit; 70 chars] High hills wake; light frosts fade; often waves warm; small tides run.
+0153 [zh; 80 bit; 39 chars] 清晨牧人怡然穿过迷蒙林间，晚夏舞者依旧穿过静谧山坡，今夜樵夫怡然途经开阔山林。
+0154 [zh; 80 bit; 39 chars] 黄昏来客再次走过遥远古道，初夏老者忽然穿过陌生古道，日间老者静静步入宁静小路。
+0155 [en; 64 bit; 67 chars] Old pools warm; owls wait here; new rivers rest; tides slowly wake.
+0156 [en; 64 bit; 68 chars] New wrens feed; echoes only rest; quiet buds rest; gleams now blink.
+0157 [zh; 80 bit; 39 chars] 清晨旅人自在进入清幽旧城，雪夜舞者安然奔向幽静草原，初夏少年悄悄奔向宁静郊野。
+0158 [zh; 80 bit; 39 chars] 黄昏牧人轻轻来到陌生村庄，长夜老人从容走向平静河畔，黄昏歌者悄悄走过微凉小镇。
+0159 [en; 64 bit; 67 chars] Old pools warm; just waves glow; slowly beams gleam; few seas wake.
+0160 [en; 64 bit; 69 chars] Vines nod freely; most deer rest; pink rays rise; sands calmly gleam.
+0161 [zh; 80 bit; 39 chars] 清晨过客欣然来到悠远古道，傍晚佳人翩翩穿过葱茏麦田，初秋乐师相携走过青葱山间。
+0162 [zh; 80 bit; 39 chars] 黄昏旅人徐徐行经安静荒野，今夜行人怡然途经静谧郊野，仲秋行人沿途路过明净山林。
+0163 [en; 64 bit; 70 chars] Crows soar freely; gold oaks sigh; low nights fall; here ponds freeze.
+0164 [en; 64 bit; 70 chars] Still dreams wake; some isles sleep; old flies float; gold coves rest.
+0165 [zh; 80 bit; 39 chars] 清晨归人结伴途经沉静草地，今夜友人静静穿过幽静湖畔，傍晚路人随风行经清冷庭院。
+0166 [zh; 80 bit; 39 chars] 黄昏书生终于越过恬静花园，盛夏老人偶尔踏过安静稻田，仲春青年欣然踏过辽阔麦田。
+0167 [en; 64 bit; 69 chars] Still hills wait; dim seeds rest; crows wait briefly; icy seas shine.
+0168 [en; 64 bit; 68 chars] Freely stags move; both notes wake; blue fogs float; pale rays rise.
+0169 [zh; 80 bit; 39 chars] 清晨过客欣然路过空旷花园，黄昏青年踏雪奔向开阔故里，傍晚农人沿途行经朦胧老街。
+0170 [zh; 80 bit; 39 chars] 黄昏诗人乘月路过悠远溪边，晚夏行人相携行经苍茫沙洲，初秋花农坦然途经静谧村庄。
+0171 [en; 64 bit; 70 chars] Fresh waves hum; today hares roam; gleams often fade; slow roots grow.
+0172 [en; 64 bit; 68 chars] Late rivers run; warm crows nap; late waves wake; stags gently move.
+0173 [zh; 80 bit; 39 chars] 清晨老人再次路过陌生石桥，晚夏归人悄悄踏过微凉小镇，初春过客迎风奔向清寂古城。
+0174 [zh; 80 bit; 39 chars] 黄昏书生悠悠途经宁静平原，正午老者终于行经安静泉边，暮春学子仍旧穿过辽阔江畔。
+0175 [en; 64 bit; 70 chars] Dim rills drift; moths just hum; firs quietly bow; waves flow quietly.
+0176 [en; 64 bit; 64 chars] Pure firs bow; calm clouds move; again deer roam; now suns fall.
+0177 [zh; 80 bit; 39 chars] 清晨游子安然走过葱茏松林，黄昏行人缓缓越过明净山林，长夜文人从容来到迷离街角。
+0178 [zh; 80 bit; 39 chars] 黄昏游子终于踏过幽深旷野，长夜常客仍旧踏过温柔小巷，黄昏书生徐徐走向静谧小路。
+0179 [en; 64 bit; 70 chars] Bells rise there; bright rivers swell; firs lean now; dim sparks rest.
+0180 [en; 64 bit; 70 chars] Fresh skies fade; rivers soon drift; bright vines rest; no larks wait.
+0181 [zh; 80 bit; 39 chars] 清晨来客轻轻走进宁静小镇，清晨行人依旧走过寂静楼台，午夜游人从容进入沉静山林。
+0182 [zh; 80 bit; 39 chars] 黄昏游人终于步入寂静花园，昨夜过客沿途返回陌生古城，仲夏渔人慢慢踏入沉静村庄。
+0183 [en; 64 bit; 68 chars] Wet firs nod; fogs again move; light moons gleam; softly bays gleam.
+0184 [en; 64 bit; 65 chars] Quiet words hum; vines now lean; crows here feed; wild owls wait.
+0185 [zh; 80 bit; 39 chars] 清晨青年迎风步入迷离栈道，子夜书生悄悄穿过沉静沙丘，昨夜歌者终于路过微凉旷野。
+0186 [zh; 80 bit; 39 chars] 黄昏长者沿途经过迷离湖畔，深夜牧人独自行经沉静小径，仲夏少年欣然奔向平静稻田。
+0187 [en; 64 bit; 69 chars] Pink suns set; crows calmly drift; briefly gulls wait; wet tides ebb.
+0188 [en; 64 bit; 67 chars] Damp reeds nod; rose hills wake; these gleams fade; both elms sing.
+0189 [zh; 80 bit; 39 chars] 清晨老翁默默越过幽静老街，暮春文人沿途走向明净村庄，昨夜茶农仍旧来到苍翠苔原。
+0190 [zh; 80 bit; 39 chars] 黄昏青年坦然经过寂静古道，午后常客踏雪走向朦胧故里，午后歌者并肩踏过静谧溪边。
+0191 [en; 64 bit; 70 chars] Waves cool here; lakes freeze always; soft trees wake; dim bays shine.
+0192 [en; 64 bit; 70 chars] Lights today wake; rich reeds sway; terns glide here; both rills wake.
+0193 [zh; 80 bit; 39 chars] 清晨游子欣然途经熟悉海边，晌午茶农结伴越过遥远江畔，晨间佳人相携路过清寂街角。
+0194 [zh; 80 bit; 39 chars] 黄昏行人随风奔向幽深山径，初春过客默默走进恬静花园，今夜樵夫随风途经清冷村落。
+0195 [en; 64 bit; 69 chars] Leaves turn then; new mists gleam; both bays glint; hopes still grow.
+0196 [en; 64 bit; 62 chars] Then bells fall; now harts nap; soon rains fall; even days go.
+0197 [zh; 80 bit; 39 chars] 清晨画师悄悄奔向寂静村落，初秋茶农沿途走进清冷村落，子夜茶农再次途经悠远山间。
+0198 [zh; 80 bit; 39 chars] 黄昏老人从容返回沉静山径，清晨老人翩翩进入温柔竹林，雨夜乐师随风走向空旷海边。
+0199 [en; 64 bit; 66 chars] Waves gleam today; few rays glow; soft vines nod; sands soon glow.
+0200 [en; 64 bit; 68 chars] Just rays rest; only birds glide; echoes ring gently; no dusks come.
+0201 [zh; 80 bit; 39 chars] 清晨行人自在行经恬静村庄，暮春茶农踏雪走向苍茫山坡，深秋花农随风行经辽阔山谷。
+0202 [zh; 80 bit; 39 chars] 黄昏归人自在走向温柔稻田，仲春书生乘月踏过苍翠荒野，黄昏老翁独自路过安静街角。
+0203 [en; 64 bit; 66 chars] Those buds wake; wet bays dim; rivers shine soon; even echoes hum.
+0204 [en; 64 bit; 66 chars] Gulls turn today; pink seas fall; dawns fade here; airy waves run.
+0205 [zh; 80 bit; 39 chars] 清晨游人并肩越过明净麦田，日间友人安然经过空旷草甸，仲夏友人欣然走进苍茫旷野。
+0206 [zh; 80 bit; 39 chars] 黄昏友人悄悄走过明净溪边，初秋文人相携行经熟悉丘陵，初秋行人踏雪途经微凉沙洲。
+0207 [en; 64 bit; 68 chars] Some woods wake; here elms sway; rich nights fall; larks rest there.
+0208 [en; 64 bit; 70 chars] Still deer wait; these seas sing; damp brooks move; mists move freely.
+0209 [zh; 80 bit; 39 chars] 清晨画师默默走过迷离回廊，晨间花农徐徐返回幽深平原，午夜渔人迎风进入幽静绿洲。
+0210 [zh; 80 bit; 39 chars] 黄昏老翁悠悠走向悠远田野，仲夏茶农结伴行经遥远长桥，仲春归人踏雪走进明净草原。
+0211 [en; 64 bit; 70 chars] Rays only blink; pink beams gleam; oaks sing still; deer briefly wake.
+0212 [en; 64 bit; 70 chars] Winds always sing; terns here sleep; words only fall; just stags rest.
+0213 [zh; 80 bit; 39 chars] 清晨游人结伴踏入翠绿草原，初春歌者徐徐越过明净荒野，暮间游人终于来到悠远山谷。
+0214 [zh; 80 bit; 39 chars] 黄昏歌者迎风进入朦胧草地，雨夜书生轻轻进入寂静亭台，长夜故人结伴来到宁静长廊。
+0215 [en; 64 bit; 66 chars] Sweet bells wake; new wrens feed; open hills glow; pink suns wane.
+0216 [en; 64 bit; 70 chars] Firs sleep often; rose sands glow; birds soon feed; today sparks fade.
+0217 [zh; 80 bit; 39 chars] 清晨来客再次穿过清冷山坡，盛夏老者独自经过朦胧回廊，傍晚游人相携踏过迷蒙山坡。
+0218 [zh; 80 bit; 39 chars] 黄昏老人怡然踏入朦胧旷野，黎明文人踏雪经过明净花间，黎明归人翩翩路过朦胧草甸。
+0219 [en; 64 bit; 69 chars] Freely birds soar; wet rivers stir; airy gales rise; then deer pause.
+0220 [en; 64 bit; 69 chars] Small larks sing; woods soon fade; quiet coves rest; both moons fade.
+0221 [zh; 80 bit; 39 chars] 清晨老者慢慢走过幽静河畔，盛夏樵夫缓缓走进微凉古道，黄昏少年悠悠越过明净山林。
+0222 [zh; 80 bit; 39 chars] 黄昏牧人随风进入清寂小径，拂晓花农安然路过宁静山岭，薄暮老者忽然越过幽深荒原。
+0223 [en; 64 bit; 69 chars] Quiet rivers rest; icy ponds rest; suns dim there; quietly gulls nap.
+0224 [en; 64 bit; 70 chars] Always fogs move; again storms fall; pale winds sigh; high elms bloom.
+0225 [zh; 80 bit; 39 chars] 清晨归人坦然途经寂静栈道，初春游人趁夜走向幽深庭院，长夜青年默默返回沉静山林。
+0226 [zh; 80 bit; 39 chars] 黄昏友人相携奔向葱茏稻田，今夜过客迎风踏入沉静村落，晨间樵夫偶尔步入宁静松林。
+0227 [en; 64 bit; 69 chars] Gently nights wake; pure notes echo; red fogs drift; mild beams rise.
+0228 [en; 64 bit; 70 chars] Few ponds freeze; suns again blink; soft fogs float; then rills glide.
+0229 [zh; 80 bit; 39 chars] 清晨故人自在走进迷离街角，深秋行人从容行经陌生村庄，午夜老翁从容踏过熟悉稻田。
+0230 [zh; 80 bit; 39 chars] 黄昏文人自在走过恬静绿洲，雪夜佳人结伴返回古老高原，午后歌者缓缓穿过青葱河畔。
+0231 [en; 64 bit; 65 chars] Now lakes stir; dark stags rest; both trees nod; winds soon stir.
+0232 [en; 64 bit; 68 chars] Few ponds thaw; seas run freely; tonight sparks fade; icy tides hum.
+0233 [zh; 80 bit; 39 chars] 清晨茶农并肩越过朦胧村落，今夜行人趁夜途经温柔竹林，子夜长者终于走过陌生苔原。
+0234 [zh; 80 bit; 39 chars] 黄昏画师默默走向遥远小镇，雨夜归人再次走过清冷街角，深夜诗人再次走过开阔古城。
+0235 [en; 64 bit; 67 chars] Red bees rest; all vines sway; mists rise calmly; pure stars blink.
+0236 [en; 64 bit; 69 chars] New birds wait; dark moons shine; hares today pause; words only wait.
+0237 [zh; 80 bit; 39 chars] 清晨画师怡然穿过翠绿高原，昨夜路人自在来到朦胧旷野，午夜来客自在踏过幽深原野。
+0238 [zh; 80 bit; 39 chars] 黄昏老翁偶尔穿过开阔石桥，薄暮学子依旧走向开阔麦田，仲春舞者依旧走过清冷山谷。
+0239 [en; 64 bit; 68 chars] Freely terns wake; mild ferns sway; wild bays fade; moths often hum.
+0240 [en; 64 bit; 70 chars] Sweet vines sleep; quiet winds wake; crows here rest; wet pools shine.
+0241 [zh; 80 bit; 39 chars] 清晨书生再次经过遥远苔原，黎明少年轻轻行经青葱原野，晚夏花农慢慢返回陌生栈道。
+0242 [zh; 80 bit; 39 chars] 黄昏老者坦然踏过清寂丘陵，正午佳人静静越过恬静山径，雪夜友人缓缓走过恬静古道。
+0243 [en; 64 bit; 70 chars] Often skies wake; wild oaks bloom; leaves often gleam; our winds wake.
+0244 [en; 64 bit; 69 chars] Vines rest today; there suns glow; seas glow gently; both birds soar.
+0245 [zh; 80 bit; 39 chars] 清晨舞者依旧踏入古老村落，深夜少年并肩返回清幽花间，初春文人欣然走过辽阔沙丘。
+0246 [zh; 80 bit; 39 chars] 黄昏诗人默默越过平静松林，盛夏花农静静走向翠绿草甸，拂晓老者翩翩走过微凉山坡。
+0247 [en; 64 bit; 69 chars] Dusks go still; wide gales sleep; only flies float; owls nap briefly.
+0248 [en; 64 bit; 68 chars] Long coves shine; only streams sing; tales rest soon; icy waves ebb.
+0249 [zh; 80 bit; 39 chars] 清晨老翁静静进入遥远小镇，深冬归人终于踏入幽静原野，清晨花农终于经过熟悉苔原。
+0250 [zh; 80 bit; 39 chars] 黄昏过客趁夜进入葱茏郊野，深夜友人悄悄走进温柔草甸，暮间游子缓缓途经幽静沙滩。
+0251 [en; 64 bit; 67 chars] Gleams only sleep; few elms nod; rivers hum gently; new roses rest.
+0252 [en; 64 bit; 70 chars] Soft skies fall; both chimes ring; even hills rest; terns turn calmly.
+0253 [zh; 80 bit; 39 chars] 清晨路人轻轻奔向静谧草甸，日间农人忽然走过清幽山巅，暮间老者踏雪走向辽阔荒野。
+0254 [zh; 80 bit; 39 chars] 黄昏故人翩翩进入开阔绿洲，雪夜游人自在踏过悠远花圃，初秋过客独自路过寂静庭院。
+0255 [en; 64 bit; 70 chars] Rhymes hum here; oaks tonight bend; gales only pass; again vines sway.
+0256 [en; 64 bit; 70 chars] Some lights fall; long pools freeze; gales then wake; soft ponds fade.
+0257 [zh; 80 bit; 39 chars] 清晨老翁偶尔越过温柔绿洲，初秋游人乘月穿过迷离旧城，日间文人迎风走过迷离高原。
+0258 [zh; 80 bit; 39 chars] 黄昏路人相携走进清寂草甸，雨夜行人悠然踏过悠远亭台，仲夏少年自在路过遥远山径。
+0259 [en; 64 bit; 68 chars] Wild brooks glide; thin tides warm; late nights rest; wide bays dim.
+0260 [en; 64 bit; 66 chars] New streams run; fogs fall gently; rich isles rest; firs even nod.
+0261 [zh; 80 bit; 39 chars] 清晨路人相携踏入恬静郊野，正午老翁缓缓返回恬静石桥，暮间常客缓缓行经葱茏麦田。
+0262 [zh; 80 bit; 39 chars] 黄昏青年慢慢穿过寂静长廊，初春青年并肩越过迷蒙古道，昨夜归人依旧来到静谧松林。
+0263 [en; 64 bit; 68 chars] Mists fall briefly; airy dawns go; deep trees bow; hopes again fade.
+0264 [en; 64 bit; 69 chars] Freely fogs drift; ferns only bow; echoes even ring; blue tides flow.
+0265 [zh; 80 bit; 39 chars] 清晨常客默默行经熟悉田野，午夜舞者缓缓经过安静小镇，子夜归人终于走过清幽花间。
+0266 [zh; 80 bit; 39 chars] 黄昏游人悠悠来到清寂高原，昨夜农人并肩行经平静荒野，初春学子静静路过开阔山麓。
+0267 [en; 64 bit; 68 chars] Oaks bloom freely; gales ebb again; bare rays wane; dusks come here.
+0268 [en; 64 bit; 70 chars] Mild skies fade; slow roots sleep; both rills warm; doves gently wake.
+0269 [zh; 80 bit; 39 chars] 清晨归人悄悄走进青葱原野，黄昏樵夫怡然穿过宁静渡口，暮春少年自在来到陌生石桥。
+0270 [zh; 80 bit; 39 chars] 黄昏友人依旧进入悠远山间，深冬路人自在走过幽深栈道，深冬佳人乘月来到平静山岭。
+0271 [en; 64 bit; 67 chars] Few echoes sleep; thin stars fade; pure seas move; airy tides rise.
+0272 [en; 64 bit; 65 chars] Gently bays cool; bare suns wait; our rains fall; red snows glow.
+0273 [zh; 80 bit; 39 chars] 清晨花农悠悠返回静谧草原，黎明渔人再次越过幽深田野，黄昏老者忽然经过迷离溪边。
+0274 [zh; 80 bit; 39 chars] 黄昏故人怡然返回平静草原，仲春长者独自走进微凉绿洲，正午青年随风走进幽静麦田。
+0275 [en; 64 bit; 66 chars] Reeds now nod; damp brooks wake; soft lights dim; bare rivers ebb.
+0276 [en; 64 bit; 67 chars] Deep brooks warm; bare pines grow; bays warm now; new streams fall.
+0277 [zh; 80 bit; 39 chars] 清晨佳人终于越过安静石桥，晨间诗人再次进入恬静麦田，仲夏老者忽然来到温柔旧城。
+0278 [zh; 80 bit; 39 chars] 黄昏青年相携走向悠远山岭，长夜画师结伴走过隐约湖畔，暮春佳人悠悠路过悠远亭台。
+0279 [en; 64 bit; 67 chars] Calm days rest; even rills swell; waves run there; bays glow again.
+0280 [en; 64 bit; 68 chars] Icy oaks sigh; dreams soon fall; there fields wait; rich hills fade.
+0281 [zh; 80 bit; 39 chars] 清晨书生慢慢越过熟悉沙滩，清晨归人再次越过苍翠松林，薄暮画师悠然踏过静谧田野。
+0282 [zh; 80 bit; 39 chars] 黄昏文人并肩途经幽深老街，薄暮旅人独自走向葱茏山麓，初春游子悠然返回静谧沙洲。
+0283 [en; 64 bit; 70 chars] Old seas glow; seeds wake here; fields gleam calmly; quiet stars rest.
+0284 [en; 64 bit; 70 chars] Ferns again sway; rich frosts shine; high firs bloom; days fade still.
+0285 [zh; 80 bit; 39 chars] 清晨过客仍旧踏入宁静草甸，清晨少年并肩途经沉静小镇，黄昏长者悠然踏过安静石桥。
+0286 [zh; 80 bit; 39 chars] 黄昏游子偶尔返回遥远沙滩，清晨老翁悠然走向迷离回廊，晌午舞者沿途来到微凉山麓。
+0287 [en; 64 bit; 68 chars] Doves feed slowly; no brooks move; airy woods sleep; cool owls rest.
+0288 [en; 64 bit; 68 chars] No fogs fade; hills rest gently; quietly moons rest; late elms wake.
+0289 [zh; 80 bit; 39 chars] 清晨歌者悄悄踏入隐约古道，晨间歌者独自来到幽深沙洲，仲春乐师偶尔踏入微凉花间。
+0290 [zh; 80 bit; 39 chars] 黄昏归人并肩奔向朦胧山岭，黄昏歌者欣然返回幽静稻田，午后老翁沿途越过静谧庭院。
+0291 [en; 64 bit; 67 chars] Firs just bow; open waves sigh; bays slowly fade; wild sparks fade.
+0292 [en; 64 bit; 69 chars] Soon flies sleep; damp oaks sigh; hares move calmly; soon terns wait.
+0293 [zh; 80 bit; 39 chars] 清晨路人悠然步入隐约松林，拂晓归人偶尔走过温柔平原，深夜歌者忽然走向宁静亭台。
+0294 [zh; 80 bit; 39 chars] 黄昏佳人依旧越过幽深山间，拂晓故人怡然途经清寂小巷，晨间老人徐徐途经古老街角。
+0295 [en; 64 bit; 68 chars] Rills now warm; even pools stir; these doves feed; small reeds sway.
+0296 [en; 64 bit; 70 chars] No storms fall; here fields wait; calm bays freeze; calmly notes echo.
+0297 [zh; 80 bit; 39 chars] 清晨樵夫自在经过微凉高原，日间文人忽然踏入朦胧稻田，初秋长者再次路过寂静沙丘。
+0298 [zh; 80 bit; 39 chars] 黄昏友人静静路过清寂麦田，今夜牧人偶尔经过空旷江畔，清晨游子安然走过迷离沙滩。
+0299 [en; 64 bit; 68 chars] Vines bloom gently; wild beams glow; warm terns sing; calm owls nap.
+0300 [en; 64 bit; 69 chars] Gently owls turn; today rills shine; wild bees hum; late sands shine.
+0301 [zh; 80 bit; 39 chars] 清晨故人怡然穿过温柔荒野，子夜青年徐徐穿过寂静亭台，暮春渔人仍旧踏过清幽山岭。
+0302 [zh; 80 bit; 39 chars] 黄昏老翁慢慢行经安静桥头，深夜过客沿途来到宁静海边，暮春过客徐徐来到翠绿山坡。
+0303 [en; 64 bit; 68 chars] Clear ponds glow; often coves rest; pines then lean; blue gales ebb.
+0304 [en; 64 bit; 69 chars] Gold firs bend; gulls wake often; only rills glint; pale tides drift.
+0305 [zh; 80 bit; 39 chars] 清晨长者慢慢走进清寂原野，雪夜渔人沿途踏入陌生山径，子夜来客坦然来到苍翠泉边。
+0306 [zh; 80 bit; 39 chars] 黄昏游人踏雪步入熟悉花园，傍晚过客缓缓途经幽深荒野，暮间旅人随风踏入幽静街角。
+0307 [en; 64 bit; 65 chars] Low rhymes sleep; doves rest now; oaks bow often; fogs fade here.
+0308 [en; 64 bit; 67 chars] Doves calmly nap; larks fly still; calm beams gleam; wet winds ebb.
+0309 [zh; 80 bit; 39 chars] 清晨樵夫徐徐踏过熟悉草地，昨夜诗人怡然步入静谧街角，初夏故人依旧踏入清冷林间。
+0310 [zh; 80 bit; 39 chars] 黄昏花农徐徐走过辽阔原野，子夜友人再次步入沉静小巷，深秋旅人终于走过明净海边。
+0311 [en; 64 bit; 65 chars] Wet gulls fly; notes hum then; flies drift slowly; deep fogs dim.
+0312 [en; 64 bit; 67 chars] Suns here fade; songs slowly hum; our gales rest; sparks still dim.
+0313 [zh; 80 bit; 39 chars] 清晨樵夫怡然行经熟悉山麓，深夜归人忽然路过清冷泉边，日间佳人翩翩经过温柔竹林。
+0314 [zh; 80 bit; 39 chars] 黄昏故人慢慢经过熟悉亭台，晌午佳人独自踏入葱茏原野，子夜归人结伴步入安静山径。
+0315 [en; 64 bit; 70 chars] Most hills gleam; mists fall often; suns here rise; often clouds fade.
+0316 [en; 64 bit; 70 chars] Both notes sing; slowly bays thaw; quietly stars fall; new pools thaw.
+0317 [zh; 80 bit; 39 chars] 清晨花农慢慢踏入安静栈道，仲秋故人自在踏过寂静沙洲，长夜歌者独自穿过苍茫湖畔。
+0318 [zh; 80 bit; 39 chars] 黄昏樵夫静静奔向寂静水畔，盛夏渔人依旧行经平静山岭，深冬游人缓缓经过古老麦田。
+0319 [en; 64 bit; 66 chars] Winds here pass; grey wrens fly; pale seas fall; notes soon sleep.
+0320 [en; 64 bit; 68 chars] Bays now gleam; vast tides rest; trees grow again; rich nights rest.
+0321 [zh; 80 bit; 39 chars] 清晨旅人沿途路过辽阔沙洲，今夜路人相携走向葱茏绿洲，子夜少年慢慢越过翠绿草甸。
+0322 [zh; 80 bit; 39 chars] 黄昏渔人相携途经迷蒙山坡，仲秋文人忽然步入陌生郊野，仲秋常客迎风步入微凉巷口。
+0323 [en; 64 bit; 69 chars] Airy rivers sleep; gales ebb soon; tides sigh often; our stags pause.
+0324 [en; 64 bit; 68 chars] Lone lakes cool; rose tides ebb; faint gales pass; wide waves swell.
+0325 [zh; 80 bit; 39 chars] 清晨友人独自路过迷离花间，傍晚故人并肩步入悠远花园，仲春渔人迎风奔向遥远山径。
+0326 [zh; 80 bit; 39 chars] 黄昏来客悄悄穿过清冷山间，子夜来客偶尔路过隐约亭台，正午游子独自返回隐约花园。
+0327 [en; 64 bit; 68 chars] Lights rest freely; long tides stir; some dusks go; hares just rest.
+0328 [en; 64 bit; 66 chars] Ferns only sing; pink waves sigh; gently fogs float; few days end.
+0329 [zh; 80 bit; 39 chars] 清晨牧人安然进入遥远山林，深秋长者迎风踏入迷蒙稻田，子夜佳人趁夜走进隐约山林。
+0330 [zh; 80 bit; 39 chars] 黄昏故人相携经过迷离旷野，初冬舞者沿途路过苍茫草甸，暮春老者结伴来到陌生古城。
+0331 [en; 64 bit; 70 chars] Ponds fade there; late beams wake; freely elms sing; pale rivers wake.
+0332 [en; 64 bit; 69 chars] New chimes sleep; all storms pass; airy elms sway; brooks even glide.
+0333 [zh; 80 bit; 39 chars] 清晨歌者悠悠返回古老草原，午后青年默默行经安静竹林，初春老人沿途经过辽阔沙洲。
+0334 [zh; 80 bit; 39 chars] 黄昏故人悄悄步入幽静苔原，雨夜佳人依旧来到熟悉栈道，晨间画师默默走进微凉旧城。
+0335 [en; 64 bit; 70 chars] Warm lights sleep; damp tides rest; gently notes rest; most birds nap.
+0336 [en; 64 bit; 69 chars] Days wait today; words echo always; today snows fade; all gales stir.
+0337 [zh; 80 bit; 39 chars] 清晨故人悠然途经悠远草地，日间歌者并肩路过苍茫苔原，雪夜老翁偶尔经过温柔渡口。
+0338 [zh; 80 bit; 39 chars] 黄昏归人依旧进入幽静花圃，黄昏农人安然走过明净郊野，暮间游子乘月进入古老长街。
+0339 [en; 64 bit; 68 chars] Rays glow still; no clouds fade; bright roses sleep; songs ring now.
+0340 [en; 64 bit; 70 chars] Calm rivers run; bells sing there; lights always fade; airy rays rise.
+0341 [zh; 80 bit; 39 chars] 清晨画师偶尔进入悠远麦田，深秋友人默默途经古老石桥，初夏故人悠然行经清幽竹林。
+0342 [zh; 80 bit; 39 chars] 黄昏路人坦然走过辽阔山间，正午歌者怡然越过遥远旧城，今夜老者从容途经宁静平原。
+0343 [en; 64 bit; 66 chars] Rains fade soon; gulls gently fly; warm waves hum; dark suns wake.
+0344 [en; 64 bit; 68 chars] Few beams shine; lights now glow; new fields wake; echoes soon rest.
+0345 [zh; 80 bit; 39 chars] 清晨书生悠然走向隐约沙滩，黄昏友人坦然返回迷蒙草地，深冬诗人默默经过静谧荒野。
+0346 [zh; 80 bit; 39 chars] 黄昏旅人依旧奔向清寂海边，今夜舞者忽然途经遥远山径，薄暮牧人沿途进入幽深巷口。
+0347 [en; 64 bit; 66 chars] Few lakes dim; damp doves nap; gently stags nap; pools today fade.
+0348 [en; 64 bit; 70 chars] Calmly bays warm; here woods sleep; no ponds freeze; some tides shine.
+0349 [zh; 80 bit; 39 chars] 清晨文人安然路过古老沙丘，仲夏书生随风走进青葱田野，暮间青年仍旧经过清幽桥头。
+0350 [zh; 80 bit; 39 chars] 黄昏老翁乘月穿过静谧山径，清晨诗人悠悠走向幽静花圃，晚夏青年悄悄穿过幽深山麓。
+0351 [en; 64 bit; 70 chars] Damp skies fade; lakes warm often; high trees rest; stars dim quietly.
+0352 [en; 64 bit; 64 chars] Again notes echo; oaks soon nod; all reeds sigh; gales now fade.
+0353 [zh; 80 bit; 39 chars] 清晨花农依旧来到清寂湖畔，昨夜老人自在步入古老稻田，晚夏学子沿途走进空旷山间。
+0354 [zh; 80 bit; 39 chars] 黄昏老者结伴途经迷蒙湖畔，深秋长者怡然途经幽深草原，晚夏路人乘月踏过悠远泉边。
+0355 [en; 64 bit; 63 chars] All lakes stir; all trees bow; warm tides flow; few terns wake.
+0356 [en; 64 bit; 67 chars] Few brooks roll; beams only dim; bright mists rise; dark suns fade.
+0357 [zh; 80 bit; 39 chars] 清晨老翁再次进入遥远竹林，日间友人徐徐途经古老平原，初冬画师再次来到恬静林间。
+0358 [zh; 80 bit; 39 chars] 黄昏旅人悠悠步入苍翠花圃，初夏老翁缓缓进入幽静草原，清晨常客欣然经过陌生山麓。
+0359 [en; 64 bit; 67 chars] Rills calmly move; calm suns rest; wild pools dim; lone birds wait.
+0360 [en; 64 bit; 66 chars] Pale birds nap; red terns soar; mists move soon; still bells echo.
+0361 [zh; 80 bit; 39 chars] 清晨行人坦然走过幽静花间，仲秋青年结伴奔向明净丘陵，薄暮老者坦然穿过熟悉小路。
+0362 [zh; 80 bit; 39 chars] 黄昏诗人忽然行经苍翠山麓，仲夏农人趁夜行经平静花间，清晨旅人独自途经宁静沙丘。
+0363 [en; 64 bit; 67 chars] Sands even fade; warm rills rise; sweet songs echo; only buds wake.
+0364 [en; 64 bit; 68 chars] Faint moons dim; cool days rest; these suns wake; pines lean freely.
+0365 [zh; 80 bit; 39 chars] 清晨渔人偶尔进入葱茏草原，午后过客终于走向幽静绿洲，深秋书生终于行经温柔庭院。
+0366 [zh; 80 bit; 39 chars] 黄昏茶农终于走进苍茫花园，初秋归人轻轻奔向恬静田野，清晨青年轻轻路过迷蒙草地。
+0367 [en; 64 bit; 69 chars] Sands rest softly; soft bays thaw; words soon ring; rays slowly rest.
+0368 [en; 64 bit; 67 chars] Dim seas rest; rivers hum quietly; roots just sleep; dark suns dim.
+0369 [zh; 80 bit; 39 chars] 清晨过客悠然穿过葱茏苔原，拂晓花农悄悄走进幽深栈道，晌午游子依旧路过悠远村落。
+0370 [zh; 80 bit; 39 chars] 黄昏诗人趁夜奔向青葱林间，黄昏游子再次返回明净故里，晌午友人缓缓步入静谧田野。
+0371 [en; 64 bit; 70 chars] Wet flies wake; hills today wait; wide rivers gleam; open brooks cool.
+0372 [en; 64 bit; 68 chars] Seas swell slowly; long words wait; few hopes sleep; red fogs float.
+0373 [zh; 80 bit; 39 chars] 清晨少年结伴行经微凉稻田，深夜花农慢慢返回宁静林间，雪夜佳人悠悠走过隐约古城。
+0374 [zh; 80 bit; 39 chars] 黄昏路人自在返回温柔绿洲，薄暮归人独自奔向朦胧山坡，子夜老人趁夜穿过迷蒙沙洲。
+0375 [en; 64 bit; 70 chars] Terns today glide; then days wait; old bells fade; echoes there sleep.
+0376 [en; 64 bit; 70 chars] Slowly waves flow; ponds glint now; birds now drift; dusks wake again.
+0377 [zh; 80 bit; 39 chars] 清晨樵夫缓缓走过迷蒙林间，暮间牧人结伴行经沉静旧城，长夜游子悄悄走过温柔松林。
+0378 [zh; 80 bit; 39 chars] 黄昏来客终于途经清寂旷野，盛夏过客随风踏过古老旧城，正午游人终于踏入青葱草甸。
+0379 [en; 64 bit; 67 chars] Soon rains pass; low lakes rest; wild bays shine; wrens wait there.
+0380 [en; 64 bit; 65 chars] Streams ebb here; slow nights go; most dusks go; old chimes rest.
+0381 [zh; 80 bit; 39 chars] 清晨牧人坦然踏入寂静小巷，黎明行人独自穿过微凉沙丘，午后故人沿途返回平静村庄。
+0382 [zh; 80 bit; 39 chars] 黄昏少年坦然走向开阔水畔，仲春老翁自在穿过沉静村庄，清晨渔人结伴步入寂静村落。
+0383 [en; 64 bit; 68 chars] Deep trees nod; warm ponds glow; cool oaks sing; tonight moons fade.
+0384 [en; 64 bit; 70 chars] Red hares wait; rays glint softly; fresh stars wait; quietly deer nap.
+0385 [zh; 80 bit; 39 chars] 清晨少年自在走过古老草甸，拂晓乐师默默奔向遥远村落，清晨渔人缓缓经过宁静山间。
+0386 [zh; 80 bit; 39 chars] 黄昏路人徐徐走向辽阔沙丘，薄暮老翁相携走向朦胧渡口，清晨路人随风返回静谧河畔。
+0387 [en; 64 bit; 67 chars] Buds there swell; echoes hum today; tides soon run; warm bays wake.
+0388 [en; 64 bit; 68 chars] Few suns set; red ponds stir; chimes ring here; frosts shine freely.
+0389 [zh; 80 bit; 39 chars] 清晨舞者怡然走进沉静郊野，晚夏常客坦然经过微凉老街，暮春路人安然穿过迷离草地。
+0390 [zh; 80 bit; 39 chars] 黄昏来客踏雪穿过辽阔丘陵，深秋友人缓缓踏过平静小路，拂晓故人独自步入隐约山径。
+0391 [en; 64 bit; 70 chars] Dusks even fade; grey winds fall; again tales ring; mists always fall.
+0392 [en; 64 bit; 66 chars] Wild stars fade; new seas sleep; calm suns set; lakes warm always.
+0393 [zh; 80 bit; 39 chars] 清晨来客缓缓踏过遥远海边，深冬佳人坦然越过幽静故里，傍晚歌者静静走过迷离山岭。
+0394 [zh; 80 bit; 39 chars] 黄昏茶农自在行经寂静河畔，日间老者徐徐走进苍翠林间，初夏歌者欣然步入清寂苔原。
+0395 [en; 64 bit; 69 chars] Wild dews glint; there seas sigh; roots then rest; here lakes freeze.
+0396 [en; 64 bit; 69 chars] Blue waves swell; old oaks sleep; stars calmly rise; wide ferns lean.
+0397 [zh; 80 bit; 39 chars] 清晨牧人慢慢行经悠远原野，初春旅人缓缓踏过悠远山谷，仲夏常客并肩经过迷蒙山径。
+0398 [zh; 80 bit; 39 chars] 黄昏文人依旧走过静谧海边，深夜旅人坦然踏过陌生小镇，暮春老翁悄悄行经清冷田野。
+0399 [en; 64 bit; 69 chars] Those storms fade; rays wake here; gold stars wane; high lakes glint.
+0400 [en; 64 bit; 67 chars] Stars often wane; cold seas wake; warm hares rest; pure roots rest.
+0401 [zh; 80 bit; 39 chars] 清晨舞者慢慢走向沉静松林，初冬行人随风走过青葱松林，午夜乐师坦然越过熟悉山谷。
+0402 [zh; 80 bit; 39 chars] 黄昏佳人欣然穿过朦胧花园，薄暮老者坦然返回古老草原，傍晚故人安然经过静谧老街。
+0403 [en; 64 bit; 68 chars] Bells chime today; dusks wait soon; most harts rest; trees here bow.
+0404 [en; 64 bit; 68 chars] Fresh elms lean; low pools freeze; calmly seas fall; pale owls soar.
+0405 [zh; 80 bit; 39 chars] 清晨渔人悄悄途经静谧小镇，晨间过客默默途经翠绿山巅，暮春少年忽然踏过迷离高原。
+0406 [zh; 80 bit; 39 chars] 黄昏长者从容经过迷蒙苔原，深夜歌者慢慢经过迷蒙渡口，长夜老者忽然走向幽深郊野。
+0407 [en; 64 bit; 70 chars] Dews here fade; always hares roam; oaks lean again; freely winds sigh.
+0408 [en; 64 bit; 70 chars] Airy roots sleep; briefly terns rest; low waves flow; then oaks sleep.
+0409 [zh; 80 bit; 39 chars] 清晨樵夫怡然踏入寂静小路，午夜常客偶尔奔向葱茏高原，仲秋学子并肩返回迷离老街。
+0410 [zh; 80 bit; 39 chars] 黄昏诗人默默返回幽深老街，仲秋牧人随风穿过苍茫草甸，仲春老者偶尔经过寂静高原。
+0411 [en; 64 bit; 68 chars] Firs nod freely; suns quietly fade; pure sparks dim; soon rills run.
+0412 [en; 64 bit; 67 chars] Only ponds cool; trees often bend; gold woods wake; often hopes go.
+0413 [zh; 80 bit; 39 chars] 清晨过客悠然踏过遥远沙丘，薄暮老人默默踏过微凉老街，傍晚青年坦然奔向开阔山岭。
+0414 [zh; 80 bit; 39 chars] 黄昏学子翩翩走进葱茏绿洲，午后樵夫再次越过清冷桥头，黎明游人自在奔向温柔草原。
+0415 [en; 64 bit; 70 chars] Low chimes fall; soft rivers gleam; songs wake today; birds even feed.
+0416 [en; 64 bit; 68 chars] Pale dews fade; all beams rise; wide brooks warm; deep chimes sleep.
+0417 [zh; 80 bit; 39 chars] 清晨来客结伴奔向静谧海边，晚夏茶农随风路过寂静水畔，晨间游人偶尔踏过遥远旧城。
+0418 [zh; 80 bit; 39 chars] 黄昏花农从容经过开阔古道，初夏老者随风行经翠绿苔原，暮春书生缓缓走进清幽苔原。
+0419 [en; 64 bit; 61 chars] Brooks hum now; no tides rise; elms nod here; owls then rest.
+0420 [en; 64 bit; 70 chars] Snows melt now; new streams gleam; small oaks bloom; grey woods sleep.
+0421 [zh; 80 bit; 39 chars] 清晨少年结伴踏过翠绿草原，黄昏故人怡然进入遥远长廊，初秋农人怡然途经清寂楼台。
+0422 [zh; 80 bit; 39 chars] 黄昏茶农乘月走向青葱田野，雪夜老人悠悠步入熟悉草原，仲春诗人安然来到空旷沙洲。
+0423 [en; 64 bit; 70 chars] Airy reeds bow; woods rest often; thin brooks roll; oaks bloom slowly.
+0424 [en; 64 bit; 68 chars] Wet firs bow; thin rivers glide; lakes glow still; still fogs drift.
+0425 [zh; 80 bit; 39 chars] 清晨游子缓缓路过隐约村庄，仲夏文人轻轻途经寂静草地，雪夜牧人坦然步入幽深荒原。
+0426 [zh; 80 bit; 39 chars] 黄昏老者静静走进翠绿苔原，初夏牧人再次经过清幽桥头，雨夜游人终于越过安静村落。
+0427 [en; 64 bit; 66 chars] Pure snows fade; often reeds nod; deep gales stir; deer wait then.
+0428 [en; 64 bit; 70 chars] Leaves shine often; dim ferns sway; deep mists dim; soon sparks shine.
+0429 [zh; 80 bit; 39 chars] 清晨路人静静进入悠远麦田，深冬归人并肩返回开阔苔原，仲秋农人沿途走过熟悉溪边。
+0430 [zh; 80 bit; 39 chars] 黄昏旅人并肩路过遥远草甸，雨夜游人悠悠踏入悠远亭台，晚夏茶农默默路过沉静长街。
+0431 [en; 64 bit; 65 chars] Jade roses rest; rose woods wake; lone pools fade; slow hopes go.
+0432 [en; 64 bit; 70 chars] Here clouds drift; cool wrens wait; winds still sigh; warm flies rest.
+0433 [zh; 80 bit; 39 chars] 清晨文人再次奔向迷蒙沙丘，清晨常客徐徐走向古老麦田，深冬来客偶尔穿过朦胧巷口。
+0434 [zh; 80 bit; 39 chars] 黄昏画师默默返回明净山巅，仲夏花农终于步入清幽巷口，午后农人默默路过恬静江畔。
+0435 [en; 64 bit; 69 chars] Sparks then shine; bees wake today; here brooks sing; few stars rise.
+0436 [en; 64 bit; 65 chars] Icy lakes wake; calm flies hum; all owls feed; lights fade again.
+0437 [zh; 80 bit; 39 chars] 清晨樵夫自在路过清冷石桥，子夜乐师依旧踏入苍翠花园，初夏画师并肩返回清寂林间。
+0438 [zh; 80 bit; 39 chars] 黄昏茶农静静途经隐约山坡，薄暮文人趁夜奔向温柔荒原，清晨来客终于走进平静稻田。
+0439 [en; 64 bit; 67 chars] Low notes hum; no pools stir; chimes still rise; dreams come today.
+0440 [en; 64 bit; 68 chars] Fogs drift here; icy skies fall; these clouds move; those seas sigh.
+0441 [zh; 80 bit; 39 chars] 清晨过客坦然来到安静麦田，晚夏书生忽然越过熟悉河畔，长夜老人徐徐路过空旷草甸。
+0442 [zh; 80 bit; 39 chars] 黄昏旅人偶尔踏入空旷旧城，子夜诗人迎风路过遥远小径，雨夜学子轻轻经过迷离竹林。
+0443 [en; 64 bit; 68 chars] Again beams gleam; moons here fade; dim rills flow; trees rest soon.
+0444 [en; 64 bit; 66 chars] Red rays sleep; quiet bays glint; all moths hum; teal fields fade.
+0445 [zh; 80 bit; 39 chars] 清晨茶农坦然来到清幽沙洲，拂晓文人坦然越过翠绿泉边，初春青年坦然走过清冷旷野。
+0446 [zh; 80 bit; 39 chars] 黄昏长者轻轻来到清冷古城，拂晓友人再次走向温柔石桥，正午游子偶尔越过寂静丘陵。
+0447 [en; 64 bit; 69 chars] Wild larks glide; chimes fall soon; rich ponds wake; old roses bloom.
+0448 [en; 64 bit; 69 chars] Quiet clouds gleam; few ferns sing; cool vines rest; faint rays wait.
+0449 [zh; 80 bit; 39 chars] 清晨佳人从容踏过微凉旧城，仲秋游人终于走向宁静荒原，昨夜书生安然奔向翠绿平原。
+0450 [zh; 80 bit; 39 chars] 黄昏游人缓缓经过明净花圃，今夜游人依旧踏过遥远荒野，黎明旅人欣然穿过静谧花圃。
+0451 [en; 64 bit; 69 chars] Dawns go gently; both rills shine; waves today run; seas calmly sigh.
+0452 [en; 64 bit; 67 chars] Wet lakes fade; damp days rest; bright firs lean; stars set slowly.
+0453 [zh; 80 bit; 39 chars] 清晨故人迎风奔向迷离长街，日间过客徐徐穿过熟悉长街，晨间农人徐徐踏入辽阔田野。
+0454 [zh; 80 bit; 39 chars] 黄昏渔人趁夜步入陌生苔原，正午来客怡然进入陌生小径，仲秋农人默默越过清寂水畔。
+0455 [en; 64 bit; 67 chars] Calm lights glow; rains then fall; new bells wait; slow rivers hum.
+0456 [en; 64 bit; 70 chars] Slow pines sleep; still dews fade; even rivers rest; tides still rise.
+0457 [zh; 80 bit; 39 chars] 清晨老者徐徐经过朦胧栈道，晨间来客缓缓踏入熟悉草原，日间舞者怡然越过遥远故里。
+0458 [zh; 80 bit; 39 chars] 黄昏少年从容路过明净石桥，晚夏过客乘月穿过宁静草地，午夜故人徐徐踏入清冷老街。
+0459 [en; 64 bit; 70 chars] Wide skies wait; owls even drift; storms pause soon; doves again sing.
+0460 [en; 64 bit; 69 chars] Soon pools dim; wild days wake; words calmly fade; notes hum tonight.
+0461 [zh; 80 bit; 39 chars] 清晨花农仍旧踏入平静村庄，长夜农人忽然返回青葱溪边，初冬乐师依旧穿过葱茏苔原。
+0462 [zh; 80 bit; 39 chars] 黄昏舞者迎风走进幽静回廊，昨夜渔人再次路过清寂荒野，黎明茶农终于路过明净渡口。
+0463 [en; 64 bit; 70 chars] Stars rest then; wrens turn softly; bays now freeze; softly deer wait.
+0464 [en; 64 bit; 68 chars] Long fields sleep; wild pines bend; firs today nod; pure rills sigh.
+0465 [zh; 80 bit; 39 chars] 清晨常客沿途踏过隐约长桥，晌午过客从容途经平静原野，晌午歌者依旧走向开阔麦田。
+0466 [zh; 80 bit; 39 chars] 黄昏常客悄悄走进恬静绿洲，晌午佳人安然踏过温柔山间，午夜旅人踏雪来到幽静稻田。
+0467 [en; 64 bit; 68 chars] Warm birds nap; airy winds sing; long lakes gleam; softly bays glow.
+0468 [en; 64 bit; 66 chars] Calm waves ebb; calm suns glint; only ferns sway; reeds only sway.
+0469 [zh; 80 bit; 39 chars] 清晨长者悠然走向遥远山巅，子夜故人静静步入古老庭院，昨夜常客慢慢越过清幽泉边。
+0470 [zh; 80 bit; 39 chars] 黄昏花农相携奔向古老花间，傍晚书生依旧走进遥远老街，拂晓书生忽然经过幽深花圃。
+0471 [en; 64 bit; 70 chars] Dark stars shine; lone waves rest; stags sleep calmly; old winds stir.
+0472 [en; 64 bit; 67 chars] Often winds sleep; these deer nap; stags even run; then stars wane.
+0473 [zh; 80 bit; 39 chars] 清晨文人终于返回古老高原，拂晓常客依旧路过幽静山林，仲夏茶农终于奔向微凉松林。
+0474 [zh; 80 bit; 39 chars] 黄昏常客怡然经过恬静江畔，盛夏诗人默默进入迷离田野，初夏旅人欣然行经青葱花圃。
+0475 [en; 64 bit; 69 chars] Softly vines bow; today bells sing; terns even fly; these elms bloom.
+0476 [en; 64 bit; 67 chars] Few rhymes chime; old beams glow; red vines rest; notes chime here.
+0477 [zh; 80 bit; 39 chars] 清晨游人终于越过空旷河畔，午夜学子悠然走向恬静沙丘，深冬过客翩翩返回静谧老街。
+0478 [zh; 80 bit; 39 chars] 黄昏渔人乘月走进悠远花圃，正午茶农终于经过迷离山坡，暮间友人悄悄步入隐约麦田。
+0479 [en; 64 bit; 69 chars] Moths calmly fly; beams fall calmly; then harts sleep; low seas sigh.
+0480 [en; 64 bit; 68 chars] Late ferns bend; vines calmly wake; rays even wait; cold seas shine.
+0481 [zh; 80 bit; 39 chars] 清晨少年结伴经过宁静花园，仲秋歌者悠悠来到寂静荒野，午后画师悄悄走向寂静海边。
+0482 [zh; 80 bit; 39 chars] 黄昏佳人踏雪来到幽深山岭，雨夜乐师安然奔向宁静荒野，暮春诗人从容来到迷蒙沙滩。
+0483 [en; 64 bit; 66 chars] Bays glow there; slow firs nod; low tides glide; wide clouds rise.
+0484 [en; 64 bit; 65 chars] Few firs sigh; wide storms fall; those seas hum; deer wait there.
+0485 [zh; 80 bit; 39 chars] 清晨游子再次返回迷离竹林，昨夜故人乘月行经辽阔田野，初冬书生坦然走过温柔山岭。
+0486 [zh; 80 bit; 39 chars] 黄昏行人悠悠穿过青葱山谷，今夜诗人趁夜踏入苍翠花圃，仲春游子相携踏过陌生村庄。
+0487 [en; 64 bit; 66 chars] Oaks only grow; still dusks wake; soon rays shine; elms bow there.
+0488 [en; 64 bit; 67 chars] Dim pines grow; dawns only end; waves now glide; calmly deer pause.
+0489 [zh; 80 bit; 39 chars] 清晨舞者沿途途经空旷山坡，晚夏茶农静静走进幽深楼台，深冬老人默默经过沉静小径。
+0490 [zh; 80 bit; 39 chars] 黄昏牧人再次越过幽静稻田，暮间过客踏雪走进葱茏草甸，盛夏画师悠然踏入朦胧小巷。
+0491 [en; 64 bit; 70 chars] Those seeds sleep; frosts there melt; thin winds fade; late oaks rest.
+0492 [en; 64 bit; 70 chars] Cold firs sway; wet rivers rest; sparks blink here; pines freely rest.
+0493 [zh; 80 bit; 39 chars] 清晨学子欣然返回熟悉旷野，拂晓友人静静来到遥远丘陵，今夜少年坦然路过熟悉海边。
+0494 [zh; 80 bit; 39 chars] 黄昏老翁慢慢走过宁静草地，雪夜游人趁夜进入隐约山林，深夜画师静静路过微凉亭台。
+0495 [en; 64 bit; 67 chars] Calm buds sway; cool flies float; soon tales echo; gleams then dim.
+0496 [en; 64 bit; 70 chars] Suns today shine; high elms grow; sparks glint now; gently rills sing.
+0497 [zh; 80 bit; 39 chars] 清晨茶农欣然穿过寂静河畔，暮春归人相携走向遥远沙洲，初秋常客安然途经沉静原野。
+0498 [zh; 80 bit; 39 chars] 黄昏乐师依旧奔向安静松林，薄暮游子忽然走过古老泉边，仲春长者徐徐踏入温柔山间。
+0499 [en; 64 bit; 68 chars] Dim streams glow; warm moths fly; seas today rise; bays stir freely.
+0500 [en; 64 bit; 69 chars] Bays dim always; lakes still glint; doves feed here; only trees lean.
+0501 [zh; 80 bit; 39 chars] 清晨诗人踏雪越过清幽山林，深夜路人并肩越过迷蒙麦田，初春归人乘月越过明净花圃。
+0502 [zh; 80 bit; 39 chars] 黄昏牧人结伴行经迷离巷口，子夜老人翩翩步入开阔松林，晌午过客再次行经清寂水畔。
+0503 [en; 64 bit; 70 chars] Sparks fade then; nights freely go; only seeds sprout; dark buds rest.
+0504 [en; 64 bit; 69 chars] Old ponds freeze; fields slowly wake; no deer pause; thin gales stir.
+0505 [zh; 80 bit; 39 chars] 清晨牧人翩翩途经空旷平原，薄暮常客仍旧经过寂静花园，深夜少年悠悠越过寂静丘陵。
+0506 [zh; 80 bit; 39 chars] 黄昏游子静静经过陌生松林，昨夜来客缓缓经过青葱山岭，日间少年缓缓路过恬静麦田。
+0507 [en; 64 bit; 69 chars] Icy streams roll; waves swell there; now birds turn; gold skies fall.
+0508 [en; 64 bit; 70 chars] Even dawns fade; firs bend then; shores tonight wake; still notes hum.
+0509 [zh; 80 bit; 39 chars] 清晨游子缓缓走向安静巷口，午夜少年自在行经幽静小径，初秋旅人依旧踏过葱茏河畔。
+0510 [zh; 80 bit; 39 chars] 黄昏游子默默步入微凉小镇，仲春文人欣然路过遥远山谷，子夜老翁忽然途经平静泉边。
+0511 [en; 64 bit; 70 chars] Small moons gleam; dews only gleam; these larks rest; rich ponds thaw.
+0512 [en; 64 bit; 70 chars] Late gales pass; cool moons sleep; reeds today sleep; blue winds fall.
+0513 [zh; 80 bit; 39 chars] 清晨来客欣然路过幽深村庄，清晨乐师依旧踏入幽静草地，初夏来客怡然途经迷离山岭。
+0514 [zh; 80 bit; 39 chars] 黄昏诗人自在踏过安静山坡，暮间画师怡然走进悠远古道，深秋青年趁夜踏入空旷旧城。
+0515 [en; 64 bit; 70 chars] Faint skies wake; often rivers run; birds here soar; mists drift then.
+0516 [en; 64 bit; 68 chars] Moons tonight gleam; no elms lean; rills only sigh; most bells fall.
+0517 [zh; 80 bit; 39 chars] 清晨长者并肩走进沉静荒野，薄暮乐师独自行经幽深泉边，拂晓归人悄悄步入恬静长廊。
+0518 [zh; 80 bit; 39 chars] 黄昏游人悠悠行经清冷花间，薄暮归人趁夜路过朦胧山巅，傍晚老翁悄悄来到清冷石桥。
+0519 [en; 64 bit; 67 chars] Gold seeds grow; moons soon wait; wide winds stir; roses then rest.
+0520 [en; 64 bit; 68 chars] Dark rays wait; woods gleam now; grey rills warm; brooks today warm.
+0521 [zh; 80 bit; 39 chars] 清晨渔人轻轻走向寂静亭台，清晨老者仍旧路过迷蒙小巷，仲夏老翁轻轻经过苍茫水畔。
+0522 [zh; 80 bit; 39 chars] 黄昏学子忽然走过幽静亭台，正午画师并肩走向苍翠花间，薄暮农人自在行经苍茫沙丘。
+0523 [en; 64 bit; 67 chars] Always oaks bow; both ponds rest; rays here wane; softly suns rest.
+0524 [en; 64 bit; 66 chars] Blue coves wake; wide bays warm; blue sparks wake; all hares roam.
+0525 [zh; 80 bit; 39 chars] 清晨舞者悠悠行经陌生苔原，傍晚学子轻轻途经清幽山坡，清晨歌者偶尔经过清寂长桥。
+0526 [zh; 80 bit; 39 chars] 黄昏诗人独自走过温柔旧城，暮间茶农怡然途经明净街角，午后乐师缓缓来到遥远老街。
+0527 [en; 64 bit; 65 chars] Skies often wake; crows now sing; red owls feed; far waves shine.
+0528 [en; 64 bit; 70 chars] Beams briefly glow; today owls fly; warm moths fly; roses wake calmly.
+0529 [zh; 80 bit; 39 chars] 清晨游人终于走过葱茏水畔，深秋过客仍旧来到安静庭院，薄暮路人随风经过陌生稻田。
+0530 [zh; 80 bit; 39 chars] 黄昏画师乘月走过苍茫郊野，晚夏老人相携进入幽深稻田，傍晚老翁乘月返回温柔竹林。
+0531 [en; 64 bit; 68 chars] Rich seas shine; ferns rest slowly; doves nap then; red birds sleep.
+0532 [en; 64 bit; 67 chars] Bells now rise; slow rivers stir; vines there grow; now roses rest.
+0533 [zh; 80 bit; 39 chars] 清晨老者翩翩走过葱茏溪边，仲秋游子再次行经苍翠竹林，子夜过客坦然途经清幽村庄。
+0534 [zh; 80 bit; 39 chars] 黄昏舞者沿途步入隐约古道，长夜行人轻轻走进清冷故里，暮间学子悠然穿过清冷田野。
+0535 [en; 64 bit; 67 chars] Just fogs drift; gulls again sing; bays soon shine; dim winds pass.
+0536 [en; 64 bit; 69 chars] Frosts today melt; elms often sigh; our seas move; vines often bloom.
+0537 [zh; 80 bit; 39 chars] 清晨友人终于踏过朦胧古城，雨夜青年迎风走过静谧石桥，初夏游子沿途经过清冷故里。
+0538 [zh; 80 bit; 39 chars] 黄昏歌者再次进入陌生草甸，晌午茶农独自行经平静稻田，雪夜游人终于途经朦胧庭院。
+0539 [en; 64 bit; 66 chars] Gold waves swell; all birds sing; our mists move; airy storms ebb.
+0540 [en; 64 bit; 67 chars] No bays wake; lakes tonight rest; soft tides fall; hopes slowly go.
+0541 [zh; 80 bit; 39 chars] 清晨诗人慢慢走过苍茫河畔，深冬花农依旧踏过沉静溪边，正午茶农悄悄走过空旷原野。
+0542 [zh; 80 bit; 39 chars] 黄昏来客沿途路过迷蒙小径，初夏书生乘月返回静谧石桥，暮间樵夫坦然途经静谧林间。
+0543 [en; 64 bit; 70 chars] Pale doves rest; seas softly move; quietly larks rest; bare fogs pass.
+0544 [en; 64 bit; 69 chars] Today lights wake; gales fade today; red flies hum; soon coves sleep.
+0545 [zh; 80 bit; 39 chars] 清晨渔人从容走进平静小径，今夜渔人翩翩奔向寂静平原，薄暮少年默默走过平静楼台。
+0546 [zh; 80 bit; 39 chars] 黄昏长者慢慢途经宁静水畔，深秋路人偶尔走进幽静亭台，长夜友人沿途行经迷离泉边。
+0547 [en; 64 bit; 68 chars] Ponds here gleam; quietly larks rest; no roses wake; old bays sleep.
+0548 [en; 64 bit; 66 chars] Those days go; soft stars glow; again rays dim; again chimes fade.
+0549 [zh; 80 bit; 39 chars] 清晨老人怡然进入隐约苔原，今夜长者欣然路过微凉旧城，仲夏过客徐徐奔向空旷沙滩。
+0550 [zh; 80 bit; 39 chars] 黄昏诗人趁夜路过迷离苔原，深冬渔人从容途经辽阔草原，晌午文人随风进入陌生苔原。
+0551 [en; 64 bit; 70 chars] Briefly moons blink; soft gulls wake; bays now rest; bells rest often.
+0552 [en; 64 bit; 67 chars] Wet rills stir; still suns wait; again lakes cool; our moons shine.
+0553 [zh; 80 bit; 39 chars] 清晨渔人结伴经过遥远旧城，拂晓花农默默途经微凉沙滩，薄暮友人踏雪穿过隐约原野。
+0554 [zh; 80 bit; 39 chars] 黄昏老者悠悠穿过温柔草原，初冬青年悠悠返回安静山巅，初秋诗人坦然踏过温柔街角。
+0555 [en; 64 bit; 70 chars] Some gulls rest; roses sway tonight; pools only thaw; rills rest here.
+0556 [en; 64 bit; 70 chars] Our rivers roll; vast seas gleam; rich moons wake; lights wake freely.
+0557 [zh; 80 bit; 39 chars] 清晨书生再次来到悠远泉边，午后茶农缓缓穿过苍茫平原，深秋常客随风走过陌生古道。
+0558 [zh; 80 bit; 39 chars] 黄昏茶农悠悠进入清幽林间，暮间长者乘月路过明净旷野，长夜佳人乘月奔向清冷长廊。
+0559 [en; 64 bit; 69 chars] Bright nights wait; our notes wake; deep winds ebb; then tides sleep.
+0560 [en; 64 bit; 69 chars] Calmly dusks sleep; most tides cool; today dreams wake; no seas rise.
+0561 [zh; 80 bit; 39 chars] 清晨来客翩翩穿过空旷高原，傍晚少年徐徐走向熟悉松林，清晨渔人徐徐行经隐约老街。
+0562 [zh; 80 bit; 39 chars] 黄昏花农仍旧经过沉静旧城，拂晓书生悄悄来到隐约回廊，黎明长者自在走向迷离溪边。
+0563 [en; 64 bit; 68 chars] Some clouds fall; quiet seas glide; thin winds rise; low isles wait.
+0564 [en; 64 bit; 68 chars] Grey stags rest; moons just dim; terns soar here; beams briefly dim.
+0565 [zh; 80 bit; 39 chars] 清晨游子静静行经古老小巷，今夜游子轻轻越过温柔沙丘，晚夏渔人终于途经宁静山谷。
+0566 [zh; 80 bit; 39 chars] 黄昏友人相携穿过翠绿花间，深夜青年忽然来到古老沙滩，正午书生忽然来到宁静荒野。
+0567 [en; 64 bit; 68 chars] Streams only glow; briefly moons sleep; only seas ebb; our firs nod.
+0568 [en; 64 bit; 70 chars] Rhymes softly rest; long rills rise; bays then rest; deep isles sleep.
+0569 [zh; 80 bit; 39 chars] 清晨少年悠然返回遥远巷口，晚夏归人独自走进空旷草甸，仲夏乐师悠悠穿过温柔山巅。
+0570 [zh; 80 bit; 39 chars] 黄昏友人再次穿过清幽河畔，午后少年轻轻行经温柔湖畔，深秋青年并肩来到寂静平原。
+0571 [en; 64 bit; 64 chars] Elms here wake; our wrens wake; lone seas wake; fogs dim slowly.
+0572 [en; 64 bit; 68 chars] Gently flies hum; clouds now move; small terns feed; wet harts wake.
+0573 [zh; 80 bit; 39 chars] 清晨文人偶尔走过静谧原野，深冬游人从容途经微凉河畔，仲夏来客默默返回平静郊野。
+0574 [zh; 80 bit; 39 chars] 黄昏舞者自在奔向清幽沙洲，深冬舞者轻轻路过明净古道，午夜游人轻轻走向迷蒙竹林。
+0575 [en; 64 bit; 69 chars] Wild birds nap; snows only thaw; tides softly shine; ferns rest soon.
+0576 [en; 64 bit; 69 chars] Faint rhymes ring; pale mists pass; dawns wake today; bare days rest.
+0577 [zh; 80 bit; 39 chars] 清晨画师坦然行经清冷小径，午夜老人安然路过幽静山间，深夜归人踏雪穿过静谧回廊。
+0578 [zh; 80 bit; 39 chars] 黄昏樵夫迎风返回陌生故里，黎明路人再次进入恬静花间，初夏常客悄悄走进安静庭院。
+0579 [en; 64 bit; 68 chars] Songs wake there; red oaks bend; light lights glint; now gulls soar.
+0580 [en; 64 bit; 70 chars] Seas just drift; roses sleep freely; nights here end; echoes soon hum.
+0581 [zh; 80 bit; 39 chars] 清晨过客独自行经隐约古城，雨夜归人默默行经微凉渡口，今夜书生随风走进清寂绿洲。
+0582 [zh; 80 bit; 39 chars] 黄昏长者怡然踏入恬静小径，黄昏青年相携穿过迷离丘陵，仲秋歌者迎风步入陌生村落。
+0583 [en; 64 bit; 68 chars] Red fields gleam; old brooks sleep; few rills stir; pink gales stir.
+0584 [en; 64 bit; 70 chars] Roses briefly sleep; damp bays stir; thin waves warm; clear rays wait.
+0585 [zh; 80 bit; 39 chars] 清晨渔人怡然路过清幽庭院，暮春花农缓缓穿过静谧长街，暮春渔人徐徐来到辽阔郊野。
+0586 [zh; 80 bit; 39 chars] 黄昏长者悠悠越过安静绿洲，仲夏来客沿途行经朦胧山坡，初春书生再次来到清寂丘陵。
+0587 [en; 64 bit; 68 chars] Brooks glow still; elms softly bend; low gales fall; wet tides warm.
+0588 [en; 64 bit; 67 chars] Dark seas roll; rich bays stir; oaks briefly rest; pure hopes grow.
+0589 [zh; 80 bit; 39 chars] 清晨乐师缓缓走向空旷村庄，初冬老翁欣然进入沉静小镇，黎明旅人静静走过熟悉沙丘。
+0590 [zh; 80 bit; 39 chars] 黄昏路人缓缓穿过温柔江畔，傍晚旅人偶尔路过悠远古道，晚夏歌者结伴经过迷蒙桥头。
+0591 [en; 64 bit; 67 chars] New seas fall; clouds slowly pass; waves now ebb; rivers roll soon.
+0592 [en; 64 bit; 68 chars] Calmly sparks shine; gulls then sing; firs soon nod; now wrens wake.
+0593 [zh; 80 bit; 39 chars] 清晨旅人独自返回古老河畔，日间过客悄悄走过陌生草地，暮间茶农悠然返回安静麦田。
+0594 [zh; 80 bit; 39 chars] 黄昏故人忽然路过熟悉长桥，暮春牧人徐徐奔向幽深山间，仲秋乐师轻轻途经清寂荒原。
+0595 [en; 64 bit; 70 chars] Long elms sing; red isles shine; brooks then roll; rills slowly sleep.
+0596 [en; 64 bit; 68 chars] Now owls glide; seas calmly sing; navy waves swell; faint ponds dim.
+0597 [zh; 80 bit; 39 chars] 清晨舞者偶尔经过静谧松林，午夜青年静静行经静谧故里，长夜画师怡然踏过青葱山间。
+0598 [zh; 80 bit; 39 chars] 黄昏过客并肩走进陌生小巷，初春过客忽然进入悠远小巷，清晨路人随风奔向沉静小镇。
+0599 [en; 64 bit; 65 chars] Pink seas rise; calm days wait; our tides run; notes sleep still.
+0600 [en; 64 bit; 68 chars] Blue seas run; rose isles glow; cold moths sleep; rhymes softly hum.
+0601 [zh; 80 bit; 39 chars] 清晨少年再次返回安静山坡，初秋游人坦然来到宁静泉边，今夜乐师依旧越过翠绿山麓。
+0602 [zh; 80 bit; 39 chars] 黄昏花农乘月行经清幽草地，清晨游子从容行经清幽桥头，长夜老翁踏雪经过迷离山间。
+0603 [en; 64 bit; 69 chars] Old seas fall; late days wait; there rivers glint; just streams warm.
+0604 [en; 64 bit; 66 chars] Softly clouds dim; here fields rest; our firs nod; few winds sing.
+0605 [zh; 80 bit; 39 chars] 清晨舞者相携来到安静泉边，晨间友人悠悠奔向辽阔山岭，初冬路人趁夜走向迷蒙松林。
+0606 [zh; 80 bit; 39 chars] 黄昏舞者欣然走向静谧花圃，昨夜乐师徐徐来到微凉泉边，盛夏路人翩翩走过遥远长桥。
+0607 [en; 64 bit; 69 chars] Cool rills wake; pines sigh freely; again gulls turn; now tales rise.
+0608 [en; 64 bit; 67 chars] New leaves fall; here sparks rise; grey bays dim; lone dawns sleep.
+0609 [zh; 80 bit; 39 chars] 清晨行人沿途踏过清幽稻田，午后舞者徐徐奔向遥远长桥，仲春学子从容途经迷离海边。
+0610 [zh; 80 bit; 39 chars] 黄昏青年从容踏过微凉苔原，黎明歌者轻轻途经迷蒙郊野，暮间长者沿途踏过幽静绿洲。
+0611 [en; 64 bit; 70 chars] Thin shores glow; bright moons fade; these songs fade; buds just sway.
+0612 [en; 64 bit; 66 chars] Grey oaks wake; dark gales ebb; seas often sigh; streams now flow.
+0613 [zh; 80 bit; 39 chars] 清晨文人坦然行经沉静溪边，正午旅人悄悄途经幽静麦田，盛夏舞者欣然返回明净稻田。
+0614 [zh; 80 bit; 39 chars] 黄昏牧人随风穿过幽静湖畔，晨间老翁再次进入迷蒙旷野，盛夏舞者默默走过恬静花间。
+0615 [en; 64 bit; 66 chars] Icy winds pass; hares still move; bells soon echo; few rills rest.
+0616 [en; 64 bit; 64 chars] Hares now move; gold waves sigh; owls now wait; then sands wake.
+0617 [zh; 80 bit; 39 chars] 清晨青年缓缓走过沉静亭台，昨夜农人坦然返回寂静街角，正午青年并肩奔向迷蒙桥头。
+0618 [zh; 80 bit; 39 chars] 黄昏旅人迎风走向朦胧草地，雪夜友人缓缓来到幽深平原，黄昏农人忽然返回隐约花园。
+0619 [en; 64 bit; 67 chars] New brooks glint; icy snows fade; all ferns bend; grey terns sleep.
+0620 [en; 64 bit; 66 chars] Bare coves rest; cool snows fall; pink woods wake; airy elms sway.
+0621 [zh; 80 bit; 39 chars] 清晨舞者忽然来到明净花园，仲夏路人轻轻经过熟悉山巅，子夜茶农随风行经迷蒙荒原。
+0622 [zh; 80 bit; 39 chars] 黄昏老人从容走进微凉楼台，暮间归人趁夜返回宁静松林，初冬旅人静静路过青葱荒原。
+0623 [en; 64 bit; 70 chars] Gulls calmly drift; navy bays freeze; old owls wake; grey coves sleep.
+0624 [en; 64 bit; 65 chars] Here oaks bend; few rays rise; thin hills fade; light trees bend.
+0625 [zh; 80 bit; 39 chars] 清晨乐师缓缓踏入微凉村庄，初冬花农依旧奔向陌生花间，雪夜牧人再次走进苍翠花圃。
+0626 [zh; 80 bit; 39 chars] 黄昏老人踏雪进入朦胧旷野，雨夜故人忽然经过明净小径，初春老人依旧来到迷蒙麦田。
+0627 [en; 64 bit; 70 chars] Pools even wake; oaks bow freely; still suns shine; nights there rest.
+0628 [en; 64 bit; 70 chars] Mild dawns fall; trees only grow; bright seas glide; isles there glow.
+0629 [zh; 80 bit; 39 chars] 清晨乐师自在走向寂静古城，正午过客悄悄奔向空旷丘陵，初冬少年自在路过清幽沙丘。
+0630 [zh; 80 bit; 39 chars] 黄昏文人乘月走过明净亭台，晌午旅人随风踏入清幽山径，午后歌者静静穿过空旷丘陵。
+0631 [en; 64 bit; 69 chars] Gales tonight sing; wet oaks nod; hopes fall slowly; soon notes wait.
+0632 [en; 64 bit; 68 chars] Firs lean there; wet nights rest; these gales ebb; long storms fall.
+0633 [zh; 80 bit; 39 chars] 清晨牧人沿途来到平静桥头，初春青年默默走向悠远高原，雪夜行人轻轻踏入清寂长廊。
+0634 [zh; 80 bit; 39 chars] 黄昏故人仍旧进入清幽山径，初秋游人翩翩踏过清冷海边，午夜书生再次奔向安静松林。
+0635 [en; 64 bit; 66 chars] Icy pools cool; warm isles sleep; oaks sing here; elms nod calmly.
+0636 [en; 64 bit; 67 chars] Dry buds sway; cold seas move; pure brooks fall; late sparks gleam.
+0637 [zh; 80 bit; 39 chars] 清晨学子翩翩路过平静海边，黎明文人缓缓途经陌生故里，拂晓文人偶尔走进遥远山间。
+0638 [zh; 80 bit; 39 chars] 黄昏诗人沿途越过幽静草地，子夜诗人依旧穿过寂静山岭，薄暮老翁相携来到陌生旧城。
+0639 [en; 64 bit; 67 chars] Owls only feed; songs today sleep; open rills fall; open pools dim.
+0640 [en; 64 bit; 69 chars] Here ponds fade; beams gleam there; new moths hum; fogs rise tonight.
+0641 [zh; 80 bit; 39 chars] 清晨归人终于来到寂静平原，黎明牧人随风走向迷蒙山间，初夏茶农相携行经寂静栈道。
+0642 [zh; 80 bit; 39 chars] 黄昏樵夫依旧穿过静谧丘陵，暮春诗人悠然路过恬静海边，晨间游子从容走进悠远荒野。
+0643 [en; 64 bit; 65 chars] Brooks now sigh; red rivers run; then lakes dim; some waves fall.
+0644 [en; 64 bit; 70 chars] Cold gales fall; just pools dim; hopes wake then; sparks sleep slowly.
+0645 [zh; 80 bit; 39 chars] 清晨樵夫从容越过沉静湖畔，长夜老人徐徐踏过平静松林，暮春行人乘月越过温柔山林。
+0646 [zh; 80 bit; 39 chars] 黄昏友人终于走进翠绿花圃，今夜常客悠悠步入遥远小路，深夜归人静静走过苍翠泉边。
+0647 [en; 64 bit; 69 chars] Rich tales fade; jade trees bend; moths always float; red skies fade.
+0648 [en; 64 bit; 70 chars] Some skies fall; gently roots grow; our clouds pass; seas calmly flow.
+0649 [zh; 80 bit; 39 chars] 清晨佳人轻轻走过开阔花园，黎明友人徐徐越过微凉沙洲，傍晚佳人悠然来到幽深花间。
+0650 [zh; 80 bit; 39 chars] 黄昏游人缓缓穿过迷蒙老街，午后长者终于路过安静古城，晌午渔人慢慢来到悠远长桥。
+0651 [en; 64 bit; 70 chars] Dusks there rest; dim storms ebb; our beams wait; streams calmly cool.
+0652 [en; 64 bit; 64 chars] Chimes again ring; fogs dim again; few days fall; new bays stir.
+0653 [zh; 80 bit; 39 chars] 清晨佳人沿途行经平静江畔，清晨老人轻轻返回朦胧山间，日间佳人怡然途经温柔湖畔。
+0654 [zh; 80 bit; 39 chars] 黄昏过客翩翩途经辽阔竹林，深夜常客趁夜来到安静花圃，深夜旅人结伴越过微凉水畔。
+0655 [en; 64 bit; 70 chars] Isles slowly wait; wet dusks rest; old crows wait; snows softly glint.
+0656 [en; 64 bit; 70 chars] Birds only fly; calmly reeds sing; rills here ebb; nights softly rest.
+0657 [zh; 80 bit; 39 chars] 清晨路人静静奔向空旷荒野，正午来客终于走进温柔小路，傍晚常客乘月行经寂静湖畔。
+0658 [zh; 80 bit; 39 chars] 黄昏长者翩翩踏过沉静草甸，初春少年再次踏过平静栈道，日间画师迎风走过幽深花圃。
+0659 [en; 64 bit; 64 chars] Soft rills cool; clear elms sing; bays even dim; vines now sway.
+0660 [en; 64 bit; 69 chars] Small flies rest; blue seas move; thin hills fade; vast streams rest.
+0661 [zh; 80 bit; 39 chars] 清晨故人随风经过迷离村庄，仲夏佳人再次走过寂静山麓，初秋常客悠悠返回迷离山岭。
+0662 [zh; 80 bit; 39 chars] 黄昏诗人悠然途经宁静花圃，暮春舞者趁夜穿过幽静湖畔，子夜行人慢慢踏过沉静亭台。
+0663 [en; 64 bit; 67 chars] No terns wait; firs even grow; bright lights fall; pale elms bloom.
+0664 [en; 64 bit; 70 chars] Calm rills run; wrens softly turn; gold beams rest; faint tides shine.
+0665 [zh; 80 bit; 39 chars] 清晨游人自在来到迷离旷野，清晨茶农自在踏过清寂平原，暮春舞者徐徐行经翠绿湖畔。
+0666 [zh; 80 bit; 39 chars] 黄昏舞者独自进入朦胧原野，清晨友人怡然返回恬静草甸，仲夏书生随风经过沉静村落。
+0667 [en; 64 bit; 68 chars] Old lakes rest; dark days end; moons shine slowly; again winds sigh.
+0668 [en; 64 bit; 70 chars] Pale streams glint; airy storms fade; soft brooks ebb; no gulls drift.
+0669 [zh; 80 bit; 39 chars] 清晨常客轻轻走进葱茏田野，昨夜画师独自走过熟悉田野，暮间旅人迎风走向温柔溪边。
+0670 [zh; 80 bit; 39 chars] 黄昏老翁默默走向微凉长街，清晨学子悠悠返回明净山巅，仲夏行人偶尔走向清寂荒野。
+0671 [en; 64 bit; 69 chars] Gales always hum; still wrens fly; pools softly dim; just winds stir.
+0672 [en; 64 bit; 70 chars] Briefly hills sleep; bare pines sleep; seas now fall; most reeds wake.
+0673 [zh; 80 bit; 39 chars] 清晨归人终于越过辽阔山麓，日间花农悠然奔向辽阔山坡，暮间老者仍旧走过寂静石桥。
+0674 [zh; 80 bit; 39 chars] 黄昏诗人依旧进入幽静故里，正午旅人独自返回迷蒙故里，初夏茶农慢慢来到寂静河畔。
+0675 [en; 64 bit; 70 chars] Waves run there; rays rise tonight; quietly bees fly; cool gulls feed.
+0676 [en; 64 bit; 69 chars] Days soon come; gold wrens nap; gently dawns rise; faint rhymes sing.
+0677 [zh; 80 bit; 39 chars] 清晨故人沿途步入朦胧山谷，深冬旅人安然奔向朦胧老街，午夜友人踏雪来到清寂花圃。
+0678 [zh; 80 bit; 39 chars] 黄昏友人依旧奔向朦胧麦田，初春佳人随风踏入寂静小路，黎明长者翩翩来到迷蒙草甸。
+0679 [en; 64 bit; 68 chars] Few tides sleep; stags feed there; no wrens soar; mists glow calmly.
+0680 [en; 64 bit; 68 chars] Fogs rise freely; old ponds gleam; deep vines rest; trees only lean.
+0681 [zh; 80 bit; 39 chars] 清晨友人沿途走向安静江畔，清晨老者悠然走向恬静小巷，初夏老人独自进入空旷旧城。
+0682 [zh; 80 bit; 39 chars] 黄昏行人依旧走向苍茫草原，深夜行人偶尔奔向迷离小镇，午后过客踏雪穿过遥远山谷。
+0683 [en; 64 bit; 65 chars] Calmly vines sing; icy buds wake; red waves ebb; cool rays sleep.
+0684 [en; 64 bit; 66 chars] Sparks dim soon; rays wake here; beams now blink; bare winds fall.
+0685 [zh; 80 bit; 39 chars] 清晨友人再次踏过寂静楼台，深冬过客悠然进入恬静绿洲，深冬老人慢慢踏过悠远河畔。
+0686 [zh; 80 bit; 39 chars] 黄昏路人依旧踏过古老林间，长夜长者缓缓越过苍翠海边，深夜老翁再次返回恬静草地。
+0687 [en; 64 bit; 70 chars] Seas sigh softly; faint hopes wake; thin streams run; warm snows fall.
+0688 [en; 64 bit; 70 chars] Pure dews glow; fresh shores fade; frosts shine then; here beams rise.
+0689 [zh; 80 bit; 39 chars] 清晨老者坦然步入清冷花间，暮春舞者安然返回幽深水畔，仲秋诗人结伴路过迷离沙滩。
+0690 [zh; 80 bit; 39 chars] 黄昏友人踏雪奔向明净山麓，晨间渔人随风穿过宁静山巅，雪夜过客踏雪步入苍茫田野。
+0691 [en; 64 bit; 70 chars] Echoes soon wake; tides today shine; wet stags pause; only dawns come.
+0692 [en; 64 bit; 64 chars] Rose brooks ebb; rose waves run; harts now feed; icy rivers ebb.
+0693 [zh; 80 bit; 39 chars] 清晨来客静静途经幽静小镇，子夜舞者自在步入静谧草甸，暮春老人坦然走向明净小径。
+0694 [zh; 80 bit; 39 chars] 黄昏归人欣然踏入寂静苔原，今夜过客从容途经清寂小巷，盛夏路人并肩途经葱茏苔原。
+0695 [en; 64 bit; 68 chars] Dry deer feed; near seas warm; again wrens fly; briefly larks sleep.
+0696 [en; 64 bit; 70 chars] Far rivers sleep; new waves fall; icy oaks bloom; gleams gently shine.
+0697 [zh; 80 bit; 39 chars] 清晨乐师悄悄路过宁静长廊，晚夏学子缓缓路过安静村落，暮春文人趁夜返回温柔原野。
+0698 [zh; 80 bit; 39 chars] 黄昏舞者坦然途经清幽泉边，初春牧人从容越过迷离小径，初秋乐师仍旧行经安静旷野。
+0699 [en; 64 bit; 66 chars] Bare firs bow; again seas run; wide pools fade; often hopes sleep.
+0700 [en; 64 bit; 65 chars] Navy bays glow; reeds then sleep; only terns wake; icy seas rise.
+0701 [zh; 80 bit; 39 chars] 清晨老人翩翩途经辽阔草甸，暮春樵夫默默踏入沉静草地，晨间农人仍旧踏入遥远苔原。
+0702 [zh; 80 bit; 39 chars] 黄昏茶农迎风走进微凉花园，仲春老人悠悠走进悠远长廊，日间故人忽然穿过熟悉苔原。
+0703 [en; 64 bit; 66 chars] Rose rills roll; stags there move; pure dusks come; new reeds bow.
+0704 [en; 64 bit; 69 chars] High coves sleep; few tales fall; oaks bloom slowly; owls sleep here.
+0705 [zh; 80 bit; 39 chars] 清晨樵夫默默踏过苍茫沙丘，初夏书生静静返回温柔渡口，仲夏少年趁夜行经苍翠山间。
+0706 [zh; 80 bit; 39 chars] 黄昏来客欣然走进宁静长街，昨夜歌者再次途经遥远山麓，晚夏旅人静静走向陌生山径。
+0707 [en; 64 bit; 69 chars] Then pines bow; seas rise quietly; all sparks gleam; those deer roam.
+0708 [en; 64 bit; 70 chars] Buds wake quietly; low ferns wake; dark songs wait; bells wake freely.
+0709 [zh; 80 bit; 39 chars] 清晨乐师仍旧踏过安静草甸，仲夏渔人趁夜穿过陌生沙丘，长夜舞者再次途经宁静花间。
+0710 [zh; 80 bit; 39 chars] 黄昏来客忽然走过幽深山林，仲春乐师轻轻踏过寂静栈道，子夜歌者翩翩穿过翠绿花间。
+0711 [en; 64 bit; 63 chars] No suns sleep; open rills wake; grey moons dim; deer feed then.
+0712 [en; 64 bit; 67 chars] No shores fade; vast oaks sing; days fall then; moths gently drift.
+0713 [zh; 80 bit; 39 chars] 清晨过客并肩奔向微凉郊野，晚夏花农迎风走向清寂长桥，晚夏游子并肩返回幽深沙滩。
+0714 [zh; 80 bit; 39 chars] 黄昏乐师安然行经熟悉长桥，仲秋学子轻轻途经迷蒙稻田，暮间过客翩翩来到陌生山麓。
+0715 [en; 64 bit; 68 chars] Some words wake; damp woods shine; most leaves sway; wild days fall.
+0716 [en; 64 bit; 70 chars] Wide coves glow; moths float often; clear words fall; deep gales fade.
+0717 [zh; 80 bit; 39 chars] 清晨牧人徐徐走过明净渡口，今夜茶农相携奔向宁静花间，晨间文人并肩越过朦胧原野。
+0718 [zh; 80 bit; 39 chars] 黄昏归人踏雪穿过恬静花间，晚夏路人悄悄穿过迷离草甸，暮春行人徐徐踏过古老松林。
+0719 [en; 64 bit; 65 chars] Cold songs chime; suns just dim; pale winds fade; tides now rest.
+0720 [en; 64 bit; 68 chars] Now rays wane; softly suns sleep; winds rest there; slow mists fall.
+0721 [zh; 80 bit; 39 chars] 清晨文人沿途走向青葱山岭，盛夏渔人怡然来到安静平原，午后舞者静静走向安静苔原。
+0722 [zh; 80 bit; 39 chars] 黄昏友人沿途行经熟悉亭台，初冬老翁依旧走进古老绿洲，晌午青年再次路过古老村庄。
+0723 [en; 64 bit; 69 chars] Nights go here; both crows wake; tonight tides sing; dark ponds warm.
+0724 [en; 64 bit; 70 chars] Always skies sleep; lone gales sweep; all reeds rest; few stags pause.
+0725 [zh; 80 bit; 39 chars] 清晨花农仍旧穿过恬静长街，深冬老翁徐徐走过清幽沙滩，暮间乐师结伴步入苍翠草地。
+0726 [zh; 80 bit; 39 chars] 黄昏花农忽然踏入遥远小巷，子夜花农轻轻越过陌生麦田，午夜游子并肩越过迷离草地。
+0727 [en; 64 bit; 66 chars] Sweet rhymes sing; few owls rest; seas then move; bare seeds grow.
+0728 [en; 64 bit; 68 chars] Oaks often bloom; rich snows glow; no moons wane; waves slowly rest.
+0729 [zh; 80 bit; 39 chars] 清晨学子翩翩步入翠绿山间，盛夏茶农静静走过平静花园，暮间来客自在路过古老荒原。
+0730 [zh; 80 bit; 39 chars] 黄昏茶农徐徐踏过静谧巷口，昨夜书生默默越过温柔江畔，今夜牧人从容途经恬静草甸。
+0731 [en; 64 bit; 70 chars] Again dreams wake; calmly beams wake; lone birds nap; again winds hum.
+0732 [en; 64 bit; 65 chars] Soft suns rise; then elms sleep; rills stir now; old leaves sway.
+0733 [zh; 80 bit; 39 chars] 清晨老翁相携穿过温柔山间，昨夜老翁再次穿过静谧苔原，仲春老者怡然经过开阔长桥。
+0734 [zh; 80 bit; 39 chars] 黄昏友人乘月踏过微凉古城，初春舞者安然返回熟悉小径，今夜文人迎风行经幽深花间。
+0735 [en; 64 bit; 64 chars] Lush ferns grow; blue days fade; soon firs grow; old seeds wake.
+0736 [en; 64 bit; 70 chars] Gales sigh softly; now roses bloom; thin nights wake; both roots wake.
+0737 [zh; 80 bit; 39 chars] 清晨游人沿途踏过苍翠河畔，初夏书生徐徐越过清幽山径，暮间少年轻轻走过朦胧桥头。
+0738 [zh; 80 bit; 39 chars] 黄昏歌者徐徐走进遥远山林，仲夏游人徐徐返回微凉山间，正午老人悠悠行经幽深小路。
+0739 [en; 64 bit; 67 chars] Now wrens turn; ponds just gleam; light oaks grow; vast ferns lean.
+0740 [en; 64 bit; 65 chars] Near ponds dim; brooks now hum; suns dim still; high waves sleep.
+0741 [zh; 80 bit; 39 chars] 清晨友人静静走进平静麦田，晌午青年从容走过熟悉古道，傍晚舞者结伴经过苍翠山谷。
+0742 [zh; 80 bit; 39 chars] 黄昏长者轻轻走进温柔楼台，仲春歌者坦然踏入平静小路，雪夜花农结伴越过安静花圃。
+0743 [en; 64 bit; 70 chars] Cold fields rest; there ponds warm; dreams wait now; light waves sigh.
+0744 [en; 64 bit; 69 chars] Pines sleep freely; gold seas swell; red waves fall; bays today glow.
+0745 [zh; 80 bit; 39 chars] 清晨归人徐徐越过微凉古道，初春常客从容行经迷蒙山林，仲秋老人静静经过安静稻田。
+0746 [zh; 80 bit; 39 chars] 黄昏舞者悠悠步入空旷荒野，暮间路人随风踏入青葱田野，雪夜长者沿途经过幽静郊野。
+0747 [en; 64 bit; 66 chars] Few winds rise; softly pines nod; wide waves flow; thin nights go.
+0748 [en; 64 bit; 69 chars] Notes here sing; some roots grow; freely stars dim; isles wake again.
+0749 [zh; 80 bit; 39 chars] 清晨故人仍旧进入古老小巷，晨间来客慢慢走过古老平原，深夜舞者独自走向悠远亭台。
+0750 [zh; 80 bit; 39 chars] 黄昏花农结伴途经安静河畔，盛夏常客默默走过幽静松林，初春游子徐徐步入寂静花圃。
+0751 [en; 64 bit; 66 chars] Lone wrens nap; now pines lean; then chimes rest; cool roses bend.
+0752 [en; 64 bit; 68 chars] Suns then blink; thin sparks fall; seas even wake; pure gales sleep.
+0753 [zh; 80 bit; 39 chars] 清晨青年安然走过古老山林，深夜青年结伴奔向恬静山谷，暮间歌者缓缓奔向辽阔草原。
+0754 [zh; 80 bit; 39 chars] 黄昏渔人从容越过沉静街角，仲春茶农安然路过幽静丘陵，长夜书生结伴穿过翠绿郊野。
+0755 [en; 64 bit; 69 chars] Only roses grow; lush buds swell; pale days come; freely rills gleam.
+0756 [en; 64 bit; 69 chars] Frosts calmly thaw; here doves feed; pools even rest; high vines bow.
+0757 [zh; 80 bit; 39 chars] 清晨佳人悠悠越过明净湖畔，雨夜渔人坦然进入恬静苔原，晨间老者依旧进入迷蒙草原。
+0758 [zh; 80 bit; 39 chars] 黄昏友人徐徐越过熟悉沙丘，昨夜茶农结伴奔向恬静绿洲，深冬渔人趁夜穿过沉静渡口。
+0759 [en; 64 bit; 70 chars] Wet oaks lean; long pools sleep; quiet brooks glow; today beams glint.
+0760 [en; 64 bit; 69 chars] Cold tides sigh; faint leaves fall; new seas glow; calm dreams sleep.
+0761 [zh; 80 bit; 39 chars] 清晨游子欣然走进沉静花园，仲夏牧人独自越过寂静旷野，雨夜青年偶尔踏过幽静绿洲。
+0762 [zh; 80 bit; 39 chars] 黄昏佳人自在走过空旷麦田，仲春文人随风穿过古老高原，子夜常客默默走过隐约楼台。
+0763 [en; 64 bit; 68 chars] Dark gales wake; late clouds move; again rays fall; cold mists rise.
+0764 [en; 64 bit; 67 chars] Hares rest today; days then wake; owls glide here; bells wait soon.
+0765 [zh; 80 bit; 39 chars] 清晨路人终于越过清冷郊野，初夏游子再次返回迷离沙洲，傍晚老人怡然来到古老庭院。
+0766 [zh; 80 bit; 39 chars] 黄昏茶农仍旧步入陌生山间，午夜文人终于步入寂静小路，午后牧人从容经过苍茫郊野。
+0767 [en; 64 bit; 68 chars] Echoes even wake; buds sway again; deep skies fall; oaks again lean.
+0768 [en; 64 bit; 70 chars] Warm shores sleep; then gales fall; old rains pass; stars glow slowly.
+0769 [zh; 80 bit; 39 chars] 清晨樵夫偶尔越过朦胧小径，初秋樵夫从容来到恬静小巷，午夜牧人轻轻奔向苍茫湖畔。
+0770 [zh; 80 bit; 39 chars] 黄昏归人默默途经古老苔原，薄暮学子缓缓奔向遥远水畔，初秋歌者从容奔向恬静湖畔。
+0771 [en; 64 bit; 64 chars] Just flies rest; all firs sing; light rills hum; gales now sing.
+0772 [en; 64 bit; 66 chars] Suns soon wane; those echoes wake; vast elms bow; lush ferns rest.
+0773 [zh; 80 bit; 39 chars] 清晨过客随风奔向朦胧海边，初夏常客自在来到隐约山坡，子夜来客随风来到微凉草甸。
+0774 [zh; 80 bit; 39 chars] 黄昏歌者缓缓步入静谧村庄，深夜旅人终于来到清幽山间，深冬行人从容走向明净草原。
+0775 [en; 64 bit; 67 chars] Only brooks hum; dry stags rest; most sands gleam; bays shine then.
+0776 [en; 64 bit; 66 chars] Hills shine soon; days gently come; few suns set; oaks lean there.
+0777 [zh; 80 bit; 39 chars] 清晨乐师悠然行经清幽旷野，午后行人随风途经明净水畔，深秋游人依旧走过沉静村庄。
+0778 [zh; 80 bit; 39 chars] 黄昏舞者安然步入清幽旷野，暮间行人沿途走过微凉老街，薄暮歌者偶尔踏过辽阔丘陵。
+0779 [en; 64 bit; 70 chars] Thin moons glint; pools often thaw; birds even soar; pure chimes wake.
+0780 [en; 64 bit; 70 chars] Faint snows shine; fresh vines bloom; bays often glint; soft elms bow.
+0781 [zh; 80 bit; 39 chars] 清晨画师安然奔向隐约故里，昨夜路人轻轻行经遥远亭台，黎明茶农独自来到清冷林间。
+0782 [zh; 80 bit; 39 chars] 黄昏诗人依旧踏入遥远楼台，暮间过客终于走向空旷稻田，清晨长者并肩来到迷蒙泉边。
+0783 [en; 64 bit; 65 chars] Quiet suns fade; red nights wait; lush buds wake; most dawns end.
+0784 [en; 64 bit; 68 chars] Soft fields fade; ponds here dim; firs softly bow; calm stars shine.
+0785 [zh; 80 bit; 39 chars] 清晨长者相携越过温柔楼台，晨间诗人悠悠经过明净山径，初夏友人并肩奔向熟悉楼台。
+0786 [zh; 80 bit; 39 chars] 黄昏游子坦然步入清幽原野，初春书生默默穿过葱茏海边，午夜樵夫结伴行经静谧亭台。
+0787 [en; 64 bit; 67 chars] Winds only fall; few songs chime; airy frosts glint; low oaks sigh.
+0788 [en; 64 bit; 64 chars] Seas still fall; late elms sleep; rose tides run; buds now rest.
+0789 [zh; 80 bit; 39 chars] 清晨学子徐徐进入苍茫苔原，拂晓友人悠悠走进平静长街，正午长者安然越过宁静海边。
+0790 [zh; 80 bit; 39 chars] 黄昏诗人从容经过宁静渡口，暮春青年相携走进平静栈道，仲夏佳人悠然越过遥远亭台。
+0791 [en; 64 bit; 70 chars] Soon isles wait; crows wait freely; grey owls turn; waves fall calmly.
+0792 [en; 64 bit; 70 chars] Airy snows shine; wet brooks sigh; softly leaves grow; then deer rest.
+0793 [zh; 80 bit; 39 chars] 清晨常客坦然走向熟悉小镇，午夜茶农欣然途经古老古城，初春行人坦然走过青葱苔原。
+0794 [zh; 80 bit; 39 chars] 黄昏画师偶尔穿过遥远河畔，仲夏诗人终于越过熟悉山巅，雨夜樵夫自在走过清幽水畔。
+0795 [en; 64 bit; 68 chars] Deep notes ring; ferns sleep there; wet dews rest; even rivers glow.
+0796 [en; 64 bit; 70 chars] Both rays dim; clear streams move; hills then wake; terns wait gently.
+0797 [zh; 80 bit; 39 chars] 清晨常客悠悠踏过安静松林，午夜牧人结伴踏入迷离巷口，晨间乐师怡然踏过古老泉边。
+0798 [zh; 80 bit; 39 chars] 黄昏少年随风走过安静花圃，黄昏少年默默穿过熟悉栈道，子夜诗人再次路过悠远庭院。
+0799 [en; 64 bit; 65 chars] Dry crows nap; owls briefly turn; few tales rise; calm deer roam.
+0800 [en; 64 bit; 66 chars] Our larks nap; gales only sigh; woods gleam tonight; icy dawns go.
+0801 [zh; 80 bit; 39 chars] 清晨少年默默进入苍翠花间，清晨渔人悠然踏过平静原野，仲夏佳人趁夜行经熟悉长桥。
+0802 [zh; 80 bit; 39 chars] 黄昏老翁悄悄行经辽阔湖畔，子夜长者翩翩走过安静花圃，仲秋友人从容走向宁静绿洲。
+0803 [en; 64 bit; 70 chars] Often chimes rest; still tales hum; bright beams rise; hares just nap.
+0804 [en; 64 bit; 70 chars] Brooks only roll; wild streams sigh; pines bow slowly; now pools glow.
+0805 [zh; 80 bit; 39 chars] 清晨老人依旧途经熟悉水畔，午夜花农翩翩进入清冷庭院，仲秋常客相携途经熟悉苔原。
+0806 [zh; 80 bit; 39 chars] 黄昏渔人乘月路过幽静草甸，正午乐师并肩踏入朦胧老街，长夜游人迎风奔向空旷古道。
+0807 [en; 64 bit; 67 chars] Rills here cool; wild seeds rest; near tides sing; jade elms sleep.
+0808 [en; 64 bit; 70 chars] New doves glide; high tides fall; moons freely blink; then isles wake.
+0809 [zh; 80 bit; 39 chars] 清晨歌者悄悄走向隐约村落，晨间书生从容走过熟悉楼台，初夏游子随风奔向安静旷野。
+0810 [zh; 80 bit; 39 chars] 黄昏故人沿途进入幽静稻田，初春舞者从容踏入翠绿花间，晨间画师并肩返回清寂小镇。
+0811 [en; 64 bit; 70 chars] Those seas fall; pure streams ebb; always gales pause; open rills hum.
+0812 [en; 64 bit; 68 chars] Bare clouds fall; today harts run; beams soon rise; these dawns end.
+0813 [zh; 80 bit; 39 chars] 清晨牧人依旧途经平静溪边，傍晚过客乘月走过静谧溪边，午夜路人静静穿过清冷田野。
+0814 [zh; 80 bit; 39 chars] 黄昏文人结伴踏过安静山麓，午夜佳人悠悠踏入迷离花间，盛夏茶农安然踏过清寂小巷。
+0815 [en; 64 bit; 68 chars] Leaves grow still; light elms sway; quiet pools warm; navy seas run.
+0816 [en; 64 bit; 69 chars] Faint gleams wake; words ring still; fresh buds swell; old lakes dim.
+0817 [zh; 80 bit; 39 chars] 清晨花农翩翩经过迷离湖畔，仲夏来客悠然经过迷蒙海边，初冬行人怡然经过苍茫湖畔。
+0818 [zh; 80 bit; 39 chars] 黄昏青年徐徐进入古老山林，黄昏学子悄悄来到平静旷野，深秋长者默默行经清寂村落。
+0819 [en; 64 bit; 70 chars] Cool seas sleep; tonight roses sigh; fogs rise now; there hares sleep.
+0820 [en; 64 bit; 69 chars] Still doves feed; sands gleam soon; wet buds grow; often birds drift.
+0821 [zh; 80 bit; 39 chars] 清晨旅人安然行经恬静小路，仲秋老翁悄悄进入沉静庭院，今夜友人静静路过葱茏山间。
+0822 [zh; 80 bit; 39 chars] 黄昏老人迎风踏入古老旷野，初秋归人趁夜步入平静村落，正午来客悄悄越过温柔郊野。
+0823 [en; 64 bit; 69 chars] Grey harts wait; fresh pools shine; cool tides flow; lone dusks fall.
+0824 [en; 64 bit; 68 chars] Fresh snows drift; red reeds sleep; low tides glint; few larks wait.
+0825 [zh; 80 bit; 39 chars] 清晨渔人依旧走向悠远石桥，长夜花农默默经过遥远草原，初夏书生再次经过幽深沙滩。
+0826 [zh; 80 bit; 39 chars] 黄昏舞者静静来到恬静田野，仲春游子趁夜路过幽静河畔，昨夜画师独自进入安静栈道。
+0827 [en; 64 bit; 70 chars] Doves just soar; blue streams flow; pure gleams glint; red isles rest.
+0828 [en; 64 bit; 67 chars] Dawns often wait; bare rays wake; there wrens soar; harts nap soon.
+0829 [zh; 80 bit; 39 chars] 清晨花农轻轻行经寂静庭院，午后友人迎风穿过空旷山麓，昨夜长者怡然行经静谧郊野。
+0830 [zh; 80 bit; 39 chars] 黄昏诗人翩翩踏过开阔石桥，黎明画师自在途经空旷丘陵，雪夜过客悠然行经静谧江畔。
+0831 [en; 64 bit; 67 chars] Seas slowly swell; cold tides run; wet hills wait; gulls then wake.
+0832 [en; 64 bit; 68 chars] Mists slowly pass; no vines bow; streams calmly hum; all doves turn.
+0833 [zh; 80 bit; 39 chars] 清晨学子终于走向明净沙洲，拂晓归人相携路过迷蒙村落，子夜文人仍旧行经寂静竹林。
+0834 [zh; 80 bit; 39 chars] 黄昏旅人慢慢走向微凉小巷，薄暮旅人自在行经熟悉巷口，晨间友人徐徐来到宁静竹林。
+0835 [en; 64 bit; 65 chars] Elms here lean; warm woods wake; wet buds swell; days fall there.
+0836 [en; 64 bit; 67 chars] Lakes sleep freely; dark woods wait; reeds here nod; vast seas hum.
+0837 [zh; 80 bit; 39 chars] 清晨行人沿途途经平静山巅，暮间游子缓缓踏过宁静沙洲，初冬老翁偶尔走向恬静泉边。
+0838 [zh; 80 bit; 39 chars] 黄昏画师乘月越过宁静原野，仲秋老翁偶尔路过朦胧山谷，清晨青年慢慢走向辽阔河畔。
+0839 [en; 64 bit; 68 chars] Fresh oaks sing; dews there glint; both elms nod; freely gales wake.
+0840 [en; 64 bit; 68 chars] Always tales ring; suns glint still; no sands sleep; gales here hum.
+0841 [zh; 80 bit; 39 chars] 清晨长者依旧路过遥远林间，清晨乐师忽然行经幽深沙滩，薄暮文人慢慢踏入安静山谷。
+0842 [zh; 80 bit; 39 chars] 黄昏青年偶尔来到苍茫山间，深夜茶农迎风穿过清幽小巷，清晨老者欣然返回微凉草原。
+0843 [en; 64 bit; 68 chars] Storms ebb soon; dark dreams go; all crows wait; rivers wake calmly.
+0844 [en; 64 bit; 68 chars] Freely rivers sleep; seas only hum; old oaks rest; doves often sing.
+0845 [zh; 80 bit; 39 chars] 清晨归人悠悠奔向温柔旷野，初夏书生独自进入明净回廊，初春乐师踏雪越过熟悉郊野。
+0846 [zh; 80 bit; 39 chars] 黄昏来客慢慢走过朦胧湖畔，昨夜常客坦然走向幽深高原，薄暮歌者忽然返回迷离水畔。
+0847 [en; 64 bit; 67 chars] Wide isles wake; quiet wrens rest; often elms sigh; even owls rest.
+0848 [en; 64 bit; 65 chars] Owls fly briefly; here elms nod; old tales wait; most gales fall.
+0849 [zh; 80 bit; 39 chars] 清晨老者结伴穿过幽深沙滩，昨夜来客沿途越过恬静渡口，今夜茶农相携途经悠远巷口。
+0850 [zh; 80 bit; 39 chars] 黄昏长者结伴走过寂静草地，初秋花农坦然越过青葱花圃，昨夜归人欣然途经幽静原野。
+0851 [en; 64 bit; 66 chars] Icy winds rise; new shores rest; all elms wake; terns rest gently.
+0852 [en; 64 bit; 69 chars] Grey elms bloom; red brooks rest; ferns sing softly; again dusks end.
+0853 [zh; 80 bit; 39 chars] 清晨青年随风走过青葱花园，长夜行人从容走进清幽花园，雪夜书生仍旧越过青葱松林。
+0854 [zh; 80 bit; 39 chars] 黄昏归人偶尔走进空旷故里，傍晚文人仍旧奔向迷蒙泉边，仲秋歌者悄悄途经古老稻田。
+0855 [en; 64 bit; 67 chars] Words then sleep; red nights end; only dews gleam; today owls rest.
+0856 [en; 64 bit; 69 chars] Gales pause briefly; new crows rest; ferns nod today; terns sing now.
+0857 [zh; 80 bit; 39 chars] 清晨行人悄悄走进青葱草地，初秋归人坦然来到空旷桥头，长夜游子乘月走进熟悉苔原。
+0858 [zh; 80 bit; 39 chars] 黄昏归人轻轻返回明净山巅，暮春文人徐徐途经遥远海边，晨间老翁从容行经平静海边。
+0859 [en; 64 bit; 70 chars] Fresh brooks fall; hares here roam; some bells wait; bare shores fade.
+0860 [en; 64 bit; 65 chars] Pale rays wane; gold trees wake; far tides stir; then beams fade.
+0861 [zh; 80 bit; 39 chars] 清晨画师并肩踏入幽深故里，深冬老者悠悠途经清冷小径，薄暮旅人偶尔步入遥远绿洲。
+0862 [zh; 80 bit; 39 chars] 黄昏渔人从容路过清幽泉边，仲春老人终于步入幽深田野，雨夜舞者相携经过陌生村庄。
+0863 [en; 64 bit; 70 chars] Bare lakes warm; waves always rise; seeds wake today; cold ferns lean.
+0864 [en; 64 bit; 67 chars] Waves soon hum; these oaks grow; only fogs glow; lights there rise.
+0865 [zh; 80 bit; 39 chars] 清晨画师缓缓途经陌生麦田，初春乐师沿途途经幽深山林，暮春路人趁夜穿过古老渡口。
+0866 [zh; 80 bit; 39 chars] 黄昏行人忽然来到沉静山径，长夜来客从容穿过青葱苔原，初夏来客从容来到清寂古城。
+0867 [en; 64 bit; 70 chars] Songs wake still; still rills glide; soon tides sing; seeds here rest.
+0868 [en; 64 bit; 68 chars] High brooks rise; bays cool still; few bells fall; calmly doves fly.
+0869 [zh; 80 bit; 39 chars] 清晨旅人沿途踏过温柔街角，雪夜歌者悠悠步入悠远草甸，今夜来客沿途走向幽静旷野。
+0870 [zh; 80 bit; 39 chars] 黄昏农人欣然经过安静江畔，黎明渔人忽然走向迷蒙高原，仲秋茶农迎风踏过空旷河畔。
+0871 [en; 64 bit; 70 chars] Firs bend then; gently pines wake; notes wait gently; cool vines grow.
+0872 [en; 64 bit; 69 chars] Fresh dawns sleep; open seas fall; gleams often fade; wild owls soar.
+0873 [zh; 80 bit; 39 chars] 清晨花农怡然路过青葱山坡，初冬佳人踏雪途经恬静山径，午后旅人安然途经明净竹林。
+0874 [zh; 80 bit; 39 chars] 黄昏书生悠然奔向幽静松林，深冬常客悠悠踏入空旷稻田，昨夜友人乘月进入微凉田野。
+0875 [en; 64 bit; 70 chars] Soon frosts fade; blue rays shine; dawns still wake; birds always nap.
+0876 [en; 64 bit; 65 chars] Rich buds wake; soft rills drift; far waves hum; seas shine soon.
+0877 [zh; 80 bit; 39 chars] 清晨画师相携走向清幽长桥，雨夜归人相携途经幽深沙丘，日间画师偶尔途经清寂小径。
+0878 [zh; 80 bit; 39 chars] 黄昏故人缓缓行经恬静松林，雨夜老人趁夜走过恬静旷野，盛夏行人自在途经隐约河畔。
+0879 [en; 64 bit; 64 chars] Freely oaks wake; now tales rise; dim rills glow; no notes fall.
+0880 [en; 64 bit; 66 chars] Dim rains fade; always stars blink; our firs wake; red waves roll.
+0881 [zh; 80 bit; 39 chars] 清晨农人慢慢行经幽深山巅，清晨路人缓缓进入清冷故里，暮间故人静静路过遥远小巷。
+0882 [zh; 80 bit; 39 chars] 黄昏游人踏雪越过温柔古城，暮间少年随风路过熟悉沙洲，深冬游子相携来到辽阔麦田。
+0883 [en; 64 bit; 69 chars] Moths still sleep; bells here fall; grey rills hum; words wait still.
+0884 [en; 64 bit; 70 chars] Thin waves swell; rills softly sing; moons just set; lakes always dim.
+0885 [zh; 80 bit; 39 chars] 清晨渔人默默奔向熟悉山岭，拂晓书生仍旧途经葱茏竹林，深冬渔人忽然进入清幽山谷。
+0886 [zh; 80 bit; 39 chars] 黄昏诗人悄悄踏过沉静沙滩，初春茶农自在返回明净山岭，初春游子沿途走向恬静村落。
+0887 [en; 64 bit; 67 chars] Icy oaks rest; those tides fall; again hares wait; quiet vines nod.
+0888 [en; 64 bit; 69 chars] Waves slowly move; new tales hum; faint storms pause; cold seas sing.
+0889 [zh; 80 bit; 39 chars] 清晨佳人自在走过清寂花间，初秋学子自在越过静谧泉边，雪夜故人轻轻进入空旷村庄。
+0890 [zh; 80 bit; 39 chars] 黄昏渔人偶尔踏过清冷郊野，初秋茶农悄悄经过沉静溪边，仲夏牧人从容来到幽深长桥。
+0891 [en; 64 bit; 69 chars] There waves warm; grey streams hum; soon tides fall; only notes fall.
+0892 [en; 64 bit; 70 chars] Small dusks wake; mild tales fall; reeds again sway; cold terns glide.
+0893 [zh; 80 bit; 39 chars] 清晨过客翩翩经过开阔水畔，仲秋故人仍旧走进空旷小镇，初夏茶农欣然行经静谧湖畔。
+0894 [zh; 80 bit; 39 chars] 黄昏牧人踏雪奔向宁静山岭，晌午过客结伴穿过安静花圃，黎明少年终于踏入幽静回廊。
+0895 [en; 64 bit; 68 chars] Our deer rest; ponds gleam soon; here frosts gleam; some trees rest.
+0896 [en; 64 bit; 67 chars] Songs even rise; icy rivers rest; no fogs gleam; tonight wrens nap.
+0897 [zh; 80 bit; 39 chars] 清晨青年缓缓返回沉静麦田，初秋路人并肩穿过熟悉竹林，初冬路人依旧路过清冷松林。
+0898 [zh; 80 bit; 39 chars] 黄昏渔人徐徐穿过古老栈道，盛夏乐师再次踏入遥远竹林，今夜樵夫依旧经过平静楼台。
+0899 [en; 64 bit; 69 chars] Rays again glow; suns only set; streams calmly sing; high pools wake.
+0900 [en; 64 bit; 68 chars] Calm crows nap; terns wait still; rhymes calmly rest; now rays wait.
+0901 [zh; 80 bit; 39 chars] 清晨旅人随风经过隐约荒野，初春学子悄悄返回宁静松林，仲夏佳人怡然返回青葱田野。
+0902 [zh; 80 bit; 39 chars] 黄昏牧人忽然路过苍翠河畔，仲夏佳人迎风踏过遥远亭台，雨夜游子踏雪走过静谧高原。
+0903 [en; 64 bit; 69 chars] Quiet crows drift; sweet ferns grow; soon owls feed; airy sands fade.
+0904 [en; 64 bit; 66 chars] Icy lights rise; few woods wait; low waves gleam; airy lakes fade.
+0905 [zh; 80 bit; 39 chars] 清晨旅人仍旧走向开阔江畔，傍晚诗人乘月越过恬静长廊，晚夏樵夫缓缓经过寂静山巅。
+0906 [zh; 80 bit; 39 chars] 黄昏友人缓缓途经翠绿荒野，盛夏诗人仍旧行经安静竹林，清晨故人从容途经陌生古道。
+0907 [en; 64 bit; 70 chars] Firs briefly sing; old rays shine; skies wait briefly; birds fly here.
+0908 [en; 64 bit; 67 chars] Larks just nap; notes sleep there; stags then run; warm brooks hum.
+0909 [zh; 80 bit; 39 chars] 清晨游子悄悄踏过安静街角，深秋路人轻轻走过熟悉巷口，日间常客迎风来到朦胧水畔。
+0910 [zh; 80 bit; 39 chars] 黄昏旅人忽然进入迷离故里，日间游子安然路过隐约故里，午后画师自在踏入清寂草甸。
+0911 [en; 64 bit; 70 chars] Calmly vines sing; blue waves stir; jade fields wake; tides now drift.
+0912 [en; 64 bit; 70 chars] Now rhymes sing; lakes freely shine; faint days fade; late bays shine.
+0913 [zh; 80 bit; 39 chars] 清晨舞者悠然行经寂静海边，薄暮常客相携走过清冷渡口，黎明花农悠然奔向苍翠林间。
+0914 [zh; 80 bit; 39 chars] 黄昏老翁相携走过迷蒙巷口，仲春乐师默默步入平静栈道，初冬画师翩翩走进沉静旷野。
+0915 [en; 64 bit; 67 chars] Owls soon sing; calmly rills flow; damp days end; trees bend often.
+0916 [en; 64 bit; 68 chars] Just rays rise; briefly pools wake; lone rills ebb; late seeds wake.
+0917 [zh; 80 bit; 39 chars] 清晨学子终于经过明净小镇，傍晚少年独自经过苍翠草地，薄暮过客悠悠进入苍茫绿洲。
+0918 [zh; 80 bit; 39 chars] 黄昏长者从容走过青葱草原，清晨文人轻轻行经翠绿海边，初冬来客再次来到古老旷野。
+0919 [en; 64 bit; 70 chars] Warm dusks rise; light gales sing; suns calmly shine; open lakes cool.
+0920 [en; 64 bit; 70 chars] Light words sing; vines sing soon; high bays sleep; chimes fade today.
+0921 [zh; 80 bit; 39 chars] 清晨老翁从容踏过恬静栈道，暮春茶农默默来到沉静溪边，薄暮诗人终于经过清幽老街。
+0922 [zh; 80 bit; 39 chars] 黄昏归人慢慢步入陌生回廊，初冬老者轻轻踏入平静麦田，仲夏常客沿途途经宁静草甸。
+0923 [en; 64 bit; 64 chars] Dim gales wake; storms fall now; our deer move; even larks wake.
+0924 [en; 64 bit; 69 chars] Grey oaks sway; these gulls sleep; warm dusks end; snows again gleam.
+0925 [zh; 80 bit; 39 chars] 清晨牧人忽然行经迷离亭台，午后画师悄悄步入空旷稻田，日间老翁结伴踏过清寂山径。
+0926 [zh; 80 bit; 39 chars] 黄昏牧人自在奔向葱茏山巅，初冬花农乘月返回空旷草甸，长夜学子结伴经过遥远山岭。
+0927 [en; 64 bit; 69 chars] Rhymes briefly rest; soon rills hum; no bays glint; crows just drift.
+0928 [en; 64 bit; 68 chars] Few oaks sing; calmly rills flow; gleams glow soon; icy waves drift.
+0929 [zh; 80 bit; 39 chars] 清晨少年安然走过悠远渡口，黄昏画师静静踏入安静草原，仲春旅人翩翩越过安静原野。
+0930 [zh; 80 bit; 39 chars] 黄昏路人沿途踏过平静栈道，黄昏游子自在穿过沉静老街，深秋故人静静踏入空旷郊野。
+0931 [en; 64 bit; 70 chars] Pure coves rest; calm crows glide; mists move still; grey fields rest.
+0932 [en; 64 bit; 70 chars] Chimes rest still; all mists glow; today moons wane; high roses sleep.
+0933 [zh; 80 bit; 39 chars] 清晨故人偶尔返回陌生原野，雨夜农人安然踏入恬静小镇，晚夏长者偶尔越过宁静山巅。
+0934 [zh; 80 bit; 39 chars] 黄昏来客轻轻走过青葱麦田，长夜书生默默走向微凉沙丘，拂晓老翁踏雪路过熟悉郊野。
+0935 [en; 64 bit; 68 chars] Pines even bend; tides here stir; rains now pass; still pools gleam.
+0936 [en; 64 bit; 69 chars] Gently tales sleep; roses even sigh; ferns sing there; wet bays glow.
+0937 [zh; 80 bit; 39 chars] 清晨游子自在走向寂静郊野，正午旅人独自步入幽静村落，仲夏渔人仍旧穿过空旷花园。
+0938 [zh; 80 bit; 39 chars] 黄昏长者乘月来到熟悉长廊，仲夏路人独自踏过空旷山麓，晚夏书生缓缓来到迷蒙老街。
+0939 [en; 64 bit; 70 chars] Rays slowly shine; still stags run; rose ponds warm; deep rivers flow.
+0940 [en; 64 bit; 69 chars] New lakes glint; briefly notes hum; pale pines sing; soft bells fall.
+0941 [zh; 80 bit; 39 chars] 清晨长者默默经过幽静溪边，深冬花农悠然进入悠远花圃，晨间画师欣然途经古老山坡。
+0942 [zh; 80 bit; 39 chars] 黄昏歌者趁夜途经苍茫草甸，拂晓画师再次经过迷离长桥，仲秋花农偶尔路过清幽老街。
+0943 [en; 64 bit; 69 chars] Airy tides run; some lakes shine; lone isles shine; clear vines bend.
+0944 [en; 64 bit; 68 chars] Roses just sway; rivers run today; dry shores rest; rose tides warm.
+0945 [zh; 80 bit; 39 chars] 清晨青年从容返回陌生桥头，盛夏佳人相携途经安静长街，深冬青年安然越过沉静楼台。
+0946 [zh; 80 bit; 39 chars] 黄昏学子迎风踏入迷蒙花圃，长夜来客默默进入开阔草地，深夜文人终于越过青葱草地。
+0947 [en; 64 bit; 70 chars] Warm clouds dim; light bays fade; still gales fall; bees float gently.
+0948 [en; 64 bit; 69 chars] Now seas warm; open waves glint; dews softly glow; always ferns bend.
+0949 [zh; 80 bit; 39 chars] 清晨歌者并肩穿过葱茏平原，薄暮学子静静返回清寂长街，薄暮故人悠然踏入清寂小径。
+0950 [zh; 80 bit; 39 chars] 黄昏游子忽然经过幽静小径，暮间乐师安然途经开阔山林，今夜来客迎风步入宁静山间。
+0951 [en; 64 bit; 68 chars] Small oaks sleep; rills wake slowly; our larks rest; soft days wake.
+0952 [en; 64 bit; 69 chars] Navy bays warm; slowly woods sleep; near lakes sleep; cool rays glow.
+0953 [zh; 80 bit; 39 chars] 清晨舞者轻轻来到朦胧小路，盛夏归人并肩途经遥远荒野，昨夜行人独自走过明净郊野。
+0954 [zh; 80 bit; 39 chars] 黄昏行人并肩经过寂静泉边，黎明佳人默默奔向平静山径，初冬行人怡然来到朦胧草原。
+0955 [en; 64 bit; 69 chars] Shores even wait; suns always dim; woods fade still; dark crows wake.
+0956 [en; 64 bit; 66 chars] Isles glow then; trees there grow; old rills move; airy days wait.
+0957 [zh; 80 bit; 39 chars] 清晨过客轻轻越过迷蒙江畔，昨夜青年终于途经古老松林，晚夏长者结伴穿过遥远旧城。
+0958 [zh; 80 bit; 39 chars] 黄昏老人悠然来到悠远街角，长夜游人坦然步入遥远小路，暮间常客悠然途经幽静花园。
+0959 [en; 64 bit; 69 chars] Pale sparks gleam; old pools sleep; dusks soon wait; cold moths wake.
+0960 [en; 64 bit; 67 chars] Rich rivers wake; clear frosts grow; pink mists rise; owls fly now.
+0961 [zh; 80 bit; 39 chars] 清晨老者安然行经翠绿河畔，子夜樵夫坦然步入清寂山间，午后来客沿途走向温柔海边。
+0962 [zh; 80 bit; 39 chars] 黄昏青年缓缓进入熟悉竹林，仲春归人默默途经寂静旧城，仲夏画师迎风穿过清幽巷口。
+0963 [en; 64 bit; 68 chars] Wet terns soar; few sparks dim; red lights wake; waves always sleep.
+0964 [en; 64 bit; 70 chars] Light beams shine; late rills move; near pools glow; rivers here fall.
+0965 [zh; 80 bit; 39 chars] 清晨行人偶尔穿过朦胧江畔，仲春佳人悠悠走向苍翠水畔，清晨游子轻轻踏过温柔山间。
+0966 [zh; 80 bit; 39 chars] 黄昏乐师趁夜踏入清幽长街，盛夏来客默默途经陌生石桥，清晨牧人怡然返回寂静小镇。
+0967 [en; 64 bit; 65 chars] Still gales sweep; icy hills fade; soft bays warm; icy suns fade.
+0968 [en; 64 bit; 67 chars] Quiet dawns go; stars shine soon; there owls drift; soon gales hum.
+0969 [zh; 80 bit; 39 chars] 清晨少年忽然奔向古老山谷，薄暮老翁悠然途经平静麦田，晚夏老翁坦然返回温柔荒原。
+0970 [zh; 80 bit; 39 chars] 黄昏花农欣然经过宁静沙洲，晚夏渔人终于来到恬静荒野，拂晓行人迎风来到静谧回廊。
+0971 [en; 64 bit; 68 chars] Trees slowly sing; high rills sigh; days then fall; long pools rest.
+0972 [en; 64 bit; 70 chars] Rivers today glint; icy waves fall; notes softly wake; our trees bend.
+0973 [zh; 80 bit; 39 chars] 清晨牧人安然踏过平静古城，盛夏舞者坦然步入宁静古城，初秋樵夫依旧走过明净老街。
+0974 [zh; 80 bit; 39 chars] 黄昏旅人从容走向葱茏山坡，薄暮来客安然奔向开阔旷野，黄昏长者结伴踏过幽深长街。
+0975 [en; 64 bit; 65 chars] No rhymes sleep; coves just rest; crows turn now; now tides rise.
+0976 [en; 64 bit; 70 chars] Larks soar often; reeds grow softly; mists still gleam; red seas warm.
+0977 [zh; 80 bit; 39 chars] 清晨书生沿途进入清幽山谷，仲夏友人默默来到温柔小径，晚夏老者终于走向微凉老街。
+0978 [zh; 80 bit; 39 chars] 黄昏来客踏雪路过古老荒野，暮间友人独自走进隐约绿洲，今夜渔人乘月踏入清寂村落。
+0979 [en; 64 bit; 64 chars] Cool rills glow; navy hills glow; all vines wake; our waves run.
+0980 [en; 64 bit; 67 chars] Few tales rest; few doves sleep; harts move always; long dews fade.
+0981 [zh; 80 bit; 39 chars] 清晨归人徐徐走进清冷郊野，仲夏路人慢慢走进清冷麦田，仲秋故人依旧踏过迷离古道。
+0982 [zh; 80 bit; 39 chars] 黄昏过客依旧途经辽阔草甸，深冬学子缓缓路过开阔高原，晌午乐师安然踏入开阔绿洲。
+0983 [en; 64 bit; 64 chars] Near waves hum; few seas fall; red clouds dim; soon brooks sing.
+0984 [en; 64 bit; 67 chars] Both seas stir; airy roses sing; pure pines sigh; bare lights wait.
+0985 [zh; 80 bit; 39 chars] 清晨画师沿途步入温柔山间，仲春少年静静来到幽静稻田，今夜友人翩翩经过遥远旷野。
+0986 [zh; 80 bit; 39 chars] 黄昏长者轻轻踏过迷离花园，深夜老者轻轻越过清冷麦田，正午牧人静静走向迷离江畔。
+0987 [en; 64 bit; 68 chars] Rays there glow; new owls sing; briefly rains fall; only rivers ebb.
+0988 [en; 64 bit; 69 chars] Dawns fall there; lights there fade; gold birds fly; both notes ring.
+0989 [zh; 80 bit; 39 chars] 清晨牧人自在经过宁静高原，雪夜来客踏雪步入迷离草地，傍晚老翁趁夜经过葱茏高原。
+0990 [zh; 80 bit; 39 chars] 黄昏旅人欣然路过朦胧稻田，晚夏樵夫悄悄经过葱茏田野，昨夜旅人趁夜走向悠远平原。
+0991 [en; 64 bit; 69 chars] Rills there run; far rivers stir; suns gleam then; quiet shores wake.
+0992 [en; 64 bit; 70 chars] Stars wake tonight; suns dim today; seas even glint; songs sleep here.
+0993 [zh; 80 bit; 39 chars] 清晨老人随风走过微凉原野，昨夜归人随风走过朦胧田野，晨间行人结伴经过宁静街角。
+0994 [zh; 80 bit; 39 chars] 黄昏文人轻轻踏过明净古道，今夜诗人怡然步入苍翠苔原，晌午诗人并肩越过寂静小镇。
+0995 [en; 64 bit; 69 chars] Pale larks fly; dry doves sing; fresh lakes stir; gulls briefly feed.
+0996 [en; 64 bit; 68 chars] Mild fogs drift; bare storms pass; seas warm today; rich stars rise.
+0997 [zh; 80 bit; 39 chars] 清晨渔人悄悄走进隐约庭院，傍晚游人翩翩路过明净高原，深夜长者趁夜越过熟悉老街。
+0998 [zh; 80 bit; 39 chars] 黄昏少年怡然来到恬静山巅，昨夜故人随风经过清幽山巅，日间归人踏雪经过明净山林。
+0999 [en; 64 bit; 66 chars] Bare nights end; most mists fade; new larks wait; long rills flow.
+1000 [en; 64 bit; 68 chars] Deer nap again; often waves rise; all leaves glow; beams just gleam.

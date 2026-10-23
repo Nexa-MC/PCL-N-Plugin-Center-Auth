@@ -5,6 +5,7 @@
   "compatibility_date": "2026-09-26",
   "compatibility_flags": ["nodejs_compat"],
   "workers_dev": false,
+  "keep_vars": true,
   "routes": [{ "pattern": "auth.pcln.top/*", "zone_name": "pcln.top" }],
   "triggers": { "crons": ["17 3 * * *"] },
   "observability": { "enabled": true, "head_sampling_rate": 0.1 },

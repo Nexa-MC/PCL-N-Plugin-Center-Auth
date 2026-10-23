@@ -12,7 +12,7 @@ import { createConnectionAuthorization, completeConnectionAuthorization, exchang
 
 test('progression and community bindings use atomic D1 writes', async t => {
   const root = new URL('../', import.meta.url), certificate = 'a'.repeat(64), now = Date.parse('2026-09-30T03:00:00Z');
-  const modules = ['index.mjs', ...(await readdir(new URL('src/', root))).filter(f => f.endsWith('.mjs') && f !== 'index.mjs')];
+  const modules = ['index.mjs', ...(await readdir(new URL('src/', root), { recursive: true })).filter(f => f.endsWith('.mjs') && f !== 'index.mjs')];
   const mf = new Miniflare(convertV4MiniflareOptions({ modulesRoot: fileURLToPath(root), modules: modules.map(f => ({ type: 'ESModule', path: fileURLToPath(new URL('src/' + f, root)) })), compatibilityDate: '2026-09-26', compatibilityFlags: ['nodejs_compat'], d1Databases: { DB: 'progression-test' }, bindings: { WEB_ORIGIN: 'https://web.test', SERVICE_TOKEN: 'service-test-token', AFDIAN_CLIENT_ID: 'afdian-fixture', AFDIAN_CLIENT_SECRET: 'secret-fixture', AFDIAN_USER_ID: 'creator', AFDIAN_API_TOKEN: 'api-token' }, outboundService: async request => {
     if (new URL(request.url).href === 'https://ifdian.net/api/open/query-order') {
       const body = await request.json();

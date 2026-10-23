@@ -16,7 +16,7 @@ const cookieName = provider => 'nexa_link_' + provider;
 const cookie = (env, provider, value, age) => `${cookieName(provider)}=${value}; HttpOnly; SameSite=Lax; Path=/auth/v1/connections/${provider}; Max-Age=${age}${env.LOCAL_DEV === 'true' ? '' : '; Secure'}`;
 const audit = (env, actor, action, detail, conditional = false) => env.DB.prepare(`INSERT INTO auth_audit(actor,action,created_at,detail) SELECT ?,?,?,?${conditional ? ' WHERE changes()=1' : ''}`).bind(actor, action, new Date().toISOString(), detail);
 export async function listConnections(env, userId) {
-  const rows = await env.DB.prepare('SELECT provider,subject,display_name AS name,followers,profile_level AS level,connected_at AS connectedAt,checked_at AS checkedAt FROM external_connections WHERE user_id=?').bind(userId).all();
+  const rows = await env.DB.prepare('SELECT provider,subject,display_name AS name,followers,profile_level AS level,avatar_url AS avatar,connected_at AS connectedAt,checked_at AS checkedAt FROM external_connections WHERE user_id=?').bind(userId).all();
   return { connections: Object.keys(providers).map(provider => {
     const config = providers[provider];
     if (provider === 'bilibili') return { provider, label: config.name, method: 'signature', configured: bilibiliBindingConfigured(env), account: rows.results.find(row => row.provider === provider) ?? null };

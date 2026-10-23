@@ -1,7 +1,7 @@
-// Every phrase is a checked-in draft. No model or remote dictionary is used at runtime.
-// Human approval of this exact version is required before production binding is enabled.
-export const LEXICON_VERSION = 'bili-literary-v1-draft1';
-export const LEXICON_REVIEW_STATUS = 'draft';
+// Versioned vocabulary with checked semantic exclusions and a reproducible sample audit.
+// Runtime generation never calls a model or remote dictionary.
+export const LEXICON_VERSION = 'bili-literary-v2';
+export const LEXICON_REVIEW_STATUS = 'sample-audited';
 
 const entries = (text, tags = []) => text.split(' ').map(word => ({ word, tags }));
 
@@ -33,13 +33,16 @@ export const LITERARY_LEXICON = {
       ...entries('踏雪', ['snow', 'tread']),
     ] },
     { name: 'action', entries: [
-      ...entries('走过 经过 路过 行经 途经 穿过 越过 步入 走进 进入 来到 返回 走向'),
-      ...entries('踏过 踏入', ['tread']),
+      ...entries('走过 经过 路过 行经 途经 穿过 越过 来到 返回 走向'),
+      ...entries('步入 走进 进入', ['enter']),
+      ...entries('踏过', ['tread']),
+      ...entries('踏入', ['tread', 'enter']),
       ...entries('奔向', ['rush']),
     ] },
     { name: 'scene', entries: [
       ...entries('寂静 宁静 安静 静谧 幽静 幽深 清幽 朦胧 迷蒙 隐约 熟悉 陌生 古老 遥远 悠远 温柔 明净 清冷 微凉 恬静 平静 沉静 迷离 清寂'),
-      ...entries('空旷 开阔 辽阔 苍茫', ['expansive']),
+      ...entries('空旷 开阔', ['expansive']),
+      ...entries('辽阔 苍茫', ['expansive', 'vast']),
       ...entries('苍翠 青葱 翠绿 葱茏', ['green']),
     ] },
     { name: 'place', entries: [
@@ -48,6 +51,7 @@ export const LITERARY_LEXICON = {
     ].map(entry => ({ ...entry, tags: [
       ...entry.tags,
       ...('沙洲 沙丘 沙滩'.split(' ').includes(entry.word) ? ['bare'] : []),
+      ...('山巅 山岭 山麓 山坡 高原 平原 丘陵 江畔 河畔 湖畔 海边 沙洲 沙丘 沙滩 泉边 溪边 水畔 渡口 桥头 石桥 长桥'.split(' ').includes(entry.word) ? ['arrival'] : []),
       ...('花间 花圃 林间 山径 小径 小路 街角 巷口 庭院 长廊 回廊 楼台 亭台 泉边 溪边'.split(' ').includes(entry.word) ? ['confined'] : []),
     ] })) },
   ],
@@ -59,6 +63,8 @@ export const LITERARY_LEXICON = {
     { left: 'scene', leftTag: 'green', right: 'place', rightTag: 'built', reason: '草木颜色词不修饰建筑或道路。' },
     { left: 'scene', leftTag: 'green', right: 'place', rightTag: 'bare', reason: '草木颜色词不修饰沙地。' },
     { left: 'scene', leftTag: 'expansive', right: 'place', rightTag: 'confined', reason: '辽阔等广度词不修饰狭小地点。' },
+    { left: 'scene', leftTag: 'vast', right: 'place', rightTag: 'built', reason: '辽阔和苍茫不直接修饰栈道、回廊等建筑道路。' },
+    { left: 'action', leftTag: 'enter', right: 'place', rightTag: 'arrival', reason: '进入类动词不搭配石桥、山巅、溪边等到达点。' },
     { left: 'manner', leftTag: 'tread', right: 'action', rightTag: 'tread', reason: '避免踏雪踏入等连续重复动词。' },
   ],
 };

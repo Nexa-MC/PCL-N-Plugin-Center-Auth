@@ -1,0 +1,76 @@
+{
+  "version": "bili-zh80-en64-v2",
+  "samples": 1000,
+  "perLanguage": {
+    "zh": 500,
+    "en": 500
+  },
+  "perCandidate": 250,
+  "duplicates": 0,
+  "lengths": {
+    "zh": {
+      "min": 39,
+      "max": 39
+    },
+    "en": {
+      "min": 61,
+      "max": 70
+    }
+  },
+  "checks": [
+    "canonical Unicode",
+    "no invisible/control characters",
+    "length <=70",
+    "unique sampled sentences",
+    "grammar rank/unrank",
+    "English candidate spaces disjoint by parity",
+    "four distinct English subjects",
+    "exact legal-space capacity >= nonce space"
+  ],
+  "chinese": {
+    "nonceBits": 80,
+    "legalSpaces": [
+      {
+        "index": 0,
+        "prefix": "清晨",
+        "capacity": "18866076154478261996535808",
+        "entropyBitsFloor": 83,
+        "atLeast80Bits": true
+      },
+      {
+        "index": 1,
+        "prefix": "黄昏",
+        "capacity": "20128627290220614959759360",
+        "entropyBitsFloor": 84,
+        "atLeast80Bits": true
+      }
+    ],
+    "reachablePerCandidate": "1208925819614629174706176"
+  },
+  "english": {
+    "encoderVersion": "bili-english-v2",
+    "maxLength": 70,
+    "clauses": 4,
+    "adjectives": 53,
+    "subjects": 79,
+    "verbs": 56,
+    "distinctSubjects": true,
+    "legalPhrases": 97929,
+    "legalSentences": "40489922855434647216",
+    "entropyBitsFloor": 65,
+    "nonceBits": 64,
+    "legalSpaces": [
+      "20244961427717323608",
+      "20244961427717323608"
+    ],
+    "reachablePerCandidate": "18446744073709551616"
+  },
+  "entropyEvidence": "Exact constrained-space counts and injective affine rank mapping; sample uniqueness is a regression check, not an entropy proof.",
+  "samplesSha256": "5a8cb7678313181f69def591c023691fd86f0fbe2f265abebc58f6578416ca73",
+  "sourceSha256": {
+    "src/bilibili/lexicon.mjs": "febb4c387ee7e4540b77750255a2272c115f5bfe98bf16ee7213355ed4c50e35",
+    "src/bilibili/encoder.mjs": "19f30a864814d4dab221a648cd117422bfa4b48fd0aa209926b23688a2d7540c",
+    "src/bilibili/english-encoder.mjs": "835d3b3c1acc1b0ffaffba00441c75b690108040d556045e6ef2f066bc4d1563",
+    "src/bilibili/binding-candidates.mjs": "ab5b8365a086618a69a21038158a28dc260c545f5b3453331e2b384cad3dba76"
+  }
+}

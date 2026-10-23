@@ -10,7 +10,7 @@ import { decryptSecret } from '../src/totp.mjs';
 test('Microsoft website identity and Xbox authorization stay separate in the Worker', async t => {
   const root = new URL('../', import.meta.url), fixtures = new Map(), calls = [], key = 'test-only-token-encryption-key';
   let gate = null, upstreamOverride = null;
-  const modules = ['index.mjs', ...(await readdir(new URL('src/', root))).filter(f => f.endsWith('.mjs') && f !== 'index.mjs')];
+  const modules = ['index.mjs', ...(await readdir(new URL('src/', root), { recursive: true })).filter(f => f.endsWith('.mjs') && f !== 'index.mjs')];
   const mf = new Miniflare(convertV4MiniflareOptions({ modulesRoot: fileURLToPath(root), modules: modules.map(f => ({ type: 'ESModule', path: fileURLToPath(new URL('src/' + f, root)) })), compatibilityDate: '2026-09-26', compatibilityFlags: ['nodejs_compat'], d1Databases: { DB: 'microsoft-test' }, bindings: { WEB_ORIGIN: 'https://web.test', MICROSOFT_CLIENT_ID: 'app-fixture', MICROSOFT_CLIENT_SECRET: 'secret-fixture', TOKEN_ENC_KEY: key }, outboundService: async request => {
     const url = new URL(request.url); calls.push(url.href);
     const minecraftLogin = url.href === 'https://api.minecraftservices.com/authentication/login_with_xbox';

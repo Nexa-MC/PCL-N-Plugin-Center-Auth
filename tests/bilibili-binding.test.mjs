@@ -8,7 +8,7 @@ import { digest } from '../src/password.mjs';
 test('Bilibili binding verifies trusted profiles and atomically consumes session-bound challenges', async t => {
   const root = new URL('../', import.meta.url), profiles = new Map();
   let beforeRead, calls = 0, restricted = false;
-  const modules = ['index.mjs', ...(await readdir(new URL('src/', root))).filter(file => file.endsWith('.mjs') && file !== 'index.mjs')];
+  const modules = ['index.mjs', ...(await readdir(new URL('src/', root), { recursive: true })).filter(file => file.endsWith('.mjs') && file !== 'index.mjs')];
   const mf = new Miniflare(convertV4MiniflareOptions({
     modulesRoot: fileURLToPath(root), modules: modules.map(file => ({ type: 'ESModule', path: fileURLToPath(new URL('src/' + file, root)) })),
     compatibilityDate: '2026-09-26', compatibilityFlags: ['nodejs_compat'], d1Databases: { DB: 'bilibili-binding-test' },
@@ -20,7 +20,7 @@ test('Bilibili binding verifies trusted profiles and atomically consumes session
       assert.deepEqual(Object.keys(input).sort(), ['requestId', 'uid']);
       if (beforeRead) await beforeRead(input);
       if (restricted) return Response.json({ code: 'provider_restricted' }, { status: 503 });
-      return Response.json({ uid: input.uid, requestId: input.requestId, source: 'cloudflare-browser', name: '测试B站用户', signature: '', level: 6, followers: 123, checkedAt: new Date().toISOString(), ...profiles.get(input.uid) });
+      return Response.json({ uid: input.uid, requestId: input.requestId, source: 'cloudflare-browser', name: '测试B站用户', avatar: 'https://i0.hdslb.com/bfs/face/test.jpg', signature: '', level: 6, followers: 123, checkedAt: new Date().toISOString(), ...profiles.get(input.uid) });
     } }
   }));
   t.after(() => mf.dispose());
@@ -41,15 +41,42 @@ test('Bilibili binding verifies trusted profiles and atomically consumes session
     const response = await call(who, '/challenges', 'POST', { uid });
     assert.equal(response.status, 201, await response.clone().text());
     const challenge = await response.json();
+    assert.equal(challenge.candidates.length, 4);
+    const selected = await call(who, `/challenges/${challenge.id}/select`, 'POST', { index: 0 });
+    assert.equal(selected.status, 200, await selected.clone().text());
+    challenge.signature = challenge.candidates[0].text;
     profiles.set(uid, { signature: challenge.signature });
     return challenge;
   };
   const verify = (who, challenge, data = {}) => call(who, `/challenges/${challenge.id}/verify`, 'POST', data);
   const bound = id => DB.prepare("SELECT * FROM external_connections WHERE user_id=? AND provider='bilibili'").bind(id).first();
 
+  await t.test('profile preview is read-only and candidates require one session-bound selection', async () => {
+    const who = await user('candidates'), other = await user('candidate_other');
+    const preview = await call(who, '/profile', 'POST', { uid: '155' });
+    assert.equal(preview.status, 200); const profile = await preview.json();
+    assert.equal(profile.uid, '155'); assert.equal(profile.avatar, 'https://i0.hdslb.com/bfs/face/test.jpg');
+    assert.equal('signature' in profile, false); assert.equal(await bound(who.id), null);
+    const response = await call(who, '/challenges', 'POST', { uid: '155' }), challenge = await response.json();
+    assert.equal(response.status, 201); assert.equal(challenge.candidates.length, 4);
+    assert.equal((await verify(who, challenge)).status, 409);
+    assert.equal((await call(other, `/challenges/${challenge.id}/select`, 'POST', { index: 2 })).status, 409);
+    assert.equal((await call(who, `/challenges/${challenge.id}/select`, 'POST', { index: 4 })).status, 422);
+    assert.equal((await call(who, `/challenges/${challenge.id}/select`, 'POST', { index: 2, text: 'client-chosen' })).status, 422);
+    assert.equal((await call(who, `/challenges/${challenge.id}/select`, 'POST', { index: 2 })).status, 200);
+    assert.equal((await call(who, `/challenges/${challenge.id}/select`, 'POST', { index: 3 })).status, 409);
+    assert.equal((await DB.prepare('SELECT count(*) AS n FROM bilibili_signature_candidates WHERE challenge_id=?').bind(challenge.id).first()).n, 1);
+    profiles.set('155', { signature: challenge.candidates[3].text });
+    assert.equal((await verify(who, challenge)).status, 422);
+    profiles.set('155', { signature: challenge.candidates[2].text });
+    assert.equal((await verify(who, challenge)).status, 200);
+  });
+
   await t.test('valid fresh signature binds once and stores only its hash in the challenge', async () => {
     const who = await user('normal'), challenge = await create(who, '123');
-    assert.ok(challenge.signature.includes('@user_normal'));
+    assert.ok(/[\p{Script=Han}]/u.test(challenge.signature));
+    assert.ok(!challenge.signature.includes('bind'));
+    assert.equal(challenge.candidates.filter(c=>c.language==='en').length, 2);
     assert.ok(challenge.signature.length <= 70);
     const saved = await DB.prepare('SELECT * FROM bilibili_binding_challenges WHERE id=?').bind(challenge.id).first();
     assert.equal(saved.expected_hash, digest(challenge.signature));

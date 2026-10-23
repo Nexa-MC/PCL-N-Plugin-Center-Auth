@@ -59,11 +59,17 @@ test('normalization is fixed; invisibles, line breaks, punctuation variants neve
 
 test('actual lexicon capacity is independently counted, including every semantic exclusion', () => {
   const [times, people, manners, actions, scenes, places] = LITERARY_LEXICON.slots.map(slot => slot.entries);
-  let scenePlacePairs = 0n;
+  const scenePlacePairs = new Map();
+  for (const action of actions) {
+  let pairs = 0n;
   for (const scene of scenes) for (const place of places) {
     if (scene.tags.includes('green') && (place.tags.includes('built') || place.tags.includes('bare'))) continue;
     if (scene.tags.includes('expansive') && place.tags.includes('confined')) continue;
-    scenePlacePairs++;
+    if (scene.tags.includes('vast') && place.tags.includes('built')) continue;
+    if (action.tags.includes('enter') && place.tags.includes('arrival')) continue;
+    pairs++;
+  }
+  scenePlacePairs.set(action.word, pairs);
   }
   const perTime = new Map();
   for (const time of times) {
@@ -73,9 +79,9 @@ test('actual lexicon capacity is independently counted, including every semantic
       if (time.tags.includes('summer') && manner.tags.includes('snow')) continue;
       if (person.tags.includes('elder') && action.tags.includes('rush')) continue;
       if (manner.tags.includes('tread') && action.tags.includes('tread')) continue;
-      prefixes++;
+      prefixes += scenePlacePairs.get(action.word);
     }
-    perTime.set(time.word, prefixes * scenePlacePairs);
+    perTime.set(time.word, prefixes);
   }
   const full = [...perTime.values()].reduce((sum, count) => sum + count, 0n);
   const report = capacityReport();
@@ -83,7 +89,7 @@ test('actual lexicon capacity is independently counted, including every semantic
   report.spaces.forEach(space => { assert.equal(BigInt(space.capacity), perTime.get(space.prefix) * full ** 2n); assert.ok(BigInt(space.capacity) >= NONCE_LIMIT); });
   assert.equal(BigInt(report.reachableCapacity), 3n * NONCE_LIMIT);
   assert.equal(report.unicodeLength, 39);
-  assert.equal(report.reviewStatus, 'draft');
+  assert.equal(report.reviewStatus, 'sample-audited');
   assert.throws(() => assertProductionLexicon(undefined), /not been approved/);
   assert.throws(() => assertProductionLexicon('some-older-version'), /not been approved/);
   assert.doesNotThrow(() => assertProductionLexicon(ENCODER_VERSION));
