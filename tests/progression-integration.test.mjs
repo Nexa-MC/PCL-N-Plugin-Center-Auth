@@ -7,6 +7,7 @@ import { Miniflare, convertV4MiniflareOptions } from 'miniflare';
 import { loadLevel, loadProgression, recordActivity, selectLevelDisplay, computeLevel, activityDay } from '../src/progression.mjs';
 import { digest } from '../src/password.mjs';
 import { syncAfdianDonations } from '../src/afdian-donations.mjs';
+import { syncBilibiliBadgeProfile, syncNexaContributors, NEXACL_REPOSITORY } from '../src/community-badges.mjs';
 import { privacyForAcceptedTerms } from '../src/index.mjs';
 import { createConnectionAuthorization, completeConnectionAuthorization, exchangeConnection, listConnections, unlinkConnection } from '../src/connections.mjs';
 
@@ -14,6 +15,7 @@ test('progression and community bindings use atomic D1 writes', async t => {
   const root = new URL('../', import.meta.url), certificate = 'a'.repeat(64), now = Date.parse('2026-09-30T03:00:00Z');
   const modules = ['index.mjs', ...(await readdir(new URL('src/', root), { recursive: true })).filter(f => f.endsWith('.mjs') && f !== 'index.mjs')];
   const mf = new Miniflare(convertV4MiniflareOptions({ modulesRoot: fileURLToPath(root), modules: modules.map(f => ({ type: 'ESModule', path: fileURLToPath(new URL('src/' + f, root)) })), compatibilityDate: '2026-09-26', compatibilityFlags: ['nodejs_compat'], d1Databases: { DB: 'progression-test' }, bindings: { WEB_ORIGIN: 'https://web.test', SERVICE_TOKEN: 'service-test-token', AFDIAN_CLIENT_ID: 'afdian-fixture', AFDIAN_CLIENT_SECRET: 'secret-fixture', AFDIAN_USER_ID: 'creator', AFDIAN_API_TOKEN: 'api-token' }, outboundService: async request => {
+    if (new URL(request.url).pathname === '/repos/Nexa-MC/NexaCL/contributors') return Response.json([{id:987,type:'User',contributions:1}]);
     if (new URL(request.url).href === 'https://ifdian.net/api/open/query-order') {
       const body = await request.json();
       assert.equal(body.user_id, 'creator');
@@ -118,21 +120,88 @@ test('progression and community bindings use atomic D1 writes', async t => {
     assert.equal(infinity.conditions.level, true); assert.equal(infinity.conditions.gameTime, true); assert.equal(infinity.earned, false);
     await assert.rejects(selectLevelDisplay(env, staff, { badgeId: 'infinity' }), e => e.status === 403);
   });
-  await t.test('manual Bilibili verification remains staff-only and audited; donor requires a bound account', async () => {
+  await t.test('public-source badges reject manual verification and ignore historical manual records', async () => {
     const staff = await addUser('reviewer', 1), user = await addUser('recipient');
     const path = '/auth/v1/users/recipient/badge-verifications/bilibili-million', proof = { value: 1000000, sourceAccount: 'bilibili-user', evidence: '人工复核B站粉丝凭证记录' };
     assert.equal((await api(path, user.token, 'PUT', proof)).status, 403);
     assert.equal((await api('/auth/v1/users/reviewer/badge-verifications/bilibili-million', staff.token, 'PUT', proof)).status, 403);
-    assert.equal((await api(path, staff.token, 'PUT', proof)).status, 200);
-    assert.equal((await loadProgression(env, user)).badges.find(b => b.id === 'bilibili-million').earned, true);
+    assert.equal((await api(path, staff.token, 'PUT', proof)).status, 422);
+    assert.equal((await api('/auth/v1/users/recipient/badge-verifications/bilibili-level', staff.token, 'PUT', { ...proof, value: 6 })).status, 422);
+    assert.equal((await api('/auth/v1/users/recipient/badge-verifications/nexacl-contributor', staff.token, 'PUT', proof)).status, 422);
     assert.equal((await api('/auth/v1/users/recipient/badge-verifications/donor', staff.token, 'PUT', proof)).status, 422);
     await DB.prepare("INSERT INTO badge_verifications(user_id,badge_id,verified_value,source_account,evidence,reviewer,verified_at) VALUES(?,'donor',999999,'legacy','legacy manual proof',?,?)").bind(user.id, staff.id, new Date().toISOString()).run();
     assert.equal((await loadProgression(env, user)).badges.find(b => b.id === 'donor').earned, false);
-    proof.value = 1000001;
-    assert.equal((await api(path, staff.token, 'PUT', proof)).status, 200);
-    assert.equal((await api(path, staff.token, 'PUT', proof)).status, 200);
-    assert.equal((await DB.prepare("SELECT count(*) AS n FROM auth_audit WHERE action='badge.verified'").first()).n, 2);
+    for (const [badgeId, value] of [['bilibili-level', 6], ['bilibili-million', 1000001]]) {
+      await DB.prepare('INSERT INTO badge_verifications(user_id,badge_id,verified_value,source_account,evidence,reviewer,verified_at) VALUES(?,?,?,?,?,?,?)').bind(user.id,badgeId,value,'legacy','legacy manual proof',staff.id,new Date().toISOString()).run();
+      assert.equal((await loadProgression(env, user)).badges.find(b => b.id === badgeId).earned, false);
+    }
+    assert.equal((await DB.prepare("SELECT count(*) AS n FROM auth_audit WHERE action='badge.verified'").first()).n, 0);
     assert.equal((await api('/auth/v1/users/recipient/badge-verifications/infinity', staff.token, 'PUT', proof)).status, 422);
+  });
+  await t.test('Bilibili badges require proven ownership and trusted public facts, with inclusive boundaries', async () => {
+    const user = await addUser('bilibadges'), stamp = new Date().toISOString();
+    await DB.prepare("INSERT INTO external_connections(user_id,provider,subject,profile_level,followers,connected_at,checked_at) VALUES(?,'bilibili','900',6,1000000,?,?)").bind(user.id,stamp,stamp).run();
+    const badges = async () => (await loadProgression(env, user)).badges.filter(b=>b.id.startsWith('bilibili-'));
+    assert.ok((await badges()).every(b=>!b.earned));
+    await DB.prepare("UPDATE external_connections SET ownership_verified_at=?,profile_source='client-json' WHERE user_id=?").bind(stamp,user.id).run();
+    assert.ok((await badges()).every(b=>!b.earned));
+    await DB.prepare("UPDATE external_connections SET profile_source='cloudflare-browser',profile_level=5,followers=999999 WHERE user_id=?").bind(user.id).run();
+    assert.ok((await badges()).every(b=>!b.earned));
+    await DB.prepare('UPDATE external_connections SET profile_level=6,followers=1000000 WHERE user_id=?').bind(user.id).run();
+    assert.ok((await badges()).every(b=>b.earned));
+    await unlinkConnection(env,user.id,'bilibili');
+    assert.ok((await badges()).every(b=>!b.earned));
+  });
+  await t.test('Bilibili refresh is cached, updates downward changes and cannot cross a rebind', async () => {
+    const user = await addUser('bilirefresh'), stamp = new Date().toISOString();
+    const link = subject => DB.prepare("INSERT INTO external_connections(user_id,provider,subject,connected_at,checked_at,ownership_verified_at) VALUES(?,'bilibili',?,?,?,?)").bind(user.id,subject,stamp,stamp,stamp).run();
+    await link('901'); let calls=0, followers=1000000, failed=false, beforeRead;
+    const biliEnv={...env,BILIBILI_BINDING_ENABLED:'true',BILIBILI_VERIFIER_TOKEN:'test-verifier-token-that-is-long-enough',BILIBILI_VERIFIER:{fetch:async (_url,init)=>{
+      calls++; const {uid,requestId}=JSON.parse(init.body);
+      if(beforeRead) await beforeRead();
+      if(failed) return Response.json({code:'unavailable'},{status:503});
+      return Response.json({uid,requestId,source:'cloudflare-browser',signature:'',name:'Bili',avatar:null,level:6,followers,checkedAt:new Date().toISOString()});
+    }}};
+    const badge=async()=>(await loadProgression(env,user)).badges.find(b=>b.id==='bilibili-million');
+    await Promise.all([1,2,3].map(()=>syncBilibiliBadgeProfile(biliEnv,user.id,now)));
+    assert.equal(calls,1); assert.equal((await badge()).earned,true);
+    await syncBilibiliBadgeProfile(biliEnv,user.id,now+899999); assert.equal(calls,1);
+    failed=true; await syncBilibiliBadgeProfile(biliEnv,user.id,now+900000);
+    assert.equal((await badge()).earned,true); assert.match((await badge()).progress,/上次同步失败/);
+    failed=false; followers=999999; await syncBilibiliBadgeProfile(biliEnv,user.id,now+1800000);
+    assert.equal((await badge()).earned,false);
+    beforeRead=async()=>{await unlinkConnection(env,user.id,'bilibili'); await link('902');};
+    followers=1000000; await syncBilibiliBadgeProfile(biliEnv,user.id,now+2700000);
+    assert.equal((await badge()).earned,false);
+    assert.equal((await DB.prepare("SELECT profile_source FROM external_connections WHERE user_id=? AND provider='bilibili'").bind(user.id).first()).profile_source,null);
+  });
+  await t.test('NexaCL contributors use a shared snapshot and the linked immutable GitHub ID', async () => {
+    const user=await addUser('contributor'), other=await addUser('noncontributor'), stamp=new Date().toISOString();
+    const identity=(who,subject)=>DB.prepare("INSERT INTO oauth_identities(provider,subject,user_id,email,created_at,updated_at) VALUES('github',?,?,?, ?,?)").bind(subject,who.id,'same@example.test',stamp,stamp).run();
+    await identity(user,'456'); await identity(other,'457');
+    let calls=0, failed=false, members=[{id:456,type:'User',login:'old-name',contributions:1}];
+    const fetcher=async url=>{calls++; assert.equal(url,`https://api.github.com/repos/${NEXACL_REPOSITORY}/contributors?anon=false&per_page=100&page=1`); return failed?new Response('',{status:403}):Response.json(members);};
+    const badge=async who=>(await loadProgression(env,who)).badges.find(b=>b.id==='nexacl-contributor');
+    await Promise.all([user,other,user].map(who=>syncNexaContributors(env,who.id,fetcher,now)));
+    assert.equal(calls,1); assert.equal((await badge(user)).earned,true); assert.equal((await badge(other)).earned,false);
+    await syncNexaContributors(env,user.id,fetcher,now+3599999); assert.equal(calls,1);
+    failed=true; await syncNexaContributors(env,user.id,fetcher,now+3600000);
+    assert.equal((await badge(user)).earned,true); assert.match((await badge(user)).progress,/GitHub同步失败/);
+    failed=false; members=[]; await syncNexaContributors(env,user.id,fetcher,now+4500000);
+    assert.equal((await badge(user)).earned,false);
+    members=[{id:456,type:'User',login:'renamed',contributions:2}]; await syncNexaContributors(env,user.id,fetcher,now+8100000);
+    assert.equal((await badge(user)).earned,true);
+    await DB.prepare("DELETE FROM oauth_identities WHERE user_id=? AND provider='github'").bind(user.id).run();
+    assert.equal((await badge(user)).earned,false);
+    await identity(user,'458'); assert.equal((await badge(user)).earned,false);
+    await assert.rejects(selectLevelDisplay(env,user,{badgeId:'nexacl-contributor'}),e=>e.status===422);
+  });
+  await t.test('the account API automatically loads GitHub contributor facts in the Worker runtime', async () => {
+    const user=await addUser('runtimecontributor'), stamp=new Date().toISOString();
+    await DB.prepare("INSERT INTO oauth_identities(provider,subject,user_id,created_at,updated_at) VALUES('github','987',?,?,?)").bind(user.id,stamp,stamp).run();
+    const response=await api('/auth/v1/account/level',user.token);
+    assert.equal(response.status,200);
+    assert.equal((await response.json()).badges.find(b=>b.id==='nexacl-contributor').earned,true);
   });
   const donationEnv = { ...env, AFDIAN_USER_ID: 'creator', AFDIAN_API_TOKEN: 'api-token' };
   async function linkAfdian(user, subject = user.id + '-afdian') {

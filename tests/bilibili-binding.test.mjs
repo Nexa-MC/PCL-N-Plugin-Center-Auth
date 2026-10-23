@@ -86,6 +86,12 @@ test('Bilibili binding verifies trusted profiles and atomically consumes session
     assert.deepEqual(await result.json(), { verified: true, uid: '123' });
     const connection = await bound(who.id);
     assert.equal(connection.subject, '123'); assert.equal(connection.profile_level, 6); assert.equal(connection.followers, 123);
+    assert.ok(connection.ownership_verified_at); assert.equal(connection.profile_source, 'cloudflare-browser');
+    const levelResponse = await mf.dispatchFetch('https://web.test/auth/v1/account/level', { headers: { authorization: 'Bearer ' + who.token } });
+    assert.equal(levelResponse.status, 200);
+    const badges = (await levelResponse.json()).badges;
+    assert.equal(badges.find(b=>b.id==='bilibili-level').earned, true);
+    assert.equal(badges.find(b=>b.id==='bilibili-million').earned, false);
     const previousCalls = calls;
     assert.equal((await verify(who, challenge)).status, 409); assert.equal(calls, previousCalls);
     assert.equal((await DB.prepare("SELECT count(*) AS n FROM auth_audit WHERE actor=? AND action='bilibili.linked'").bind(who.id).first()).n, 1);

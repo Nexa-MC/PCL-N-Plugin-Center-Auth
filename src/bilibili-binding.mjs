@@ -83,15 +83,15 @@ export async function verifyBilibiliChallenge(env, user, sessionToken, id, input
       AND EXISTS(SELECT 1 FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=? AND s.user_id=? AND s.scope='console' AND s.expires>? AND u.disabled=0 AND u.confirmed_at IS NOT NULL)
       AND NOT EXISTS(SELECT 1 FROM external_connections WHERE provider='bilibili' AND (subject=? OR user_id=?))`)
       .bind(stamp, id, user.id, sessionHash, finished, sessionHash, user.id, finished, row.uid, user.id),
-    env.DB.prepare(`INSERT INTO external_connections(user_id,provider,subject,display_name,followers,profile_level,avatar_url,connected_at,checked_at)
-      SELECT ?,'bilibili',?,?,?,?,?,?,? WHERE changes()=1`).bind(user.id, row.uid, profile.name, profile.followers, profile.level, profile.avatar, stamp, profile.checkedAt),
+    env.DB.prepare(`INSERT INTO external_connections(user_id,provider,subject,display_name,followers,profile_level,avatar_url,connected_at,checked_at,ownership_verified_at,profile_source,profile_attempted_at)
+      SELECT ?,'bilibili',?,?,?,?,?,?,?,?,?,? WHERE changes()=1`).bind(user.id, row.uid, profile.name, profile.followers, profile.level, profile.avatar, stamp, profile.checkedAt, stamp, profile.source, finished),
     env.DB.prepare("INSERT INTO auth_audit(actor,action,created_at,detail) SELECT ?,'bilibili.linked',?,? WHERE changes()=1").bind(user.id, stamp, row.uid)
   ]);
   if (!claimed.meta.changes) fail(409, '验证状态或账户绑定已变化，请重新开始');
   return { verified: true, uid: row.uid };
 }
 
-async function trustedProfile(env, uid, createdAt = Date.now() - 60000) {
+export async function trustedProfile(env, uid, createdAt = Date.now() - 60000) {
   const now = Date.now();
   const requestId = randomUUID();
   let response, profile;

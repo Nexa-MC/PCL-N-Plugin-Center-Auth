@@ -1,4 +1,5 @@
 import { afdianDonationsConfigured } from './afdian-donations.mjs';
+import { NEXACL_REPOSITORY } from './community-badges.mjs';
 const fail = (status, message) => { throw Object.assign(new Error(message), { status }); };
 export const LEVEL_THRESHOLDS = { 2: 2000, 3: 5000, 4: 10000, 5: 20000, 6: 50000, 7: 100000 };
 export const XP_REWARDS = { launcherLogin: 20, firstGameStart: 30, gameMinutes: 1, launcherMinutes: 5, dailyCap: 500, timeZone: 'Asia/Shanghai' };
@@ -32,18 +33,27 @@ function streaks(days, now) {
   return { best, current: days.at(-1) === today || days.at(-1) === yesterday ? run : 0 };
 }
 export async function loadProgression(env, user, now = Date.now()) {
-  const [level, presence, days, verifications, selection, today, donation] = await Promise.all([
+  const [level, presence, days, selection, today, donation, bilibili, github] = await Promise.all([
     loadLevel(env, user.id),
     env.DB.prepare('SELECT launcher_ms,game_ms FROM launcher_presence WHERE user_id=?').bind(user.id).first(),
     env.DB.prepare('SELECT day FROM launcher_activity_days WHERE user_id=? AND game_started=1 ORDER BY day').bind(user.id).all(),
-    env.DB.prepare('SELECT badge_id,verified_value,verified_at FROM badge_verifications WHERE user_id=?').bind(user.id).all(),
     env.DB.prepare('SELECT badge_id FROM user_level_display WHERE user_id=?').bind(user.id).first(),
     env.DB.prepare('SELECT xp_earned FROM launcher_activity_days WHERE user_id=? AND day=?').bind(user.id, activityDay(now)).first(),
-    env.DB.prepare("SELECT donation_cents,donation_checked_at,donation_error FROM external_connections WHERE user_id=? AND provider='afdian'").bind(user.id).first()
+    env.DB.prepare("SELECT donation_cents,donation_checked_at,donation_error FROM external_connections WHERE user_id=? AND provider='afdian'").bind(user.id).first(),
+    env.DB.prepare("SELECT profile_level,followers,ownership_verified_at,profile_source,checked_at,profile_error FROM external_connections WHERE user_id=? AND provider='bilibili'").bind(user.id).first(),
+    env.DB.prepare(`SELECT i.subject,s.contributors_json,s.checked_at,s.error FROM oauth_identities i
+      LEFT JOIN github_contributor_snapshots s ON s.repository=? WHERE i.user_id=? AND i.provider='github'`).bind(NEXACL_REPOSITORY, user.id).first()
   ]);
   const streak = streaks(days.results.map(d => d.day), now), gameSeconds = Math.floor((presence?.game_ms ?? 0) / 1000);
-  const verified = Object.fromEntries(verifications.results.map(v => [v.badge_id, v]));
-  const fact = (id, threshold) => (verified[id]?.verified_value ?? 0) >= threshold;
+  const bilibiliTrusted = Boolean(bilibili?.ownership_verified_at && bilibili.profile_source === 'cloudflare-browser' && Number.isFinite(Date.parse(bilibili.checked_at)));
+  const bilibiliLevelReady = bilibiliTrusted && Number.isInteger(bilibili.profile_level) && bilibili.profile_level >= 0 && bilibili.profile_level <= 6;
+  const bilibiliFollowersReady = bilibiliTrusted && Number.isSafeInteger(bilibili.followers) && bilibili.followers >= 0;
+  const bilibiliPending = !bilibili ? '请先绑定B站账户' : !bilibili.ownership_verified_at ? '请重新核验B站账户' : '等待同步B站公开资料';
+  const bilibiliProgress = text => text + (bilibili?.profile_error ? ' · 上次同步失败，显示上次核验资料' : '');
+  const contributors = github?.checked_at ? JSON.parse(github.contributors_json) : [];
+  const contribution = contributors.find(person => person.id === github?.subject)?.contributions ?? 0;
+  const githubProgress = (!github ? '请先绑定GitHub账户' : !github.checked_at ? '等待同步GitHub贡献记录'
+    : `NexaCL 公开贡献提交：${contribution}`) + (github?.error ? ' · GitHub同步失败，请稍后刷新' : '');
   const donationReady = Boolean(donation?.donation_checked_at) && Number.isSafeInteger(donation?.donation_cents);
   const donationProgress = !donation ? '请先绑定爱发电账户'
     : donationReady ? `累计有效发电 ¥${(donation.donation_cents / 100).toFixed(2)}（不含电铺）`
@@ -53,8 +63,9 @@ export async function loadProgression(env, user, now = Date.now()) {
     { id: 'infinity', name: 'Lv∞', replacesLevel: true, earned: false, requirement: 'Lv7 · MC 100h · 通过∞答题', progress: `${level.level}/7 · ${(gameSeconds / 3600).toFixed(1)}/100h · 题库未开放`, conditions: { level: level.level >= 7, gameTime: gameSeconds >= 360000, quiz: false, quizAvailable: false } },
     { id: 'administrator', name: 'Lv-1', replacesLevel: true, earned: Boolean(user.staff), requirement: '成为网站管理员', progress: user.staff ? '已达成' : '未达成' },
     { id: 'mc-streak', name: 'LvMC', replacesLevel: true, earned: streak.best >= 100, requirement: '连续100天启动MC', progress: `${Math.min(streak.best, 100)}/100天` },
-    { id: 'bilibili-level', name: 'b站来的', replacesLevel: false, earned: fact('bilibili-level', 6), requirement: 'B站达到Lv6', progress: fact('bilibili-level', 6) ? '已核验' : '待管理员核验' },
-    { id: 'bilibili-million', name: '小黄标', replacesLevel: false, earned: fact('bilibili-million', 1000000), requirement: 'B站粉丝达到100w+', progress: fact('bilibili-million', 1000000) ? '已核验' : '待管理员核验' },
+    { id: 'bilibili-level', name: 'b站来的', replacesLevel: false, earned: bilibiliLevelReady && bilibili.profile_level >= 6, requirement: '绑定B站账户，公开等级达到Lv6', progress: bilibiliProgress(bilibiliLevelReady ? `B站公开等级：Lv${bilibili.profile_level} / Lv6` : bilibiliPending), checkedAt: bilibiliTrusted ? bilibili.checked_at : null },
+    { id: 'bilibili-million', name: '小黄标', replacesLevel: false, earned: bilibiliFollowersReady && bilibili.followers >= 1000000, requirement: '绑定B站账户，公开粉丝数达到100万', progress: bilibiliProgress(bilibiliFollowersReady ? `B站公开粉丝：${bilibili.followers} / 1000000` : bilibiliPending), checkedAt: bilibiliTrusted ? bilibili.checked_at : null },
+    { id: 'nexacl-contributor', name: '走向明天', replacesLevel: false, earned: contribution >= 1, requirement: '绑定GitHub账户，成为Nexa-MC/NexaCL公开贡献者', progress: githubProgress, checkedAt: github?.checked_at ?? null },
     { id: 'donor', name: '我喜欢你', replacesLevel: false, earned: donationReady && donation.donation_cents > 100000, requirement: '绑定爱发电账户，累计有效发电超过1000元（不含电铺）', progress: donationProgress + (donationReady && donation.donation_error ? ' · 上次同步失败，显示上次统计' : '') }
   ];
   const selected = badges.find(b => b.id === selection?.badge_id && b.replacesLevel && b.earned);
@@ -78,12 +89,9 @@ export async function selectLevelDisplay(env, user, input) {
 }
 export function validateVerification(badgeId, input) {
   if (badgeId === 'donor') fail(422, '该铭牌通过绑定爱发电账户自动统计，不支持人工核验');
-  if (!['bilibili-level', 'bilibili-million'].includes(badgeId)) fail(422, '仅支持审核B站铭牌');
-  if (!input || Object.keys(input).some(k => !['value', 'sourceAccount', 'evidence'].includes(k))) fail(422, '核验字段无效');
-  if (!Number.isSafeInteger(input.value) || input.value < 0 || (badgeId === 'bilibili-level' && input.value > 6)) fail(422, '核验数值无效');
-  if (typeof input.sourceAccount !== 'string' || !input.sourceAccount.trim() || input.sourceAccount.length > 120) fail(422, '需要来源账户或捐赠记录编号');
-  if (typeof input.evidence !== 'string' || input.evidence.trim().length < 8 || input.evidence.length > 1000) fail(422, '需要8–1000字的核验凭证说明');
-  return { value: input.value, sourceAccount: input.sourceAccount.trim(), evidence: input.evidence.trim() };
+  if (['bilibili-level', 'bilibili-million'].includes(badgeId)) fail(422, '该铭牌通过绑定B站账户的公开资料自动核验，不支持人工核验');
+  if (badgeId === 'nexacl-contributor') fail(422, '该铭牌通过GitHub公开贡献记录自动核验，不支持人工核验');
+  fail(422, '该铭牌不支持人工核验');
 }
 const elapsed = (last, now) => last !== null && now >= last && now - last <= 120000 ? Math.min(90000, now - last) : 0;
 const onlineGain = (before, delta, unit) => Math.floor((before + delta) / unit) - Math.floor(before / unit);

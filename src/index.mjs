@@ -10,6 +10,8 @@ import { XBOX_SCOPE, XBOX_AUTHORIZE, XBOX_TOKEN, exchangeMicrosoftToken } from '
 import { AuthFlowError, safeAuthDiagnostic, gameAuthorizationMessage } from './auth-flow-errors.mjs';
 import { computeLevel, loadLevel, loadProgression, selectLevelDisplay, recordActivity, readActivity, validateVerification } from './progression.mjs';
 import { syncAfdianDonations } from './afdian-donations.mjs';
+import { syncBilibiliBadgeProfile, syncNexaContributors } from './community-badges.mjs';
+import { saveGithubDeveloperProfile, developerConditions, loadDeveloperEligibility, submitDeveloperApplication, approveDeveloperApplication } from './developer-eligibility.mjs';
 import { readBilibiliBindingProfile, createBilibiliChallenge, selectBilibiliCandidate, verifyBilibiliChallenge, cancelBilibiliChallenge } from './bilibili-binding.mjs';
 import { listConnections, createConnectionAuthorization, completeConnectionAuthorization, unlinkConnection } from './connections.mjs';
 class Failure extends Error { constructor(status, detail) { super(detail); this.status = status; } }
@@ -145,10 +147,14 @@ async function oauthStart(request, env, provider) {
   const returnPath = url.searchParams.get('return_to') || '/';
   if (!validReturnUrl(returnPath, env)) fail(400, '无效返回地址');
   const mode = url.searchParams.get('mode') === 'link' ? 'link' : 'login';
+  const developerCheck = url.searchParams.get('intent') === 'developer';
+  if (developerCheck && (provider !== 'github' || mode !== 'link')) fail(400, '开发者核验需要登录后关联GitHub');
   let userId = null, termsPolicyId = null, sessionHash = null, sessionScope = null;
   if (mode === 'link') {
     const scope = scopeOf(url.searchParams.get('scope') || 'console');
     const current = await sessionUser(env, request, scope);
+    if (developerCheck && (scope !== 'console' || current.setupRequired || !current.termsAccepted)) fail(403, '请先完成注册并接受服务条款');
+    if (developerCheck) await rateLimit(env, 'github-developer:' + current.id, 10, 3600000, 'GitHub核验过于频繁，请稍后重试');
     userId = current.id; sessionHash = digest(credential(request, scope)); sessionScope = scope;
   } else {
     const terms = await currentPolicy(env, 'terms');
@@ -159,12 +165,12 @@ async function oauthStart(request, env, provider) {
   const verifier = provider === 'microsoft' ? randomBytes(32).toString('base64url') : null;
   await env.DB.batch([
     env.DB.prepare('DELETE FROM oauth_states WHERE expires<? OR consumed=1').bind(Date.now()),
-    env.DB.prepare('INSERT INTO oauth_states(state,nonce,provider,return_to,user_id,terms_policy_id,expires,created_at,session_hash,session_scope,code_verifier) VALUES(?,?,?,?,?,?,?,?,?,?,?)').bind(state, nonce, provider, returnPath, userId, termsPolicyId, expires, new Date().toISOString(), sessionHash, sessionScope, verifier)
+    env.DB.prepare('INSERT INTO oauth_states(state,nonce,provider,return_to,user_id,terms_policy_id,expires,created_at,session_hash,session_scope,code_verifier,developer_check) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)').bind(state, nonce, provider, returnPath, userId, termsPolicyId, expires, new Date().toISOString(), sessionHash, sessionScope, verifier, Number(developerCheck))
   ]);
   const authorize = new URL(config.authorize);
   authorize.searchParams.set('client_id', config.clientId); authorize.searchParams.set('redirect_uri', config.callback); authorize.searchParams.set('response_type', 'code'); authorize.searchParams.set('state', state);
   // Website identity never asks for Xbox permissions, including when linking.
-  authorize.searchParams.set('scope', config.scope);
+  authorize.searchParams.set('scope', config.scope + (developerCheck ? ' read:org' : ''));
   authorize.searchParams.set('nonce', nonce);
   if (verifier) {
     authorize.searchParams.set('code_challenge', createHash('sha256').update(verifier).digest('base64url'));
@@ -289,6 +295,7 @@ async function oauthCallback(request, env, provider, secure) {
     }
     if (!user || user.disabled) throw new Error('account disabled');
     await env.DB.prepare('UPDATE oauth_identities SET email=?,updated_at=? WHERE provider=? AND subject=?').bind(email, new Date().toISOString(), provider, subject).run();
+    if (provider === 'github' && stateRow.developer_check === 1) await saveGithubDeveloperProfile(env, stateRow.state, user.id, subject, tokenData.access_token);
     const headers = new Headers({ location: validReturnUrl(stateRow.return_to, env) || env.WEB_ORIGIN, 'cache-control': 'no-store' });
     headers.append('set-cookie', `${oauthStateCookie}=; HttpOnly; SameSite=Lax; Path=/auth/v1/oauth; Max-Age=0${secure ? '; Secure' : ''}`);
     if (stateRow.user_id) {
@@ -322,7 +329,7 @@ async function oauthCallback(request, env, provider, secure) {
       catch { console.error(JSON.stringify({ oauth: provider, purpose: 'minecraft', reference: diagnostic.reference, stage: 'grant.save', reason: 'storage_error' })); }
       return oauthError(env, gameAuthorizationMessage(diagnostic), stateRow);
     }
-    return oauthError(env, '第三方身份关联或登录失败，请重试', stateRow);
+    return oauthError(env, stateRow.developer_check && error.status ? error.message : '第三方身份关联或登录失败，请重试', stateRow);
   }
 }
 export async function finalizeAccountDeletion(env, requestId, userId) {
@@ -330,6 +337,7 @@ export async function finalizeAccountDeletion(env, requestId, userId) {
   await env.DB.batch([
     env.DB.prepare('DELETE FROM sessions WHERE user_id=?').bind(userId),
     env.DB.prepare('DELETE FROM oauth_identities WHERE user_id=?').bind(userId),
+    env.DB.prepare('DELETE FROM github_developer_profiles WHERE user_id=?').bind(userId),
     env.DB.prepare('DELETE FROM oauth_states WHERE user_id=?').bind(userId),
     env.DB.prepare('DELETE FROM microsoft_tokens WHERE user_id=?').bind(userId),
     env.DB.prepare('DELETE FROM minecraft_profiles WHERE user_id=?').bind(userId),
@@ -753,6 +761,14 @@ export default {
         return json(env, { ok: true });
       }
       // ---------- 等级 / 资格申请 ----------
+      if (path === '/auth/v1/account/developer-eligibility' && request.method === 'GET') {
+        const user = await sessionUser(env, request, 'console');
+        const [developer, trustedDeveloper, applications] = await Promise.all([
+          loadDeveloperEligibility(env,user.id), loadDeveloperEligibility(env,user.id,Date.now(),'trusted_developer'),
+          env.DB.prepare("SELECT kind,state FROM applications WHERE user_id=? AND state='pending'").bind(user.id).all()
+        ]);
+        return json(env, {developer,trustedDeveloper,applications:applications.results,roles:{developer:Boolean(user.developer),trustedDeveloper:Boolean(user.trustedDeveloper)}});
+      }
       if (path === '/auth/v1/account/level-display' && request.method === 'PUT') {
         const user = await sessionUser(env, request, 'console');
         return json(env, await selectLevelDisplay(env, user, await body(request)));
@@ -765,28 +781,21 @@ export default {
         const user = await env.DB.prepare('SELECT id FROM users WHERE disabled=0 AND (id=? OR user_handle=?)').bind(target, target).first();
         if (!user) fail(404, '账户不存在');
         if (user.id === reviewer.id) fail(403, '不能审核自己的铭牌');
-        const input = validateVerification(badgeId, await body(request));
-        await rateLimit(env, 'badge-review:' + reviewer.id, 30, 3600000, '核验操作过于频繁');
-        await env.DB.batch([
-          env.DB.prepare(`INSERT INTO badge_verifications(user_id,badge_id,verified_value,source_account,evidence,reviewer,verified_at) VALUES(?,?,?,?,?,?,?)
-            ON CONFLICT(user_id,badge_id) DO UPDATE SET verified_value=excluded.verified_value,source_account=excluded.source_account,evidence=excluded.evidence,reviewer=excluded.reviewer,verified_at=excluded.verified_at
-            WHERE verified_value!=excluded.verified_value OR source_account!=excluded.source_account OR evidence!=excluded.evidence`).bind(user.id, badgeId, input.value, input.sourceAccount, input.evidence, reviewer.id, new Date().toISOString()),
-          auditOnChange(env, reviewer.id, 'badge.verified', `${user.id}:${badgeId}:${input.value}`)
-        ]);
-        return json(env, { userId: user.id, badgeId, value: input.value });
+        validateVerification(badgeId, await body(request));
       }
       if (path === '/auth/v1/account/level' && request.method === 'GET') {
         const user = await sessionUser(env, request, 'console');
-        await syncAfdianDonations(env, user.id);
-        const [level, popular, apps, profile] = await Promise.all([
+        await Promise.all([syncAfdianDonations(env, user.id), syncBilibiliBadgeProfile(env, user.id), syncNexaContributors(env, user.id)]);
+        const [level, popular, apps, profile, developer, trustedDeveloper] = await Promise.all([
           loadProgression(env, user),
           env.DB.prepare("SELECT value, set_at FROM user_flags WHERE user_id=? AND flag='popular_plugin'").bind(user.id).first(),
           env.DB.prepare('SELECT id,kind,state,note,created_at,reviewed_at FROM applications WHERE user_id=? ORDER BY created_at DESC LIMIT 20').bind(user.id).all(),
-          env.DB.prepare('SELECT staff, developer, trusted_developer FROM users WHERE id=?').bind(user.id).first()
+          env.DB.prepare('SELECT staff, developer, trusted_developer FROM users WHERE id=?').bind(user.id).first(),
+          loadDeveloperEligibility(env,user.id),loadDeveloperEligibility(env,user.id,Date.now(),'trusted_developer')
         ]);
         const met = {
-          developer: level.level >= 2,
-          trustedDeveloper: level.level >= 3 && Boolean(popular) && Boolean(profile?.developer),
+          developer: developer.verifiedCount >= developer.required,
+          trustedDeveloper: trustedDeveloper.verifiedCount >= trustedDeveloper.required && Boolean(profile?.developer),
           admin: level.level >= 4
         };
         return json(env, {
@@ -794,8 +803,8 @@ export default {
           roles: { staff: Boolean(profile?.staff), developer: Boolean(profile?.developer), trustedDeveloper: Boolean(profile?.trusted_developer) },
           popularPlugin: popular ? { evidence: popular.value, setAt: popular.set_at } : null,
           requirements: {
-            developer: { level: 2, met: met.developer },
-            trustedDeveloper: { level: 3, popularPlugin: Boolean(popular), isDeveloper: Boolean(profile?.developer), met: met.trustedDeveloper },
+            developer: { ...developer, met: met.developer },
+            trustedDeveloper: { ...trustedDeveloper, isDeveloper: Boolean(profile?.developer), met: met.trustedDeveloper },
             admin: { level: 4, met: met.admin }
           },
           applications: apps.results
@@ -812,14 +821,9 @@ export default {
         if (kind === 'trusted_developer' && profile.trusted_developer) fail(409, '你已经是受信任的开发者');
         if (kind === 'trusted_developer' && !profile.developer) fail(403, '需要先成为开发者');
         if (kind === 'admin' && profile.staff) fail(409, '你已经是网站管理员');
+        if (['developer','trusted_developer'].includes(kind)) return json(env, await submitDeveloperApplication(env,user,input),201);
         const level = await loadLevel(env, user.id);
-        if (kind === 'developer' && level.level < 2) fail(403, '开发者申请需要达到 Lv2(先启动一次游戏,再累计 2,000 经验)');
-        if (kind === 'trusted_developer' && level.level < 3) fail(403, '受信任的开发者需要达到 Lv3(累计 5,000 经验)');
         if (kind === 'admin' && level.level < 4) fail(403, '网站管理员申请需要达到 Lv4(累计 10,000 经验)');
-        if (kind === 'trusted_developer') {
-          const popular = await env.DB.prepare("SELECT 1 FROM user_flags WHERE user_id=? AND flag='popular_plugin'").bind(user.id).first();
-          if (!popular) fail(403, '受信任的开发者需要拥有一个下载量超过 1,000 的插件');
-        }
         const id = crypto.randomUUID();
         const nowIso = new Date().toISOString();
         try {
@@ -836,10 +840,14 @@ export default {
       if (path === '/auth/v1/applications/pending' && request.method === 'GET') {
         const user = await sessionUser(env, request, 'console');
         if (!user.staff) fail(403, '仅网站管理员可查看待审申请');
-        const rows = await env.DB.prepare(`SELECT a.id,a.kind,a.state,a.created_at,u.id AS user_id,COALESCE(u.display_name,u.name) AS user_name,u.user_handle,
-          COALESCE(ul.xp,0) AS xp, COALESCE(ul.launched,0) AS launched FROM applications a JOIN users u ON u.id=a.user_id
-          LEFT JOIN user_levels ul ON ul.user_id=u.id WHERE a.state='pending' ORDER BY a.created_at LIMIT 100`).all();
-        return json(env, { applications: rows.results.map(r => ({ id: r.id, kind: r.kind, createdAt: r.created_at, user: { id: r.user_id, name: r.user_name, handle: r.user_handle }, level: computeLevel(r.xp, r.launched) })) });
+        const rows = await env.DB.prepare(`SELECT a.id,a.kind,a.state,a.created_at,a.core_contributor_claimed,u.id AS user_id,COALESCE(u.display_name,u.name) AS user_name,u.user_handle,
+          COALESCE(ul.xp,0) AS xp, COALESCE(ul.launched,0) AS launched,i.subject AS current_github_subject,
+          p.account_created_at,p.followers,p.qualifying_repository,p.org_member,p.checked_at,p.core_verified_at
+          FROM applications a JOIN users u ON u.id=a.user_id LEFT JOIN user_levels ul ON ul.user_id=u.id
+          LEFT JOIN oauth_identities i ON i.user_id=u.id AND i.provider='github'
+          LEFT JOIN github_developer_profiles p ON p.user_id=u.id AND p.subject=i.subject AND p.linked_at=i.created_at
+          WHERE a.state='pending' ORDER BY a.created_at LIMIT 100`).all();
+        return json(env, { applications: rows.results.map(r => ({ id:r.id,kind:r.kind,createdAt:r.created_at,coreContributorClaimed:Boolean(r.core_contributor_claimed),eligibility:['developer','trusted_developer'].includes(r.kind)?{...developerConditions(r,Date.now(),r.kind),githubLinked:Boolean(r.current_github_subject)}:null,user:{id:r.user_id,name:r.user_name,handle:r.user_handle},level:computeLevel(r.xp,r.launched) })) });
       }
       const reviewMatch = path.match(/^\/auth\/v1\/applications\/([0-9a-f-]{36})\/review$/);
       if (reviewMatch && request.method === 'POST') {
@@ -849,16 +857,15 @@ export default {
         const decision = input?.decision === 'approved' ? 'approved' : input?.decision === 'rejected' ? 'rejected' : null;
         if (!decision) fail(400, 'decision 需为 approved 或 rejected');
         const note = typeof input?.note === 'string' ? input.note.slice(0, 400) : null;
-        const app = await env.DB.prepare("SELECT id,user_id,kind,state FROM applications WHERE id=? AND state='pending'").bind(reviewMatch[1]).first();
+        const app = await env.DB.prepare("SELECT * FROM applications WHERE id=? AND state='pending'").bind(reviewMatch[1]).first();
         if (!app) fail(404, '申请不存在或已处理');
         if (app.user_id === user.id) fail(403, '不能审批自己的申请');
+        if (decision === 'approved' && ['developer','trusted_developer'].includes(app.kind)) return json(env,await approveDeveloperApplication(env,app,user,input));
         const nowIso = new Date().toISOString();
         const statements = [
           env.DB.prepare("UPDATE applications SET state=?, note=?, reviewed_at=?, reviewer=? WHERE id=? AND state='pending'").bind(decision, note, nowIso, user.id, app.id)
         ];
         if (decision === 'approved') {
-          if (app.kind === 'developer') statements.push(env.DB.prepare('UPDATE users SET developer=1 WHERE id=? AND changes()=1').bind(app.user_id));
-          if (app.kind === 'trusted_developer') statements.push(env.DB.prepare('UPDATE users SET trusted_developer=1 WHERE id=? AND changes()=1').bind(app.user_id));
           if (app.kind === 'admin') statements.push(env.DB.prepare('UPDATE users SET staff=1 WHERE id=? AND changes()=1').bind(app.user_id));
         }
         statements.push(auditOnChange(env, user.id, 'application.reviewed', `${app.kind}:${decision}`));
@@ -1063,6 +1070,7 @@ export default {
         if ((count?.n ?? 0) <= 1) fail(400, '至少保留一个登录方式');
         await env.DB.batch([
           env.DB.prepare('DELETE FROM oauth_identities WHERE user_id=? AND provider=?').bind(user.id, identityMatch[1]),
+          ...(identityMatch[1] === 'github' ? [env.DB.prepare('DELETE FROM github_developer_profiles WHERE user_id=?').bind(user.id)] : []),
           ...(identityMatch[1] === 'microsoft' ? [env.DB.prepare('DELETE FROM minecraft_profiles WHERE user_id=?').bind(user.id), env.DB.prepare('DELETE FROM microsoft_tokens WHERE user_id=?').bind(user.id), env.DB.prepare("DELETE FROM oauth_states WHERE user_id=? AND provider='microsoft' AND purpose='minecraft'").bind(user.id)] : []),
           auditEvent(env, user.id, 'oauth.unlinked', identityMatch[1])
         ]);
@@ -1096,7 +1104,7 @@ export default {
       }
       if (path === '/auth/v1/account/export' && request.method === 'GET') {
         const user = await sessionUser(env, request, 'console');
-        const [identities, sessions, acceptances, deletion, privacy, mfa, minecraft, progression, badgeProofs, connections, activityDays, activityEvents] = await Promise.all([
+        const [identities, sessions, acceptances, deletion, privacy, mfa, minecraft, progression, badgeProofs, connections, activityDays, activityEvents, githubDeveloperProfile] = await Promise.all([
           env.DB.prepare('SELECT provider,subject,email,created_at,updated_at FROM oauth_identities WHERE user_id=?').bind(user.id).all(),
           env.DB.prepare("SELECT scope, CASE WHEN expires>? THEN 'active' ELSE 'expired' END AS state FROM sessions WHERE user_id=?").bind(Date.now(), user.id).all(),
           env.DB.prepare(`SELECT pd.kind,pd.version,ta.accepted_at AS acceptedAt FROM terms_acceptances ta JOIN policy_documents pd ON pd.id=ta.policy_id WHERE ta.user_id=?
@@ -1109,7 +1117,8 @@ export default {
           env.DB.prepare('SELECT badge_id,verified_value,source_account,evidence,verified_at FROM badge_verifications WHERE user_id=?').bind(user.id).all(),
           env.DB.prepare('SELECT provider,subject,private_subject,display_name,followers,profile_level,avatar_url,connected_at,checked_at FROM external_connections WHERE user_id=?').bind(user.id).all(),
           env.DB.prepare('SELECT day,logged_in,game_started,launcher_ms,game_ms,xp_earned FROM launcher_activity_days WHERE user_id=? ORDER BY day').bind(user.id).all(),
-          env.DB.prepare('SELECT id,type,certificate,xp,occurred_at FROM launcher_activity_events WHERE user_id=? ORDER BY occurred_at').bind(user.id).all()
+          env.DB.prepare('SELECT id,type,certificate,xp,occurred_at FROM launcher_activity_events WHERE user_id=? ORDER BY occurred_at').bind(user.id).all(),
+          env.DB.prepare('SELECT subject,account_created_at,followers,qualifying_repository,org_member,checked_at,core_verified_at FROM github_developer_profiles WHERE user_id=?').bind(user.id).first()
         ]);
         return json(env, {
           profile: { id: user.id, name: user.name, email: user.email, staff: user.staff, developer: user.developer, handle: user.handle ?? null },
@@ -1117,7 +1126,7 @@ export default {
           deletionRequest: deletion ?? null, privacyRequests: privacy.results,
           mfa: { factors: mfa.list, passkeys: mfa.passkeyCount, totp: mfa.totpCount, recoveryCodes: mfa.recoveryCount },
           minecraft: minecraft ? { owned: minecraft.owned, profileId: minecraft.profile_id, profileName: minecraft.profile_name, checkedAt: minecraft.checked_at } : null,
-          progression, badgeVerifications: badgeProofs.results, connections: connections.results,
+          progression, badgeVerifications: badgeProofs.results, connections: connections.results, githubDeveloperProfile,
           activityDays: activityDays.results, activityEvents: activityEvents.results,
           exportedAt: new Date().toISOString()
         });
