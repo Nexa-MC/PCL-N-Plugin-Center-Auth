@@ -9,6 +9,7 @@ import { fetchMinecraftStatus } from './minecraft.mjs';
 import { XBOX_SCOPE, XBOX_AUTHORIZE, XBOX_TOKEN, exchangeMicrosoftToken } from './microsoft.mjs';
 import { AuthFlowError, safeAuthDiagnostic, gameAuthorizationMessage } from './auth-flow-errors.mjs';
 import { computeLevel, loadLevel, loadProgression, selectLevelDisplay, recordActivity, readActivity, validateVerification } from './progression.mjs';
+import { syncAfdianDonations } from './afdian-donations.mjs';
 import { listConnections, createConnectionAuthorization, completeConnectionAuthorization, unlinkConnection } from './connections.mjs';
 class Failure extends Error { constructor(status, detail) { super(detail); this.status = status; } }
 const fail = (status, detail) => { throw new Failure(status, detail); };
@@ -743,6 +744,7 @@ export default {
       }
       if (path === '/auth/v1/account/level' && request.method === 'GET') {
         const user = await sessionUser(env, request, 'console');
+        await syncAfdianDonations(env, user.id);
         const [level, popular, apps, profile] = await Promise.all([
           loadProgression(env, user),
           env.DB.prepare("SELECT value, set_at FROM user_flags WHERE user_id=? AND flag='popular_plugin'").bind(user.id).first(),

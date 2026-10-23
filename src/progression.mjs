@@ -1,3 +1,4 @@
+import { afdianDonationsConfigured } from './afdian-donations.mjs';
 const fail = (status, message) => { throw Object.assign(new Error(message), { status }); };
 export const LEVEL_THRESHOLDS = { 2: 2000, 3: 5000, 4: 10000, 5: 20000, 6: 50000, 7: 100000 };
 export const XP_REWARDS = { launcherLogin: 20, firstGameStart: 30, gameMinutes: 1, launcherMinutes: 5, dailyCap: 500, timeZone: 'Asia/Shanghai' };
@@ -31,24 +32,30 @@ function streaks(days, now) {
   return { best, current: days.at(-1) === today || days.at(-1) === yesterday ? run : 0 };
 }
 export async function loadProgression(env, user, now = Date.now()) {
-  const [level, presence, days, verifications, selection, today] = await Promise.all([
+  const [level, presence, days, verifications, selection, today, donation] = await Promise.all([
     loadLevel(env, user.id),
     env.DB.prepare('SELECT launcher_ms,game_ms FROM launcher_presence WHERE user_id=?').bind(user.id).first(),
     env.DB.prepare('SELECT day FROM launcher_activity_days WHERE user_id=? AND game_started=1 ORDER BY day').bind(user.id).all(),
     env.DB.prepare('SELECT badge_id,verified_value,verified_at FROM badge_verifications WHERE user_id=?').bind(user.id).all(),
     env.DB.prepare('SELECT badge_id FROM user_level_display WHERE user_id=?').bind(user.id).first(),
-    env.DB.prepare('SELECT xp_earned FROM launcher_activity_days WHERE user_id=? AND day=?').bind(user.id, activityDay(now)).first()
+    env.DB.prepare('SELECT xp_earned FROM launcher_activity_days WHERE user_id=? AND day=?').bind(user.id, activityDay(now)).first(),
+    env.DB.prepare("SELECT donation_cents,donation_checked_at,donation_error FROM external_connections WHERE user_id=? AND provider='afdian'").bind(user.id).first()
   ]);
   const streak = streaks(days.results.map(d => d.day), now), gameSeconds = Math.floor((presence?.game_ms ?? 0) / 1000);
   const verified = Object.fromEntries(verifications.results.map(v => [v.badge_id, v]));
   const fact = (id, threshold) => (verified[id]?.verified_value ?? 0) >= threshold;
+  const donationReady = Boolean(donation?.donation_checked_at) && Number.isSafeInteger(donation?.donation_cents);
+  const donationProgress = !donation ? '请先绑定爱发电账户'
+    : donationReady ? `累计有效发电 ¥${(donation.donation_cents / 100).toFixed(2)}（不含电铺）`
+    : !afdianDonationsConfigured(env) ? '爱发电订单统计暂未配置'
+    : donation.donation_error ? '爱发电订单暂时无法同步，请稍后刷新' : '等待同步爱发电订单';
   const badges = [
     { id: 'infinity', name: 'Lv∞', replacesLevel: true, earned: false, requirement: 'Lv7 · MC 100h · 通过∞答题', progress: `${level.level}/7 · ${(gameSeconds / 3600).toFixed(1)}/100h · 题库未开放`, conditions: { level: level.level >= 7, gameTime: gameSeconds >= 360000, quiz: false, quizAvailable: false } },
     { id: 'administrator', name: 'Lv-1', replacesLevel: true, earned: Boolean(user.staff), requirement: '成为网站管理员', progress: user.staff ? '已达成' : '未达成' },
     { id: 'mc-streak', name: 'LvMC', replacesLevel: true, earned: streak.best >= 100, requirement: '连续100天启动MC', progress: `${Math.min(streak.best, 100)}/100天` },
     { id: 'bilibili-level', name: 'b站来的', replacesLevel: false, earned: fact('bilibili-level', 6), requirement: 'B站达到Lv6', progress: fact('bilibili-level', 6) ? '已核验' : '待管理员核验' },
     { id: 'bilibili-million', name: '小黄标', replacesLevel: false, earned: fact('bilibili-million', 1000000), requirement: 'B站粉丝达到100w+', progress: fact('bilibili-million', 1000000) ? '已核验' : '待管理员核验' },
-    { id: 'donor', name: '我喜欢你', replacesLevel: false, earned: fact('donor', 100001), requirement: '向Nexa无偿捐赠累计超过1000元', progress: fact('donor', 100001) ? '已核验' : '待管理员核验' }
+    { id: 'donor', name: '我喜欢你', replacesLevel: false, earned: donationReady && donation.donation_cents > 100000, requirement: '绑定爱发电账户，累计有效发电超过1000元（不含电铺）', progress: donationProgress + (donationReady && donation.donation_error ? ' · 上次同步失败，显示上次统计' : '') }
   ];
   const selected = badges.find(b => b.id === selection?.badge_id && b.replacesLevel && b.earned);
   return {
@@ -70,7 +77,8 @@ export async function selectLevelDisplay(env, user, input) {
   return loadProgression(env, user);
 }
 export function validateVerification(badgeId, input) {
-  if (!['bilibili-level', 'bilibili-million', 'donor'].includes(badgeId)) fail(422, '仅支持审核B站与无偿捐赠铭牌');
+  if (badgeId === 'donor') fail(422, '该铭牌通过绑定爱发电账户自动统计，不支持人工核验');
+  if (!['bilibili-level', 'bilibili-million'].includes(badgeId)) fail(422, '仅支持审核B站铭牌');
   if (!input || Object.keys(input).some(k => !['value', 'sourceAccount', 'evidence'].includes(k))) fail(422, '核验字段无效');
   if (!Number.isSafeInteger(input.value) || input.value < 0 || (badgeId === 'bilibili-level' && input.value > 6)) fail(422, '核验数值无效');
   if (typeof input.sourceAccount !== 'string' || !input.sourceAccount.trim() || input.sourceAccount.length > 120) fail(422, '需要来源账户或捐赠记录编号');

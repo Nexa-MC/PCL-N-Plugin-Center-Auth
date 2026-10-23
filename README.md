@@ -89,7 +89,9 @@ Web 在 auth 域使用 HttpOnly Cookie 会话，换取仅存内存的 API Bearer
 - 每日登录启动器 +20、每日首次启动 MC +30、MC 在线每分钟 +1、启动器在线每 5 分钟 +1；上海时间按日合计最多 500。所有时间由服务器计算，不接受客户端金额、用户 ID、时间或经验值。
 - `GET /auth/v1/account/level` 返回普通等级、Exp、在线时长、连续天数、铭牌与展示选择；`PUT /auth/v1/account/level-display` 的 `{badgeId:null}` 恢复普通等级。
 - Lv-1 随当前管理员身份即时变化；LvMC 需要曾连续 100 天启动 MC；Lv∞ 需要 Lv7、MC 100h 和∞答题，题库未开放时不能授予。
-- B站 Lv6、百万粉丝及累计无偿捐赠严格超过 1000 元的铭牌由管理员用 `PUT /auth/v1/users/{id或handle}/badge-verifications/{badgeId}` 核验，金额单位分。提交 `{value,sourceAccount,evidence}`，禁止审核自己，结果及更正写审计。订阅付款与爱发电 OAuth 绑定不等于无偿捐赠证明。
+- B站 Lv6、百万粉丝铭牌由管理员用 `PUT /auth/v1/users/{id或handle}/badge-verifications/{badgeId}` 核验。提交 `{value,sourceAccount,evidence}`，禁止审核自己，结果及更正写审计。
+- 「我喜欢你」由已绑定爱发电账户的有效发电订单自动统计，累计金额必须严格超过 1000 元（1000.00 不获得，1000.01 获得）。只累计该账户 `status=2` 且 `product_type=0` 的订单，按订单号去重；不计电铺订单、未完成订单和其他账户的订单，也不采用含电铺金额的赞助者汇总 `all_sum_amount`。旧的人工 donor 凭证不再授予此徽章，人工写入 donor 返回 422。
+- 打开或刷新 `GET /auth/v1/account/level` 时按需同步订单，每个绑定账户 15 分钟最多查询一次。所有分页完整成功后才更新统计；失败保留上次完整结果并显示提示。解绑清除累计缓存和徽章，更换绑定账户从该账户订单重新计算；历史订单详情和地址等信息不落库。
 - 已退役 `POST /internal/v1/xp` 返回 410。新的可信接口是 `POST /internal/v1/launcher/activity-events` 与 `GET /internal/v1/launcher/activity-events/{UUID}`：SERVICE_TOKEN + `x-nexa-account-token` 真实用户会话 + `x-nexa-client-certificate` 已由 Web 验证的证书指纹。只能由 API 调用，原始匿名遥测不进入此通道。
 - 请求 `{id:UUID,type}`，type 为 launcher.login / launcher.heartbeat / launcher.logout / game.start / game.heartbeat / game.stop；创建返回 201 和 Location，重复相同事件返回 200，冲突返回 409。最长心跳间隔 120 秒、每次最多计 90 秒，离线不补时，多设备不重叠累计。事件回执保留 30 天，累计时间、按日经验与铭牌随账户保存；注销清除。
 - 启动器接口当前仅预留，未修改启动器。证书验证与吊销交由 Cloudflare Client Certificates；Web 仅采用 Cloudflare TLS 校验结果，缺少有效证书就拒绝。启用流程见 API `nexa/README.md`。
@@ -104,7 +106,11 @@ Web 在 auth 域使用 HttpOnly Cookie 会话，换取仅存内存的 API Bearer
 ```powershell
 pnpm exec wrangler secret put AFDIAN_CLIENT_ID
 pnpm exec wrangler secret put AFDIAN_CLIENT_SECRET
+pnpm exec wrangler secret put AFDIAN_USER_ID
+pnpm exec wrangler secret put AFDIAN_API_TOKEN
 ```
+
+`AFDIAN_USER_ID` 与 `AFDIAN_API_TOKEN` 是 Nexa 收款创作者的开放 API 凭据，供订单查询使用，不能用 OAuth Client ID/Secret 代替。缺少时仍可绑定，但铭牌提示「爱发电订单统计暂未配置」，不会把绑定本身视为捐赠。发布前先运行 `pnpm exec wrangler d1 migrations apply pcln-production --remote --env=""` 应用 migration 0017，再部署 Auth。
 
 代码在授权及换取身份时传递 redirect_uri=https://auth.pcln.top/auth/v1/connections/afdian/callback。只请求 basic，接受官方只返回 user_id 的响应，不强求 access_token、邮箱或昵称，不保存第三方访问令牌。10 分钟单次 state 同时绑定当前 Nexa 会话与 HttpOnly Cookie；退出、解绑、过期或重放都会拒绝。数据库唯一约束防止跨账户抢占第三方身份。
 

@@ -6,13 +6,23 @@ import { randomUUID } from 'node:crypto';
 import { Miniflare, convertV4MiniflareOptions } from 'miniflare';
 import { loadLevel, loadProgression, recordActivity, selectLevelDisplay, computeLevel, activityDay } from '../src/progression.mjs';
 import { digest } from '../src/password.mjs';
+import { syncAfdianDonations } from '../src/afdian-donations.mjs';
 import { privacyForAcceptedTerms } from '../src/index.mjs';
 import { createConnectionAuthorization, completeConnectionAuthorization, exchangeConnection, listConnections, unlinkConnection } from '../src/connections.mjs';
 
 test('progression and community bindings use atomic D1 writes', async t => {
   const root = new URL('../', import.meta.url), certificate = 'a'.repeat(64), now = Date.parse('2026-09-30T03:00:00Z');
   const modules = ['index.mjs', ...(await readdir(new URL('src/', root))).filter(f => f.endsWith('.mjs') && f !== 'index.mjs')];
-  const mf = new Miniflare(convertV4MiniflareOptions({ modulesRoot: fileURLToPath(root), modules: modules.map(f => ({ type: 'ESModule', path: fileURLToPath(new URL('src/' + f, root)) })), compatibilityDate: '2026-09-26', compatibilityFlags: ['nodejs_compat'], d1Databases: { DB: 'progression-test' }, bindings: { WEB_ORIGIN: 'https://web.test', SERVICE_TOKEN: 'service-test-token', AFDIAN_CLIENT_ID: 'afdian-fixture', AFDIAN_CLIENT_SECRET: 'secret-fixture' }, outboundService: async request => {
+  const mf = new Miniflare(convertV4MiniflareOptions({ modulesRoot: fileURLToPath(root), modules: modules.map(f => ({ type: 'ESModule', path: fileURLToPath(new URL('src/' + f, root)) })), compatibilityDate: '2026-09-26', compatibilityFlags: ['nodejs_compat'], d1Databases: { DB: 'progression-test' }, bindings: { WEB_ORIGIN: 'https://web.test', SERVICE_TOKEN: 'service-test-token', AFDIAN_CLIENT_ID: 'afdian-fixture', AFDIAN_CLIENT_SECRET: 'secret-fixture', AFDIAN_USER_ID: 'creator', AFDIAN_API_TOKEN: 'api-token' }, outboundService: async request => {
+    if (new URL(request.url).href === 'https://ifdian.net/api/open/query-order') {
+      const body = await request.json();
+      assert.equal(body.user_id, 'creator');
+      assert.equal(JSON.parse(body.params).user_id, 'worker-runtime-subject');
+      return Response.json({ ec: 200, data: { total_page: 1, list: [
+        { out_trade_no: 'runtime-donation', user_id: 'worker-runtime-subject', product_type: 0, status: 2, show_amount: '1000.01' },
+        { out_trade_no: 'runtime-shop', user_id: 'worker-runtime-subject', product_type: 1, status: 2, show_amount: '99999' }
+      ] } });
+    }
     assert.equal(new URL(request.url).href, 'https://afdian.com/api/oauth2/access_token');
     assert.equal(request.method, 'POST');
     const form = new URLSearchParams(await request.text());
@@ -108,19 +118,66 @@ test('progression and community bindings use atomic D1 writes', async t => {
     assert.equal(infinity.conditions.level, true); assert.equal(infinity.conditions.gameTime, true); assert.equal(infinity.earned, false);
     await assert.rejects(selectLevelDisplay(env, staff, { badgeId: 'infinity' }), e => e.status === 403);
   });
-  await t.test('manual verification is staff-only, audited and donations must exceed 1000 CNY', async () => {
+  await t.test('manual Bilibili verification remains staff-only and audited; donor requires a bound account', async () => {
     const staff = await addUser('reviewer', 1), user = await addUser('recipient');
-    const path = '/auth/v1/users/recipient/badge-verifications/donor', proof = { value: 100000, sourceAccount: 'receipt-1', evidence: '人工复核无偿捐赠凭证记录' };
+    const path = '/auth/v1/users/recipient/badge-verifications/bilibili-million', proof = { value: 1000000, sourceAccount: 'bilibili-user', evidence: '人工复核B站粉丝凭证记录' };
     assert.equal((await api(path, user.token, 'PUT', proof)).status, 403);
-    assert.equal((await api('/auth/v1/users/reviewer/badge-verifications/donor', staff.token, 'PUT', proof)).status, 403);
+    assert.equal((await api('/auth/v1/users/reviewer/badge-verifications/bilibili-million', staff.token, 'PUT', proof)).status, 403);
     assert.equal((await api(path, staff.token, 'PUT', proof)).status, 200);
+    assert.equal((await loadProgression(env, user)).badges.find(b => b.id === 'bilibili-million').earned, true);
+    assert.equal((await api('/auth/v1/users/recipient/badge-verifications/donor', staff.token, 'PUT', proof)).status, 422);
+    await DB.prepare("INSERT INTO badge_verifications(user_id,badge_id,verified_value,source_account,evidence,reviewer,verified_at) VALUES(?,'donor',999999,'legacy','legacy manual proof',?,?)").bind(user.id, staff.id, new Date().toISOString()).run();
     assert.equal((await loadProgression(env, user)).badges.find(b => b.id === 'donor').earned, false);
-    proof.value = 100001;
+    proof.value = 1000001;
     assert.equal((await api(path, staff.token, 'PUT', proof)).status, 200);
     assert.equal((await api(path, staff.token, 'PUT', proof)).status, 200);
-    assert.equal((await loadProgression(env, user)).badges.find(b => b.id === 'donor').earned, true);
     assert.equal((await DB.prepare("SELECT count(*) AS n FROM auth_audit WHERE action='badge.verified'").first()).n, 2);
     assert.equal((await api('/auth/v1/users/recipient/badge-verifications/infinity', staff.token, 'PUT', proof)).status, 422);
+  });
+  const donationEnv = { ...env, AFDIAN_USER_ID: 'creator', AFDIAN_API_TOKEN: 'api-token' };
+  async function linkAfdian(user, subject = user.id + '-afdian') {
+    await DB.prepare("INSERT INTO external_connections(user_id,provider,subject,connected_at,checked_at) VALUES(?,'afdian',?,?,?)").bind(user.id, subject, new Date().toISOString(), new Date().toISOString()).run();
+    return subject;
+  }
+  const donationBadge = async user => (await loadProgression(donationEnv, user)).badges.find(b => b.id === 'donor');
+  const donationOrders = (subject, amount) => Response.json({ ec: 200, data: { total_page: 1, list: [
+    { out_trade_no: 'donation', user_id: subject, product_type: 0, status: 2, show_amount: amount },
+    { out_trade_no: 'shop', user_id: subject, product_type: 1, status: 2, show_amount: '99999' }
+  ] } });
+  await t.test('linked donations strictly exceed 1000 CNY, refresh once and survive failures without counting shop orders', async () => {
+    const user = await addUser('donationtotal'), subject = await linkAfdian(user);
+    assert.equal((await loadProgression(env, user)).badges.find(b => b.id === 'donor').progress, '爱发电订单统计暂未配置');
+    await syncAfdianDonations(donationEnv, user.id, async () => donationOrders(subject, '1000.00'), now);
+    assert.equal((await donationBadge(user)).earned, false);
+    let calls = 0;
+    const fetcher = async () => { calls++; return donationOrders(subject, '1000.01'); };
+    await Promise.all([1,2,3].map(() => syncAfdianDonations(donationEnv, user.id, fetcher, now + 900000)));
+    assert.equal(calls, 1); assert.equal((await donationBadge(user)).earned, true);
+    await syncAfdianDonations(donationEnv, user.id, fetcher, now + 900001);
+    assert.equal(calls, 1);
+    await syncAfdianDonations(donationEnv, user.id, async () => { throw new Error('temporary failure'); }, now + 1800000);
+    assert.equal((await donationBadge(user)).earned, true);
+    assert.match((await donationBadge(user)).progress, /1000\.01.*上次同步失败/);
+    await syncAfdianDonations(donationEnv, user.id, async () => donationOrders(subject, '0.00'), now + 2700000);
+    assert.equal((await donationBadge(user)).earned, false);
+    assert.doesNotMatch((await donationBadge(user)).progress, /同步失败/);
+  });
+  await t.test('unlinking and replacing the account cannot inherit a donor badge, including a query in flight', async () => {
+    const user = await addUser('donationunlink'), subject = await linkAfdian(user);
+    await syncAfdianDonations(donationEnv, user.id, async () => donationOrders(subject, '2000.00'), now);
+    assert.equal((await donationBadge(user)).earned, true);
+    await unlinkConnection(env, user.id, 'afdian');
+    assert.equal((await donationBadge(user)).earned, false);
+    assert.equal((await donationBadge(user)).progress, '请先绑定爱发电账户');
+    await linkAfdian(user, 'new-subject');
+    assert.equal((await donationBadge(user)).earned, false);
+    await syncAfdianDonations(donationEnv, user.id, async () => {
+      await unlinkConnection(env, user.id, 'afdian');
+      await linkAfdian(user, 'replacement-subject');
+      return donationOrders('new-subject', '2000');
+    }, now + 900000);
+    assert.equal((await donationBadge(user)).earned, false);
+    assert.equal((await DB.prepare("SELECT donation_cents FROM external_connections WHERE user_id=? AND provider='afdian'").bind(user.id).first()).donation_cents, null);
   });
   await t.test('Afdian accepts the official user-id-only response and never exposes credentials', async () => {
     const user = await addUser('afdianuser');
@@ -145,7 +202,7 @@ test('progression and community bindings use atomic D1 writes', async t => {
     const duplicate = await addUser('afdianduplicate'), second = await createConnectionAuthorization(env, duplicate, duplicate.token, 'afdian');
     const conflict = await completeConnectionAuthorization(new Request('https://auth.pcln.top/auth/v1/connections/afdian/callback?code=other&state=' + new URL(second.url).searchParams.get('state'), { headers: { cookie: second.cookie.split(';')[0] } }), env, 'afdian', fetcher);
     assert.ok(new URL(conflict.headers.get('location')).searchParams.has('connection_error'));
-    assert.equal((await DB.prepare('SELECT count(*) AS n FROM external_connections').first()).n, 1);
+    assert.equal((await DB.prepare("SELECT count(*) AS n FROM external_connections WHERE subject='afdian-subject-1'").first()).n, 1);
   });
   await t.test('logout invalidates an OAuth binding even during the platform exchange', async () => {
     const user = await addUser('revokedlink'), authorization = await createConnectionAuthorization(env, user, user.token, 'afdian');
@@ -188,6 +245,10 @@ test('progression and community bindings use atomic D1 writes', async t => {
     assert.equal(result.status, 303);
     assert.equal(new URL(result.headers.get('location')).searchParams.get('connection_success'), 'afdian');
     assert.equal((await DB.prepare('SELECT subject FROM external_connections WHERE user_id=?').bind(user.id).first()).subject, 'worker-runtime-subject');
+    const level = await api('/auth/v1/account/level', user.token);
+    assert.equal(level.status, 200);
+    const badge = (await level.json()).badges.find(b => b.id === 'donor');
+    assert.equal(badge.earned, true); assert.equal(badge.progress, '累计有效发电 ¥1000.01（不含电铺）');
   });
   await t.test('Bilibili remains closed even when old OAuth credentials exist', async () => {
     const user = await addUser('biliuser');
