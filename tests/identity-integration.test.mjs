@@ -39,6 +39,38 @@ test('account and MFA endpoints run against actual Worker D1', async t => {
     return mf.dispatchFetch(origin + path, { method, headers: { origin: source, 'x-nexa-request': '1', 'content-type': 'application/json', ...(token ? { authorization: 'Bearer ' + token } : {}), ...headers }, ...(data === undefined ? {} : { body: JSON.stringify(data) }) });
   }
   const user = await addUser('aliceid', { mfa: true });
+  await t.test('creator applications require a current registered session and accepted terms',async()=>{
+    const apply=(token,data={kind:'creator'})=>call('/auth/v1/applications',{method:'POST',token,data});
+    assert.equal((await apply()).status,401);
+    const pending=await addUser('pendingcreator',{pending:true});
+    await db.prepare("INSERT INTO terms_acceptances(user_id,policy_id,accepted_at) SELECT 'pendingcreator',id,? FROM policy_documents WHERE kind='terms' AND current=1").bind(new Date().toISOString()).run();
+    assert.equal((await apply(pending)).status,403);
+    const unaccepted=await addUser('unacceptedcreator');assert.equal((await apply(unaccepted)).status,403);
+    await db.prepare("INSERT INTO terms_acceptances(user_id,policy_id,accepted_at) SELECT 'unacceptedcreator',id,? FROM policy_documents WHERE kind='terms' AND current=1").bind(new Date().toISOString()).run();
+    assert.equal((await apply(unaccepted,{kind:'creator',staff:true})).status,422);
+    await db.prepare("DELETE FROM sessions WHERE user_id='unacceptedcreator'").run();
+    const {applyCreator}=await import('../src/creator.mjs');
+    await assert.rejects(applyCreator({DB:db},{id:'unacceptedcreator',termsAccepted:1},unaccepted,{kind:'creator'}),e=>e.status===409);
+    assert.equal((await db.prepare("SELECT creator FROM users WHERE id='unacceptedcreator'").first()).creator,0);
+  });
+  await t.test('creator auto-approval is atomic, repeatable and grants only creator status',async()=>{
+    const token=await addUser('creatorid');
+    await db.prepare("INSERT INTO terms_acceptances(user_id,policy_id,accepted_at) SELECT 'creatorid',id,? FROM policy_documents WHERE kind='terms' AND current=1").bind(new Date().toISOString()).run();
+    const apply=()=>call('/auth/v1/applications',{method:'POST',token,data:{kind:'creator'}});
+    const responses=await Promise.all([apply(),apply(),apply()]);
+    assert.deepEqual(responses.map(r=>r.status).sort(),[200,200,201]);
+    for(const response of responses){const result=await response.json();assert.equal(result.state,'approved');assert.equal(result.creator,true);}
+    assert.equal((await apply()).status,200);
+    const row=await db.prepare("SELECT creator,developer,trusted_developer,staff FROM users WHERE id='creatorid'").first();
+    assert.deepEqual(row,{creator:1,developer:0,trusted_developer:0,staff:0});
+    const application=await db.prepare("SELECT state,reviewer FROM applications WHERE user_id='creatorid'").all();
+    assert.deepEqual(application.results,[{state:'approved',reviewer:'system:creator'}]);
+    assert.equal((await db.prepare("SELECT count(*) AS n FROM auth_audit WHERE actor='creatorid' AND action='creator.auto_granted'").first()).n,1);
+    const session=await call('/auth/v1/sessions/current?scope=console',{token});
+    assert.equal(session.status,200);assert.equal((await session.json()).creator,1);
+    assert.equal((await call('/auth/v1/manage/users',{token})).status,403);
+    assert.equal((await call('/auth/v1/applications',{method:'POST',token,data:{kind:'developer',coreContributor:false}})).status,403);
+  });
   const login = async id => {
     const response = await call('/auth/v1/login', { method: 'POST', data: { handle: id, password } });
     assert.equal(response.status, 200, await response.clone().text());

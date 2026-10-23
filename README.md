@@ -95,6 +95,7 @@ Web 在 auth 域使用 HttpOnly Cookie 会话，换取仅存内存的 API Bearer
 - 已退役 `POST /internal/v1/xp` 返回 410。新的可信接口是 `POST /internal/v1/launcher/activity-events` 与 `GET /internal/v1/launcher/activity-events/{UUID}`：SERVICE_TOKEN + `x-nexa-account-token` 真实用户会话 + `x-nexa-client-certificate` 已由 Web 验证的证书指纹。只能由 API 调用，原始匿名遥测不进入此通道。
 - 请求 `{id:UUID,type}`，type 为 launcher.login / launcher.heartbeat / launcher.logout / game.start / game.heartbeat / game.stop；创建返回 201 和 Location，重复相同事件返回 200，冲突返回 409。最长心跳间隔 120 秒、每次最多计 90 秒，离线不补时，多设备不重叠累计。事件回执保留 30 天，累计时间、按日经验与铭牌随账户保存；注销清除。
 - 启动器接口当前仅预留，未修改启动器。证书验证与吊销交由 Cloudflare Client Certificates；Web 仅采用 Cloudflare TLS 校验结果，缺少有效证书就拒绝。启用流程见 API `nexa/README.md`。
+- 创作者控制台支持已注册且接受条款的账户直接申请并自动开通，授予独立 creator 资格并写入审计，见 [创作者控制台](docs/creator-console.md)。
 - 开发者满足五项中至少两项，受信任开发者满足六项中至少三项且已具备开发者身份；核心贡献者需管理员确认，其余 GitHub 条件由 OAuth 核验；插件下载／评分一项按要求暂留空。管理员申请仍需 Lv4。见 [资格规则及审核](docs/developer-eligibility.md)。
 
 ## 社区绑定（migration 0014）

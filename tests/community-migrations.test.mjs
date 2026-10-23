@@ -23,4 +23,11 @@ test('community migrations preserve proven Bilibili ownership and existing roles
   assert.equal(applications.find(a=>a.kind==='admin').state,'pending');
   for(const kind of ['developer','trusted_developer']){assert.equal(applications.find(a=>a.kind===kind).state,'rejected');assert.equal(applications.find(a=>a.kind===kind).reviewer,'system:criteria-update');}
   assert.equal((await DB.prepare("SELECT developer FROM users WHERE id='proven'").first()).developer,1);
+  await DB.prepare("INSERT INTO applications(id,user_id,kind,state,note,created_at,core_contributor_claimed,github_subject,github_linked_at) VALUES('current-pending','proven','developer','pending','core proof',?,1,'123',?)").bind(stamp,stamp).run();
+  const before=(await DB.prepare('SELECT * FROM applications ORDER BY id').all()).results;
+  await apply('0022_creator_console.sql');
+  assert.deepEqual((await DB.prepare('SELECT * FROM applications ORDER BY id').all()).results,before);
+  assert.equal((await DB.prepare("SELECT creator,developer FROM users WHERE id='proven'").first()).creator,0);
+  await assert.rejects(DB.prepare("INSERT INTO applications(id,user_id,kind,state,created_at) VALUES('duplicate','proven','developer','pending',?)").bind(stamp).run(),/UNIQUE/);
+  await DB.prepare("INSERT INTO applications(id,user_id,kind,state,created_at) VALUES('creator','proven','creator','approved',?)").bind(stamp).run();
 });

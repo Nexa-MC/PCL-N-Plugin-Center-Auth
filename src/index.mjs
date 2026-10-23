@@ -12,6 +12,7 @@ import { computeLevel, loadLevel, loadProgression, selectLevelDisplay, recordAct
 import { syncAfdianDonations } from './afdian-donations.mjs';
 import { syncBilibiliBadgeProfile, syncNexaContributors } from './community-badges.mjs';
 import { saveGithubDeveloperProfile, developerConditions, loadDeveloperEligibility, submitDeveloperApplication, approveDeveloperApplication } from './developer-eligibility.mjs';
+import { applyCreator } from './creator.mjs';
 import { readBilibiliBindingProfile, createBilibiliChallenge, selectBilibiliCandidate, verifyBilibiliChallenge, cancelBilibiliChallenge } from './bilibili-binding.mjs';
 import { listConnections, createConnectionAuthorization, completeConnectionAuthorization, unlinkConnection } from './connections.mjs';
 class Failure extends Error { constructor(status, detail) { super(detail); this.status = status; } }
@@ -127,7 +128,7 @@ export async function privacyForAcceptedTerms(env, termsId) {
 async function sessionUser(env, request, scope) {
   const value = credential(request, scope);
   if (!value) fail(401, '请先登录');
-  const user = await env.DB.prepare(`SELECT u.id,COALESCE(u.display_name,u.name) AS name,u.email,u.staff,u.developer,u.trusted_developer AS trustedDeveloper,u.user_handle AS handle,(u.confirmed_at IS NULL) AS setupRequired,
+  const user = await env.DB.prepare(`SELECT u.id,COALESCE(u.display_name,u.name) AS name,u.email,u.staff,u.creator,u.developer,u.trusted_developer AS trustedDeveloper,u.user_handle AS handle,(u.confirmed_at IS NULL) AS setupRequired,
     EXISTS(SELECT 1 FROM terms_acceptances ta JOIN policy_documents pd ON pd.id=ta.policy_id AND pd.kind='terms' AND pd.current=1 WHERE ta.user_id=u.id) AS termsAccepted
     FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=? AND s.scope=? AND s.expires>? AND u.disabled=0 AND (?=0 OR u.staff=1)`).bind(digest(value), scope, Date.now(), scope === 'operations' ? 1 : 0).first();
   if (!user) fail(401, '请先登录');
@@ -357,7 +358,7 @@ export async function finalizeAccountDeletion(env, requestId, userId) {
     env.DB.prepare('DELETE FROM external_connections WHERE user_id=?').bind(userId),
     env.DB.prepare('DELETE FROM bilibili_binding_challenges WHERE user_id=?').bind(userId),
     env.DB.prepare('DELETE FROM connection_authorizations WHERE user_id=?').bind(userId),
-    env.DB.prepare("UPDATE users SET name=?, display_name=NULL, email=NULL, user_handle=NULL, password_hash='system:deleted', password_set_at=NULL, disabled=1, staff=0, developer=0, trusted_developer=0 WHERE id=? AND disabled=0").bind('deleted:' + userId, userId),
+    env.DB.prepare("UPDATE users SET name=?, display_name=NULL, email=NULL, user_handle=NULL, password_hash='system:deleted', password_set_at=NULL, disabled=1, staff=0, creator=0, developer=0, trusted_developer=0 WHERE id=? AND disabled=0").bind('deleted:' + userId, userId),
     env.DB.prepare("UPDATE account_deletion_requests SET state='finalized', finalized_at=?, version=version+1 WHERE id=? AND state='pending'").bind(now, requestId),
     env.DB.prepare('INSERT INTO deletion_tombstones(subject_id,deleted_at,deletion_version,reason) VALUES(?,?,1,?) ON CONFLICT(subject_id) DO UPDATE SET deleted_at=excluded.deleted_at, deletion_version=deletion_tombstones.deletion_version+1').bind(userId, now, 'user_requested'),
     auditEvent(env, userId, 'account.delete.completed', requestId)
@@ -414,7 +415,7 @@ export default {
           if (search.length > 120) fail(400, '搜索词过长');
           const where = "(?='' OR instr(lower(id||' '||name||' '||COALESCE(display_name,'')||' '||COALESCE(user_handle,'')||' '||COALESCE(email,'')),lower(?))>0)";
           const [rows, count] = await env.DB.batch([
-            env.DB.prepare(`SELECT id,COALESCE(display_name,name) AS name,user_handle AS handle,email,staff,developer,trusted_developer AS trustedDeveloper,disabled,created_at AS createdAt FROM users WHERE ${where} ORDER BY created_at DESC,id LIMIT ? OFFSET ?`).bind(search, search, limit, offset),
+            env.DB.prepare(`SELECT id,COALESCE(display_name,name) AS name,user_handle AS handle,email,staff,creator,developer,trusted_developer AS trustedDeveloper,disabled,created_at AS createdAt FROM users WHERE ${where} ORDER BY created_at DESC,id LIMIT ? OFFSET ?`).bind(search, search, limit, offset),
             env.DB.prepare(`SELECT count(*) AS total FROM users WHERE ${where}`).bind(search, search)
           ]);
           return json(env, { data: rows.results, pagination: { limit, offset, total: count.results[0].total } });
@@ -790,7 +791,7 @@ export default {
           loadProgression(env, user),
           env.DB.prepare("SELECT value, set_at FROM user_flags WHERE user_id=? AND flag='popular_plugin'").bind(user.id).first(),
           env.DB.prepare('SELECT id,kind,state,note,created_at,reviewed_at FROM applications WHERE user_id=? ORDER BY created_at DESC LIMIT 20').bind(user.id).all(),
-          env.DB.prepare('SELECT staff, developer, trusted_developer FROM users WHERE id=?').bind(user.id).first(),
+          env.DB.prepare('SELECT staff, creator, developer, trusted_developer FROM users WHERE id=?').bind(user.id).first(),
           loadDeveloperEligibility(env,user.id),loadDeveloperEligibility(env,user.id,Date.now(),'trusted_developer')
         ]);
         const met = {
@@ -800,9 +801,10 @@ export default {
         };
         return json(env, {
           ...level,
-          roles: { staff: Boolean(profile?.staff), developer: Boolean(profile?.developer), trustedDeveloper: Boolean(profile?.trusted_developer) },
+          roles: { staff: Boolean(profile?.staff), creator: Boolean(profile?.creator), developer: Boolean(profile?.developer), trustedDeveloper: Boolean(profile?.trusted_developer) },
           popularPlugin: popular ? { evidence: popular.value, setAt: popular.set_at } : null,
           requirements: {
+            creator: { met: !user.setupRequired && Boolean(user.termsAccepted), automatic: true },
             developer: { ...developer, met: met.developer },
             trustedDeveloper: { ...trustedDeveloper, isDeveloper: Boolean(profile?.developer), met: met.trustedDeveloper },
             admin: { level: 4, met: met.admin }
@@ -814,7 +816,12 @@ export default {
         const user = await sessionUser(env, request, 'console');
         const input = await body(request);
         const kind = String(input?.kind ?? '');
-        if (!['developer', 'trusted_developer', 'admin'].includes(kind)) fail(400, '无效的申请类型');
+        if (!['creator', 'developer', 'trusted_developer', 'admin'].includes(kind)) fail(400, '无效的申请类型');
+        if (kind === 'creator') {
+          await rateLimit(env,'creator-application:'+user.id,10,3600000,'申请操作过于频繁，请稍后重试');
+          const result=await applyCreator(env,user,credential(request,'console'),input);
+          return json(env,result,result.created?201:200);
+        }
         const profile = await env.DB.prepare('SELECT staff, developer, trusted_developer, confirmed_at FROM users WHERE id=?').bind(user.id).first();
         if (!profile?.confirmed_at) fail(403, '请先完成注册');
         if (kind === 'developer' && profile.developer) fail(409, '你已经是开发者');
@@ -1121,7 +1128,7 @@ export default {
           env.DB.prepare('SELECT subject,account_created_at,followers,qualifying_repository,org_member,checked_at,core_verified_at FROM github_developer_profiles WHERE user_id=?').bind(user.id).first()
         ]);
         return json(env, {
-          profile: { id: user.id, name: user.name, email: user.email, staff: user.staff, developer: user.developer, handle: user.handle ?? null },
+          profile: { id: user.id, name: user.name, email: user.email, staff: user.staff, creator: user.creator, developer: user.developer, handle: user.handle ?? null },
           identities: identities.results, activeSessions: sessions.results, policyAcceptances: acceptances.results,
           deletionRequest: deletion ?? null, privacyRequests: privacy.results,
           mfa: { factors: mfa.list, passkeys: mfa.passkeyCount, totp: mfa.totpCount, recoveryCodes: mfa.recoveryCount },
