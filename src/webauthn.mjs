@@ -92,7 +92,7 @@ function verifyClientData(clientDataJSON, expectedType, expectedChallenge, expec
 }
 
 // ---------- 注册 ----------
-export async function verifyRegistration({ clientDataJSON, attestationObject, expectedChallenge, expectedOrigins, rpId }) {
+export async function verifyRegistration({ clientDataJSON, attestationObject, expectedChallenge, expectedOrigins, rpId, requireUserVerification = false }) {
   verifyClientData(unb64url(clientDataJSON), 'webauthn.create', expectedChallenge, expectedOrigins);
   const attestation = cborDecode(unb64url(attestationObject));
   const fmt = attestation.get('fmt');
@@ -102,6 +102,7 @@ export async function verifyRegistration({ clientDataJSON, attestationObject, ex
   const parsed = parseAuthenticatorData(new Uint8Array(authData));
   if (parsed.rpIdHash !== b64url(await sha256(new TextEncoder().encode(rpId)))) throw new Error('webauthn: rpIdHash mismatch');
   if (!parsed.userPresent) throw new Error('webauthn: user presence flag required');
+  if (requireUserVerification && !parsed.userVerified) throw new Error('webauthn: user verification flag required');
   if (!parsed.attestedCredentialData || !parsed.credentialId || !parsed.cose) throw new Error('webauthn: missing attested credential data');
   const { jwk, alg } = coseToJwk(parsed.cose);
   return { credentialId: b64url(parsed.credentialId), coseBytes: b64url(parsed.coseBytes), jwk, alg, signCount: parsed.signCount };
@@ -136,13 +137,14 @@ function es256Signature(bytes) {
   if (offset !== bytes.length) throw new Error('webauthn: trailing DER data');
   return out;
 }
-export async function verifyAssertion({ publicKeyJwk, alg, clientDataJSON, authenticatorData, signature, expectedChallenge, expectedOrigins, rpId, storedSignCount = 0 }) {
+export async function verifyAssertion({ publicKeyJwk, alg, clientDataJSON, authenticatorData, signature, expectedChallenge, expectedOrigins, rpId, storedSignCount = 0, requireUserVerification = false }) {
   const clientDataBytes = unb64url(clientDataJSON);
   verifyClientData(clientDataBytes, 'webauthn.get', expectedChallenge, expectedOrigins);
   const authData = unb64url(authenticatorData);
   const parsed = parseAuthenticatorData(authData);
   if (parsed.rpIdHash !== b64url(await sha256(new TextEncoder().encode(rpId)))) throw new Error('webauthn: rpIdHash mismatch');
   if (!parsed.userPresent) throw new Error('webauthn: user presence flag required');
+  if (requireUserVerification && !parsed.userVerified) throw new Error('webauthn: user verification flag required');
   if (parsed.signCount !== 0 || storedSignCount !== 0) {
     if (parsed.signCount <= storedSignCount) throw new Error('webauthn: signature counter did not increase');
   }

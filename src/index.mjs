@@ -1,6 +1,8 @@
 import { randomBytes, createHash } from 'node:crypto';
 import { digest, hashPassword, verifyPassword } from './password.mjs';
 import { createMailer } from './mailer.mjs';
+import { emailLoginReady, normalizeEmail, requestEmailLogin, verifyEmailLogin } from './email-login.mjs';
+import { runMailInbox } from './mail-inbox.mjs';
 import { validateHandle, validateDisplayName, normalizeHandle, isReservedHandle, HANDLE_COOLDOWN_DAYS } from './handles.mjs';
 import { randomSecret, otpauthUrl, verifyTotp, encryptSecret, decryptSecret } from './totp.mjs';
 import { generateRecoveryCodes, hashRecoveryCode } from './recovery.mjs';
@@ -375,6 +377,11 @@ export async function runAuthMaintenance(env) {
     env.DB.prepare('DELETE FROM connection_authorizations WHERE expires<? OR consumed=1').bind(now),
     env.DB.prepare('DELETE FROM bilibili_binding_challenges WHERE expires_at<?').bind(now - 86400000),
     env.DB.prepare('DELETE FROM login_challenges WHERE expires<?').bind(now - 86400000),
+    env.DB.prepare('DELETE FROM email_login_challenges WHERE expires<?').bind(now - 86400000),
+    env.DB.prepare('DELETE FROM passkey_login_challenges WHERE expires<?').bind(now - 86400000),
+    env.DB.prepare('DELETE FROM mail_auto_replies WHERE created_at<?').bind(now - 30 * 86400000),
+    env.DB.prepare('DELETE FROM mail_send_reservations WHERE created_at<?').bind(now - 86400000),
+    env.DB.prepare('DELETE FROM mail_inbox_state WHERE updated_at<? AND lock_until<?').bind(now - 30 * 86400000, now),
     env.DB.prepare('DELETE FROM mfa_totp WHERE confirmed=0 AND created_at<?').bind(new Date(now - 900000).toISOString()),
     env.DB.prepare('DELETE FROM users WHERE confirmed_at IS NULL AND created_at<?').bind(new Date(now - 86400000).toISOString())
   ]);
@@ -383,7 +390,7 @@ export async function runAuthMaintenance(env) {
   return { finalized: due.results.length };
 }
 export default {
-  async scheduled(controller, env, ctx) { await ctx.waitUntil(runAuthMaintenance(env)); },
+  async scheduled(controller, env, ctx) { await ctx.waitUntil(controller.cron === '* * * * *' ? runMailInbox(env) : runAuthMaintenance(env)); },
   async fetch(request, env, ctx) {
     const origin = request.headers.get('origin');
     env = { ...env, responseOrigin: webOrigins(env).includes(origin) ? origin : env.WEB_ORIGIN };
@@ -575,6 +582,57 @@ export default {
         if (row?.email) later(mailer.securityNotice(row.email, changing ? '你的登录密码已被修改。' : '你的账户已设置登录密码。密码登录将强制要求两步验证。'));
         const factors = await loadFactors(env, user.id);
         return json(env, { ok: true, mfa: { required: true, factors: factors.list, message: '密码登录强制两步验证；尚未注册任何方式时，请先注册 passkey 或验证器应用。' } }, changing ? 200 : 201);
+      }
+      // Email codes are an additional sign-in method; enrolled MFA still applies.
+      if (path === '/auth/v1/login/methods' && request.method === 'GET') return json(env, { emailCode: emailLoginReady(env), passkey: true });
+      if (path === '/auth/v1/login/email/request' && request.method === 'POST') {
+        const input = await body(request), email = normalizeEmail(input?.email);
+        await rateLimit(env, 'email-login-ip:' + digest(clientIp(request)), 10, 3600000, '验证码请求过于频繁，请稍后重试');
+        await rateLimit(env, 'email-login-minute:' + digest(email), 1, 60000, '请稍后再发送验证码');
+        await rateLimit(env, 'email-login-address:' + digest(email), 5, 3600000, '验证码请求过于频繁，请稍后重试');
+        const result = await requestEmailLogin(env, email, mailer);
+        later(result.deliver());
+        return json(env, { challenge: result.challenge, expiresIn: result.expiresIn, retryAfter: result.retryAfter });
+      }
+      if (path === '/auth/v1/login/email/verify' && request.method === 'POST') {
+        const input = await body(request);
+        await rateLimit(env, 'email-verify-ip:' + digest(clientIp(request)), 30, 900000, '登录尝试过于频繁，请稍后重试');
+        const user = await verifyEmailLogin(env, input?.challenge, input?.code);
+        const factors = await loadFactors(env, user.id);
+        await auditEvent(env, user.id, 'login.email.verified', null).run();
+        if (factors.list.length) return json(env, { mfaRequired: true, challenge: await createLoginChallenge(env, user.id), factors: factors.list, user: { name: user.name } });
+        const session = await createSession(env, user, 'console', Date.now(), secure);
+        return json(env, { ok: true, method: 'email', user: { id: user.id, name: user.name } }, 200, { 'set-cookie': session.cookie });
+      }
+      // A user-verified discoverable passkey is sufficient without a password/OTP.
+      if (path === '/auth/v1/login/passkey/direct/options' && request.method === 'POST') {
+        await body(request);
+        await rateLimit(env, 'passkey-options:' + digest(clientIp(request)), 20, 300000, '登录尝试过于频繁，请稍后重试');
+        const challenge = randomBytes(32).toString('base64url'), now = Date.now();
+        await env.DB.prepare('INSERT INTO passkey_login_challenges(challenge_hash,expires,created_at) VALUES(?,?,?)').bind(digest(challenge), now + 300000, now).run();
+        return json(env, { loginChallenge: challenge, challenge, rpId: RP_ID(env), timeout: 60000, userVerification: 'required', allowCredentials: [] });
+      }
+      if (path === '/auth/v1/login/passkey/direct' && request.method === 'POST') {
+        const input = await body(request, 16384);
+        await rateLimit(env, 'passkey-direct:' + digest(clientIp(request)), 30, 300000, '登录尝试过于频繁，请稍后重试');
+        const challenge = typeof input?.challenge === 'string' && /^[A-Za-z0-9_-]{43}$/.test(input.challenge) ? input.challenge : '';
+        const row = await env.DB.prepare('SELECT challenge_hash FROM passkey_login_challenges WHERE challenge_hash=? AND consumed=0 AND expires>?').bind(digest(challenge), Date.now()).first();
+        if (!row) fail(401, 'Passkey 登录请求已失效，请重试');
+        const credential = await env.DB.prepare('SELECT * FROM mfa_passkeys WHERE credential_id=?').bind(String(input?.credentialId ?? '')).first();
+        if (!credential) fail(401, 'Passkey 校验失败');
+        const user = await env.DB.prepare('SELECT id,COALESCE(display_name,name) AS name FROM users WHERE id=? AND disabled=0 AND confirmed_at IS NOT NULL').bind(credential.user_id).first();
+        if (!user || input.userHandle !== await webauthnUserId(user.id)) fail(401, 'Passkey 校验失败');
+        let result;
+        try {
+          result = await verifyAssertion({ publicKeyJwk: JSON.parse(credential.public_key), alg: credential.algorithm, clientDataJSON: input.clientDataJSON, authenticatorData: input.authenticatorData, signature: input.signature, expectedChallenge: challenge, expectedOrigins: webauthnOrigins(env), rpId: RP_ID(env), storedSignCount: credential.sign_count, requireUserVerification: true });
+        } catch { fail(401, 'Passkey 校验失败'); }
+        const used = await env.DB.prepare('UPDATE passkey_login_challenges SET consumed=1 WHERE challenge_hash=? AND consumed=0 AND expires>?').bind(row.challenge_hash, Date.now()).run();
+        if (!used.meta.changes) fail(401, 'Passkey 登录请求已失效，请重试');
+        const updated = await env.DB.prepare('UPDATE mfa_passkeys SET sign_count=?,last_used_at=? WHERE credential_id=? AND sign_count=? AND EXISTS(SELECT 1 FROM users WHERE id=? AND disabled=0)').bind(result.signCount, new Date().toISOString(), credential.credential_id, credential.sign_count, user.id).run();
+        if (!updated.meta.changes) fail(401, 'Passkey 校验失败');
+        await auditEvent(env, user.id, 'login.passkey.direct', null).run();
+        const session = await createSession(env, user, 'console', Date.now(), secure);
+        return json(env, { ok: true, method: 'passkey', user: { id: user.id, name: user.name } }, 200, { 'set-cookie': session.cookie });
       }
       // ---------- 用户 ID + 密码登录（两段式：密码 → 强制 2FA） ----------
       if (path === '/auth/v1/login' && request.method === 'POST') {
@@ -948,7 +1006,7 @@ export default {
           user: { id: await webauthnUserId(user.id), name: account?.user_handle || account?.name || 'user', displayName: account?.name || 'user' },
           pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }],
           timeout: 120000,
-          authenticatorSelection: { residentKey: 'preferred', userVerification: 'preferred' },
+          authenticatorSelection: { residentKey: 'required', userVerification: 'required' },
           attestation: 'none',
           excludeCredentials: existing.results.map(c => ({ type: 'public-key', id: c.credential_id }))
         });
@@ -956,6 +1014,8 @@ export default {
       if (path === '/auth/v1/mfa/passkey/register' && request.method === 'POST') {
         const user = await sessionUser(env, request, 'console');
         const input = await body(request, 16384);
+        const ownChallenge = await loadChallenge(env, input?.challenge, 'register');
+        if (ownChallenge.user_id !== user.id) fail(403, 'Passkey 注册请求与当前账户不匹配');
         const row = await consumeChallenge(env, input?.challenge, 'register');
         if (!row.wa_challenge) fail(400, '请先获取注册选项');
         const attestation = input?.credential?.response ?? {};
@@ -963,7 +1023,7 @@ export default {
         try {
           result = await verifyRegistration({
             clientDataJSON: attestation.clientDataJSON, attestationObject: attestation.attestationObject,
-            expectedChallenge: row.wa_challenge, expectedOrigins: webauthnOrigins(env), rpId: RP_ID(env)
+            expectedChallenge: row.wa_challenge, expectedOrigins: webauthnOrigins(env), rpId: RP_ID(env), requireUserVerification: true
           });
         } catch (error) { console.error(JSON.stringify({ webauthn: 'registration', error: error.message })); fail(400, 'passkey 校验失败'); }
         const name = typeof input?.name === 'string' && input.name.trim() ? input.name.trim().slice(0, 60) : null;

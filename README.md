@@ -4,7 +4,7 @@
 
 Node.js 24+、pnpm；`pnpm install --frozen-lockfile`、`pnpm dev`（5733）、`pnpm check`。CI 只检查本项目，部署使用 `pnpm deploy`，不再复制 Web 到 GitHub Pages。
 
-上线前应用 D1 迁移。生产必须配置 `MFA_ENC_KEY`（TOTP/恢复码）、`TOKEN_ENC_KEY`（Microsoft 刷新令牌），均使用高熵随机密钥；不提交到 Git。`SERVICE_TOKEN` 仅供可信服务传递经验事件与资格证据，不能使用用户 Bearer 令牌替代。公开遥测不能直接授予经验或角色。OAuth provider 需要相应 CLIENT_ID / CLIENT_SECRET；安全邮件可配置 RESEND_API_KEY。
+上线前应用 D1 迁移。生产必须配置 `MFA_ENC_KEY`（TOTP/恢复码）、`TOKEN_ENC_KEY`（Microsoft 刷新令牌），均使用高熵随机密钥；不提交到 Git。`SERVICE_TOKEN` 仅供可信服务传递经验事件与资格证据，不能使用用户 Bearer 令牌替代。公开遥测不能直接授予经验或角色。OAuth provider 需要相应 CLIENT_ID / CLIENT_SECRET。邮件优先使用五个独立飞书 SMTP 账号；noreply 发送验证码和通知，其余四个邮箱通过 IMAP 轮询并发送 HTML 模板回执。配置与上线验证见 [邮件和无密码登录](docs/mail-and-passwordless.md)。已有 RESEND_API_KEY 可保留兼容。
 
 Web 在 auth 域使用 HttpOnly Cookie 会话，换取仅存内存的 API Bearer 令牌。管理权限由 Auth 当前 staff 状态确定，API 每次验证。生产设置 WEB_ORIGIN=https://pcln.top；本地 passkey 使用 localhost 与匹配的 RP_ID/WEB_ORIGIN。
 
