@@ -1,3 +1,4 @@
+import { migrationStatements } from './sql-statements.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
@@ -22,7 +23,7 @@ test('account and MFA endpoints run against actual Worker D1', async t => {
   t.after(() => mf.dispose());
   const db = await mf.getD1Database('DB');
   for (const file of (await readdir(new URL('migrations/', root))).filter(f => f.endsWith('.sql')).sort()) {
-    const statements = (await readFile(new URL('migrations/' + file, root), 'utf8')).replace(/--[^\n]*/g, '').split(';').map(s => s.trim()).filter(Boolean);
+    const statements = migrationStatements(await readFile(new URL('migrations/' + file, root), 'utf8'));
     await db.batch(statements.map(s => db.prepare(s)));
     if (file === '0005_policies.sql') await db.prepare("INSERT INTO users(id,name,password_hash,staff) VALUES('legacy','legacy','oauth:legacy',1)").run();
   }
@@ -153,4 +154,9 @@ test('account and MFA endpoints run against actual Worker D1', async t => {
     assert.equal((await db.prepare("SELECT staff FROM users WHERE id='candidate'").first()).staff, final.state === 'approved' ? 1 : 0);
     assert.equal((await db.prepare("SELECT count(*) AS n FROM auth_audit WHERE action='application.reviewed'").first()).n, 1);
   });
+  await t.test('store lifecycle source is closed by default even to the existing service token', async () => {
+    const response = await mf.dispatchFetch('https://auth.pcln.top/internal/v1/store/accounts/events', { headers: { authorization: 'Bearer test-only-service-token' } });
+    assert.equal(response.status, 503);
+  });
+
 });

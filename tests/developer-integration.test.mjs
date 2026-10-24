@@ -1,3 +1,4 @@
+import { migrationStatements } from './sql-statements.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile,readdir} from 'node:fs/promises';
@@ -23,7 +24,7 @@ test('developer applications use session-bound GitHub facts and enforce manual c
     }
   }));t.after(()=>mf.dispose());const DB=await mf.getD1Database('DB');
   for(const file of(await readdir(new URL('migrations/',root))).filter(f=>f.endsWith('.sql')).sort()){
-    await DB.batch((await readFile(new URL('migrations/'+file,root),'utf8')).replace(/--[^\n]*/g,'').split(';').map(s=>s.trim()).filter(Boolean).map(s=>DB.prepare(s)));
+    await DB.batch(migrationStatements(await readFile(new URL('migrations/'+file,root),'utf8')).map(s=>DB.prepare(s)));
   }
   async function user(id,staff=0,developer=0){const stamp=new Date().toISOString(),token='session-'+id;
     await DB.prepare("INSERT INTO users(id,name,user_handle,password_hash,staff,developer,confirmed_at,created_at) VALUES(?,?,?,'oauth:test',?,?,?,?)").bind(id,id,id,staff,developer,stamp,stamp).run();

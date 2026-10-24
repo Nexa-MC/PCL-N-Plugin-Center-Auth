@@ -1,3 +1,4 @@
+import { migrationStatements } from './sql-statements.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
@@ -69,7 +70,7 @@ test('Microsoft website identity and Xbox authorization stay separate in the Wor
   } }));
   t.after(() => mf.dispose()); const DB = await mf.getD1Database('DB');
   for (const file of (await readdir(new URL('migrations/', root))).filter(f => f.endsWith('.sql')).sort()) {
-    const sql = (await readFile(new URL('migrations/' + file, root), 'utf8')).replace(/--[^\n]*/g, '').split(';').map(s => s.trim()).filter(Boolean);
+    const sql = migrationStatements(await readFile(new URL('migrations/' + file, root), 'utf8'));
     await DB.batch(sql.map(s => DB.prepare(s)));
   }
   async function user(id, linked = true) {

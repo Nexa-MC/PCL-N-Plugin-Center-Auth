@@ -1,3 +1,4 @@
+import { migrationStatements } from './sql-statements.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile,readdir} from 'node:fs/promises';
@@ -6,7 +7,7 @@ import {Miniflare,convertV4MiniflareOptions} from 'miniflare';
 test('community migrations preserve proven Bilibili ownership and existing roles while closing obsolete applications',async t=>{
   const mf=new Miniflare(convertV4MiniflareOptions({modules:true,script:'export default {fetch(){return new Response("ok")}}',compatibilityDate:'2026-09-26',d1Databases:{DB:'migration-test'}}));
   t.after(()=>mf.dispose());const DB=await mf.getD1Database('DB'),root=new URL('../migrations/',import.meta.url);
-  const apply=async file=>DB.batch((await readFile(new URL(file,root),'utf8')).replace(/--[^\n]*/g,'').split(';').map(s=>s.trim()).filter(Boolean).map(s=>DB.prepare(s)));
+  const apply=async file=>DB.batch(migrationStatements(await readFile(new URL(file,root),'utf8')).map(s=>DB.prepare(s)));
   for(const file of(await readdir(root)).filter(f=>f.endsWith('.sql')&&f<'0020').sort())await apply(file);
   const stamp=new Date().toISOString();
   for(const [id,subject] of [['proven','123'],['unproven','124']]){

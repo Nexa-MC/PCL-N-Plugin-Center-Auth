@@ -13,6 +13,7 @@ import { syncAfdianDonations } from './afdian-donations.mjs';
 import { syncBilibiliBadgeProfile, syncNexaContributors } from './community-badges.mjs';
 import { saveGithubDeveloperProfile, developerConditions, loadDeveloperEligibility, submitDeveloperApplication, approveDeveloperApplication } from './developer-eligibility.mjs';
 import { applyCreator } from './creator.mjs';
+import { readStoreAccountSource } from './store-account-source.mjs';
 import { readBilibiliBindingProfile, createBilibiliChallenge, selectBilibiliCandidate, verifyBilibiliChallenge, cancelBilibiliChallenge } from './bilibili-binding.mjs';
 import { listConnections, createConnectionAuthorization, completeConnectionAuthorization, unlinkConnection } from './connections.mjs';
 class Failure extends Error { constructor(status, detail) { super(detail); this.status = status; } }
@@ -334,35 +335,26 @@ async function oauthCallback(request, env, provider, secure) {
   }
 }
 export async function finalizeAccountDeletion(env, requestId, userId) {
-  const now = new Date().toISOString();
-  await env.DB.batch([
-    env.DB.prepare('DELETE FROM sessions WHERE user_id=?').bind(userId),
-    env.DB.prepare('DELETE FROM oauth_identities WHERE user_id=?').bind(userId),
-    env.DB.prepare('DELETE FROM github_developer_profiles WHERE user_id=?').bind(userId),
-    env.DB.prepare('DELETE FROM oauth_states WHERE user_id=?').bind(userId),
-    env.DB.prepare('DELETE FROM microsoft_tokens WHERE user_id=?').bind(userId),
-    env.DB.prepare('DELETE FROM minecraft_profiles WHERE user_id=?').bind(userId),
-    env.DB.prepare('DELETE FROM login_challenges WHERE user_id=?').bind(userId),
-    env.DB.prepare('DELETE FROM mfa_passkeys WHERE user_id=?').bind(userId),
-    env.DB.prepare('DELETE FROM mfa_totp WHERE user_id=?').bind(userId),
-    env.DB.prepare('DELETE FROM mfa_recovery_codes WHERE user_id=?').bind(userId),
-    env.DB.prepare('DELETE FROM applications WHERE user_id=?').bind(userId),
-    env.DB.prepare('DELETE FROM user_flags WHERE user_id=?').bind(userId),
-    env.DB.prepare('DELETE FROM xp_events WHERE user_id=?').bind(userId),
-    env.DB.prepare('DELETE FROM user_levels WHERE user_id=?').bind(userId),
-    env.DB.prepare('DELETE FROM launcher_presence WHERE user_id=?').bind(userId),
-    env.DB.prepare('DELETE FROM launcher_activity_days WHERE user_id=?').bind(userId),
-    env.DB.prepare('DELETE FROM launcher_activity_events WHERE user_id=?').bind(userId),
-    env.DB.prepare('DELETE FROM badge_verifications WHERE user_id=?').bind(userId),
-    env.DB.prepare('DELETE FROM user_level_display WHERE user_id=?').bind(userId),
-    env.DB.prepare('DELETE FROM external_connections WHERE user_id=?').bind(userId),
-    env.DB.prepare('DELETE FROM bilibili_binding_challenges WHERE user_id=?').bind(userId),
-    env.DB.prepare('DELETE FROM connection_authorizations WHERE user_id=?').bind(userId),
-    env.DB.prepare("UPDATE users SET name=?, display_name=NULL, email=NULL, user_handle=NULL, password_hash='system:deleted', password_set_at=NULL, disabled=1, staff=0, creator=0, developer=0, trusted_developer=0 WHERE id=? AND disabled=0").bind('deleted:' + userId, userId),
-    env.DB.prepare("UPDATE account_deletion_requests SET state='finalized', finalized_at=?, version=version+1 WHERE id=? AND state='pending'").bind(now, requestId),
-    env.DB.prepare('INSERT INTO deletion_tombstones(subject_id,deleted_at,deletion_version,reason) VALUES(?,?,1,?) ON CONFLICT(subject_id) DO UPDATE SET deleted_at=excluded.deleted_at, deletion_version=deletion_tombstones.deletion_version+1').bind(userId, now, 'user_requested'),
-    auditEvent(env, userId, 'account.delete.completed', requestId)
+  const nowMs = Date.now(), now = new Date(nowMs).toISOString(), claim = crypto.randomUUID();
+  // Claim and cleanup are one transaction. Cancellation, an early invocation,
+  // another account ID or a replay cannot emit a deletion or erase purchase rights.
+  const guard = "EXISTS(SELECT 1 FROM account_deletion_requests WHERE id=? AND user_id=? AND state='finalized' AND finalization_token=?)";
+  const tables = ['sessions', 'oauth_identities', 'github_developer_profiles', 'oauth_states', 'microsoft_tokens', 'minecraft_profiles',
+    'login_challenges', 'mfa_passkeys', 'mfa_totp', 'mfa_recovery_codes', 'applications', 'user_flags', 'xp_events', 'user_levels',
+    'launcher_presence', 'launcher_activity_days', 'launcher_activity_events', 'badge_verifications', 'user_level_display',
+    'external_connections', 'bilibili_binding_challenges', 'connection_authorizations'];
+  const [claimed] = await env.DB.batch([
+    env.DB.prepare("UPDATE account_deletion_requests SET state='finalized',finalized_at=?,finalization_token=?,version=version+1 WHERE id=? AND user_id=? AND state='pending' AND execute_after<=? RETURNING id")
+      .bind(now, claim, requestId, userId, nowMs),
+    ...tables.map(table => env.DB.prepare(`DELETE FROM ${table} WHERE user_id=? AND ${guard}`).bind(userId, requestId, userId, claim)),
+    env.DB.prepare(`UPDATE users SET name=?,display_name=NULL,email=NULL,user_handle=NULL,password_hash='system:deleted',password_set_at=NULL,
+      disabled=1,staff=0,creator=0,developer=0,trusted_developer=0 WHERE id=? AND ${guard}`).bind('deleted:' + userId, userId, requestId, userId, claim),
+    env.DB.prepare(`INSERT INTO deletion_tombstones(subject_id,deleted_at,deletion_version,reason) SELECT ?,?,1,'user_requested' WHERE ${guard}
+      ON CONFLICT(subject_id) DO UPDATE SET deleted_at=excluded.deleted_at,deletion_version=deletion_tombstones.deletion_version+1`).bind(userId, now, requestId, userId, claim),
+    env.DB.prepare(`INSERT INTO auth_audit(actor,action,created_at,detail) SELECT ?,'account.delete.completed',?,? WHERE ${guard}`)
+      .bind(userId, now, requestId, requestId, userId, claim)
   ]);
+  return claimed.results.length === 1;
 }
 // NCL-007 保留清理 + NCL-008/009 注销冷静期执行；幂等、有界，供每日 cron 调用。
 export async function runAuthMaintenance(env) {
@@ -379,8 +371,9 @@ export async function runAuthMaintenance(env) {
     env.DB.prepare('DELETE FROM users WHERE confirmed_at IS NULL AND created_at<?').bind(new Date(now - 86400000).toISOString())
   ]);
   const due = await env.DB.prepare("SELECT id,user_id FROM account_deletion_requests WHERE state='pending' AND execute_after<=? LIMIT 20").bind(now).all();
-  for (const row of due.results) await finalizeAccountDeletion(env, row.id, row.user_id);
-  return { finalized: due.results.length };
+  let finalized = 0;
+  for (const row of due.results) if (await finalizeAccountDeletion(env, row.id, row.user_id)) finalized++;
+  return { finalized };
 }
 export default {
   async scheduled(controller, env, ctx) { await ctx.waitUntil(runAuthMaintenance(env)); },
@@ -437,12 +430,12 @@ export default {
           if (account.staff) fail(403, '不能在此更改管理员账户状态');
           await rateLimit(env, 'manage-users:' + user.id, 60, 60000, '管理操作过于频繁');
           const statements = [
-            env.DB.prepare('UPDATE users SET disabled=? WHERE id=? AND staff=0 AND disabled=? AND disabled<>?').bind(Number(input.disabled), target, Number(input.expectedDisabled), Number(input.disabled)),
+            env.DB.prepare('UPDATE users SET disabled=? WHERE id=? AND staff=0 AND disabled=? AND disabled<>? RETURNING id').bind(Number(input.disabled), target, Number(input.expectedDisabled), Number(input.disabled)),
             auditOnChange(env, user.id, input.disabled ? 'user.disabled' : 'user.enabled', target)
           ];
           if (input.disabled) statements.push(env.DB.prepare('DELETE FROM sessions WHERE user_id=? AND EXISTS(SELECT 1 FROM users WHERE id=? AND disabled=1)').bind(target, target));
           const [result] = await env.DB.batch(statements);
-          if (result.meta.changes !== 1) fail(409, '账户状态已变化，请刷新后重试');
+          if (result.results.length !== 1) fail(409, '账户状态已变化，请刷新后重试');
           return json(env, { id: target, disabled: input.disabled });
         }
         fail(404, '管理接口不存在或方法不支持');
@@ -744,6 +737,11 @@ export default {
         const input = await body(request);
         const result = await recordActivity(env, user, request.headers.get('x-nexa-client-certificate') || '', input);
         return json(env, result, result.created ? 201 : 200, { location: '/api/v1/launcher/activity-events/' + result.event.id });
+      }
+      if (path === '/internal/v1/store/accounts/events' || path === '/internal/v1/store/accounts/snapshot') {
+        if (env.STORE_ACCOUNT_SOURCE_ENABLED !== 'true') fail(503, '账户持续同步来源尚未启用');
+        serviceAuth(request, env);
+        return await readStoreAccountSource(request, env, { fail, json });
       }
       if (path === '/internal/v1/xp') {
         serviceAuth(request, env);

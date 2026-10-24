@@ -1,3 +1,4 @@
+import { migrationStatements } from './sql-statements.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
@@ -34,7 +35,7 @@ test('progression and community bindings use atomic D1 writes', async t => {
   } }));
   t.after(() => mf.dispose()); const DB = await mf.getD1Database('DB'), env = { DB, WEB_ORIGIN: 'https://web.test', AFDIAN_CLIENT_ID: 'afdian-fixture', AFDIAN_CLIENT_SECRET: 'secret-fixture', BILIBILI_CLIENT_ID: 'bili-fixture', BILIBILI_CLIENT_SECRET: 'bili-secret-fixture' };
   for (const file of (await readdir(new URL('migrations/', root))).filter(f => f.endsWith('.sql')).sort()) {
-    const sql = (await readFile(new URL('migrations/' + file, root), 'utf8')).replace(/--[^\n]*/g, '').split(';').map(s => s.trim()).filter(Boolean);
+    const sql = migrationStatements(await readFile(new URL('migrations/' + file, root), 'utf8'));
     await DB.batch(sql.map(s => DB.prepare(s)));
   }
   async function addUser(id, staff = 0) {
