@@ -14,6 +14,7 @@ import { syncBilibiliBadgeProfile, syncNexaContributors } from './community-badg
 import { saveGithubDeveloperProfile, developerConditions, loadDeveloperEligibility, submitDeveloperApplication, approveDeveloperApplication } from './developer-eligibility.mjs';
 import { applyCreator } from './creator.mjs';
 import { readStoreAccountSource } from './store-account-source.mjs';
+import { verifyDeletionDisclosure } from './deletion-disclosure.mjs';
 import { readBilibiliBindingProfile, createBilibiliChallenge, selectBilibiliCandidate, verifyBilibiliChallenge, cancelBilibiliChallenge } from './bilibili-binding.mjs';
 import { listConnections, createConnectionAuthorization, completeConnectionAuthorization, unlinkConnection } from './connections.mjs';
 class Failure extends Error { constructor(status, detail) { super(detail); this.status = status; } }
@@ -1090,9 +1091,14 @@ export default {
         if (request.method === 'POST') {
           const existing = await env.DB.prepare("SELECT id,state,requested_at AS requestedAt,execute_after AS executeAfter FROM account_deletion_requests WHERE user_id=? AND state='pending'").bind(user.id).first();
           if (existing) return json(env, { request: existing, cooldownDays: 7 });
+          const input = await body(request);
+          const disclosure = await verifyDeletionDisclosure(input?.publisherForfeitToken, env.SERVICE_TOKEN, user.id);
+          if (user.creator || user.developer || user.trustedDeveloper || env.STORE_DELETION_DISCLOSURE_REQUIRED === 'true' || input?.publisherForfeitToken) {
+            if (input?.publisherForfeitConfirmed !== true || !disclosure) fail(409, '请先核对并确认未提现收入与待审提现将不会支付并在注销后丢弃');
+          }
           const now = Date.now(), executeAfter = now + 7 * 86400000, requestId = crypto.randomUUID();
           await env.DB.batch([
-            env.DB.prepare("INSERT INTO account_deletion_requests(id,user_id,state,requested_at,execute_after) VALUES(?,?,'pending',?,?)").bind(requestId, user.id, new Date().toISOString(), executeAfter),
+            env.DB.prepare("INSERT INTO account_deletion_requests(id,user_id,state,requested_at,execute_after,publisher_forfeit_consent) VALUES(?,?,'pending',?,?,?)").bind(requestId, user.id, new Date().toISOString(), executeAfter, disclosure ? JSON.stringify(disclosure) : null),
             auditEvent(env, user.id, 'account.delete.requested', requestId)
           ]);
           if (user.email) later(mailer.accountDeletionRequested(user.email, new Date(executeAfter).toISOString()));
