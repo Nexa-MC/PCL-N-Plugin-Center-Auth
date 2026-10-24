@@ -1,6 +1,7 @@
 node_modules/
 .wrangler/
 .dev.vars*
+!.dev.vars.example
 .env*
 .tmp/
 worker-configuration.d.ts

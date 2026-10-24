@@ -1,0 +1,15 @@
+# Local development only. Store production credentials with wrangler secret put.
+MFA_ENC_KEY=replace-with-a-high-entropy-development-secret
+SMTP_NOREPLY_PASSWORD=
+SMTP_SUPPORT_PASSWORD=
+SMTP_PRIVACY_PASSWORD=
+SMTP_SECURITY_PASSWORD=
+SMTP_LEGAL_PASSWORD=
+# Optional if a provider's login name differs from the public mailbox address:
+# SMTP_SUPPORT_USERNAME=support@pcln.top
+# SMTP_NOREPLY_USERNAME=noreply@pcln.top
+# SMTP_PRIVACY_USERNAME=privacy@pcln.top
+# SMTP_SECURITY_USERNAME=security@pcln.top
+# SMTP_LEGAL_USERNAME=legal@pcln.top
+# A separate OTP MAC key can override the existing MFA_ENC_KEY.
+# EMAIL_OTP_SECRET=

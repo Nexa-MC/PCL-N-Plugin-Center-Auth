@@ -7,9 +7,9 @@
   "workers_dev": false,
   "keep_vars": true,
   "routes": [{ "pattern": "auth.pcln.top/*", "zone_name": "pcln.top" }],
-  "triggers": { "crons": ["17 3 * * *"] },
+  "triggers": { "crons": ["17 3 * * *", "* * * * *"] },
   "observability": { "enabled": true, "head_sampling_rate": 0.1 },
-  "vars": { "WEB_ORIGIN": "https://pcln.top", "MANAGE_ORIGIN": "https://manage.pcln.top", "BILIBILI_BINDING_ENABLED": "true" },
+  "vars": { "WEB_ORIGIN": "https://pcln.top", "MANAGE_ORIGIN": "https://manage.pcln.top", "BILIBILI_BINDING_ENABLED": "true", "IMAP_ENABLED": "true", "SMTP_HOST": "smtp.feishu.cn", "SMTP_PORT": "465", "IMAP_HOST": "imap.feishu.cn", "IMAP_PORT": "993" },
   "services": [{ "binding": "BILIBILI_VERIFIER", "service": "nexa-bilibili-verifier" }],
   "d1_databases": [{ "binding": "DB", "database_name": "pcln-production", "database_id": "453ca043-67cf-425e-9548-ec125e8389eb", "migrations_dir": "migrations" }],
   "env": { "local": {

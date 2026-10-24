@@ -78,7 +78,7 @@ test('Microsoft website identity and Xbox authorization stay separate in the Wor
     await DB.batch([
       DB.prepare('INSERT INTO users(id,name,password_hash,confirmed_at,created_at) VALUES(?,?,?,?,?)').bind(id, id, 'oauth:test', new Date().toISOString(), new Date().toISOString()),
       DB.prepare("INSERT INTO sessions(token_hash,user_id,scope,expires) VALUES(?,?,'console',?)").bind(digest(token), id, Date.now() + 3600000),
-      DB.prepare("INSERT INTO terms_acceptances(user_id,policy_id,accepted_at) VALUES(?,'terms-1.1',?)").bind(id, new Date().toISOString()),
+      DB.prepare("INSERT INTO terms_acceptances(user_id,policy_id,accepted_at) VALUES(?,'terms-1.2',?)").bind(id, new Date().toISOString()),
       ...(linked ? [DB.prepare("INSERT INTO oauth_identities(provider,subject,user_id,created_at,updated_at) VALUES('microsoft',?,?,?,?)").bind('identity-' + id, id, new Date().toISOString(), new Date().toISOString())] : [])
     ]);
     return token;
@@ -96,14 +96,14 @@ test('Microsoft website identity and Xbox authorization stay separate in the Wor
   }
   const callback = (authorization, extra = '') => mf.dispatchFetch('https://web.test/auth/v1/oauth/microsoft/callback?state=' + authorization.row.state + '&code=' + authorization.code + extra, { redirect: 'manual', headers: { cookie: 'nexa_oauth_state=' + authorization.row.state } });
   await t.test('ordinary Microsoft sign-in still creates a setup session and the shown policy receipts', async () => {
-    const response = await api('/auth/v1/oauth/microsoft/start?tos=1.1', '', 'GET'); assert.equal(response.status, 302);
+    const response = await api('/auth/v1/oauth/microsoft/start?tos=1.2', '', 'GET'); assert.equal(response.status, 302);
     const url = new URL(response.headers.get('location')); assert.equal(url.searchParams.get('scope'), 'openid profile email');
     const row = await DB.prepare('SELECT * FROM oauth_states WHERE state=?').bind(url.searchParams.get('state')).first(); assert.equal(row.user_id, null);
     const code = 'code-' + row.state; fixtures.set(code, row); const before = calls.length;
     const completed = await callback({ row, code }); assert.equal(new URL(completed.headers.get('location')).pathname, '/register');
     assert.match(completed.headers.get('set-cookie'), /nexa_console=/);
     const account = await DB.prepare("SELECT user_id FROM oauth_identities WHERE provider='microsoft' AND subject='identity-null'").first(); assert.ok(account);
-    assert.equal((await DB.prepare('SELECT policy_id FROM privacy_notice_receipts WHERE user_id=?').bind(account.user_id).first()).policy_id, 'privacy-1.1');
+    assert.equal((await DB.prepare('SELECT policy_id FROM privacy_notice_receipts WHERE user_id=?').bind(account.user_id).first()).policy_id, 'privacy-1.2');
     assert.deepEqual(calls.slice(before).map(u => new URL(u).hostname), ['login.microsoftonline.com', 'graph.microsoft.com']);
   });
   await t.test('ordinary Microsoft association uses only identity scopes and never calls Xbox', async () => {

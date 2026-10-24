@@ -34,7 +34,7 @@ test('Bilibili binding verifies trusted profiles and atomically consumes session
     const stamp = new Date().toISOString(), token = 'session-' + id;
     await DB.prepare("INSERT INTO users(id,name,user_handle,password_hash,confirmed_at,created_at) VALUES(?,?,?,'oauth:test',?,?)").bind(id, id, 'user_' + id, stamp, stamp).run();
     await DB.prepare("INSERT INTO sessions(token_hash,user_id,scope,expires) VALUES(?,?,'console',?)").bind(digest(token), id, Date.now() + 3600000).run();
-    await DB.prepare("INSERT INTO terms_acceptances(user_id,policy_id,accepted_at) VALUES(?,'terms-1.1',?)").bind(id, stamp).run();
+    await DB.prepare("INSERT INTO terms_acceptances(user_id,policy_id,accepted_at) VALUES(?,'terms-1.2',?)").bind(id, stamp).run();
     return { id, token };
   }
   const call = (who, path, method = 'POST', data = {}) => mf.dispatchFetch('https://web.test/auth/v1/connections/bilibili' + path, { method, headers: { origin: 'https://web.test', 'x-nexa-request': '1', authorization: 'Bearer ' + who.token, 'content-type': 'application/json' }, ...(method === 'DELETE' || method === 'GET' ? {} : { body: JSON.stringify(data) }) });

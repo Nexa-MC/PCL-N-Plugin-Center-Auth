@@ -29,7 +29,7 @@ test('developer applications use session-bound GitHub facts and enforce manual c
   async function user(id,staff=0,developer=0){const stamp=new Date().toISOString(),token='session-'+id;
     await DB.prepare("INSERT INTO users(id,name,user_handle,password_hash,staff,developer,confirmed_at,created_at) VALUES(?,?,?,'oauth:test',?,?,?,?)").bind(id,id,id,staff,developer,stamp,stamp).run();
     await DB.prepare("INSERT INTO sessions(token_hash,user_id,scope,expires) VALUES(?,?,'console',?)").bind(digest(token),id,Date.now()+3600000).run();
-    await DB.prepare("INSERT INTO terms_acceptances(user_id,policy_id,accepted_at) VALUES(?,'terms-1.1',?)").bind(id,stamp).run();return{id,token};
+    await DB.prepare("INSERT INTO terms_acceptances(user_id,policy_id,accepted_at) VALUES(?,'terms-1.2',?)").bind(id,stamp).run();return{id,token};
   }
   const call=(who,path,method='GET',data,extra={})=>mf.dispatchFetch('https://web.test'+path,{method,redirect:'manual',headers:{origin:'https://web.test','x-nexa-request':'1',authorization:'Bearer '+who.token,'content-type':'application/json',...extra},...(data===undefined?{}:{body:JSON.stringify(data)})});
   async function authorize(who){
