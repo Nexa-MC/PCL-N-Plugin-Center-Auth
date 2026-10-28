@@ -28,7 +28,7 @@ const token = (request, scope) => cookieValue(request, cookieName(scope));
 const bearer = request => (request.headers.get('authorization') || '').match(/^Bearer ([^\s]+)$/)?.[1] || '';
 const credential = (request, scope) => bearer(request) || token(request, scope);
 const scopeOf = scope => ['console', 'operations'].includes(scope) ? scope : fail(400, '无效会话范围');
-const webOrigins = env => [env.WEB_ORIGIN, env.MANAGE_ORIGIN].filter(Boolean);
+const webOrigins = env => [env.WEB_ORIGIN, env.MANAGE_ORIGIN, ...(env.WEB_ORIGIN === 'https://pcln.top' ? ['https://dev.consol.pcln.top', 'https://creator.consol.pcln.top'] : [])].filter(Boolean);
 const cors = env => ({ 'access-control-allow-origin': env.responseOrigin || env.WEB_ORIGIN, 'access-control-allow-credentials': 'true', vary: 'Origin' });
 export function validReturnUrl(value, env) {
   if (typeof value !== 'string' || value.includes('\\') || /[\r\n]/.test(value)) return null;
