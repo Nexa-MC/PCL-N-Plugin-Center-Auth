@@ -1,3 +1,4 @@
+import { deviceFlow } from './device-flow.mjs';
 import { randomBytes, createHash } from 'node:crypto';
 import { digest, hashPassword, verifyPassword } from './password.mjs';
 import { createMailer } from './mailer.mjs';
@@ -132,7 +133,7 @@ export async function privacyForAcceptedTerms(env, termsId) {
 async function sessionUser(env, request, scope) {
   const value = credential(request, scope);
   if (!value) fail(401, '请先登录');
-  const user = await env.DB.prepare(`SELECT u.id,COALESCE(u.display_name,u.name) AS name,u.email,u.staff,u.creator,u.developer,u.trusted_developer AS trustedDeveloper,u.user_handle AS handle,(u.confirmed_at IS NULL) AS setupRequired,
+  const user = await env.DB.prepare(`SELECT s.client,u.id,COALESCE(u.display_name,u.name) AS name,u.email,u.staff,u.creator,u.developer,u.trusted_developer AS trustedDeveloper,u.user_handle AS handle,(u.confirmed_at IS NULL) AS setupRequired,
     EXISTS(SELECT 1 FROM terms_acceptances ta JOIN policy_documents pd ON pd.id=ta.policy_id AND pd.kind='terms' AND pd.current=1 WHERE ta.user_id=u.id) AS termsAccepted
     FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=? AND s.scope=? AND s.expires>? AND u.disabled=0 AND (?=0 OR u.staff=1)`).bind(digest(value), scope, Date.now(), scope === 'operations' ? 1 : 0).first();
   if (!user) fail(401, '请先登录');
@@ -143,7 +144,7 @@ async function createSession(env, user, scope, now, secure) {
   const value = randomBytes(32).toString('base64url');
   await env.DB.batch([
     env.DB.prepare('DELETE FROM sessions WHERE expires<?').bind(now),
-    env.DB.prepare('INSERT INTO sessions(token_hash,user_id,scope,expires) VALUES(?,?,?,?)').bind(digest(value), user.id, scope, now + (scope === 'operations' ? 3600000 : 86400000))
+    env.DB.prepare('INSERT INTO sessions(token_hash,user_id,scope,expires,client) VALUES(?,?,?,?,?)').bind(digest(value), user.id, scope, now + (scope === 'operations' ? 3600000 : 86400000), user.client === 'nexacl' ? 'nexacl' : 'web')
   ]);
   return { value, cookie: `${cookieName(scope)}=${value}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${scope === 'operations' ? 3600 : 86400}${secure ? '; Secure' : ''}` };
 }
@@ -401,6 +402,8 @@ export default {
       }
       // /internal/* 为服务间通道,以 SERVICE_TOKEN 鉴权,不适用浏览器 Origin 检查。
       if (!path.startsWith('/internal/') && !['GET', 'HEAD'].includes(request.method) && (!webOrigins(env).includes(origin) || request.headers.get('x-nexa-request') !== '1')) fail(403, '请求来源无效');
+      const deviceResponse = await deviceFlow(request, env, { body, user: () => sessionUser(env, request, 'console'), rateLimit, fail, json });
+      if (deviceResponse) return deviceResponse;
       if (path.startsWith('/auth/v1/manage/')) {
         const user = await sessionUser(env, request, 'console');
         if (user.staff !== 1) fail(403, '仅网站管理员可访问后台');

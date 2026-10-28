@@ -120,3 +120,24 @@ B站采用 Cloudflare Browser Rendering 受控浏览器核对一次性签名，�
 ## 政策版本与隐私记录
 
 服务条款接受与隐私告知分别存储，隐私状态读取 privacy_notice_receipts，不依赖条款审计语句是否新插入。migration 0012 只修复已知 v1.0 联合确认流程的漏记，不推断新版本已接受。政策版本更新时必须同步 Web 版本常量、文本哈希和 Auth policy_documents；旧版本及接受记录保留，新版本不自动代签。
+
+## NexaCL device authorization
+
+Client sign-in uses `POST /auth/v1/device/authorize` with `{"client_id":"nexacl"}`.
+The response contains a private `device_code`, a display `user_code`, the `/device`
+verification URL, a 600-second lifetime and a five-second polling interval. Never
+put `device_code` in URLs, logs, UI state or persistent storage.
+
+The browser signs in normally, checks the displayed code, then explicitly calls
+`POST /auth/v1/device/confirm` with `user_code` and `decision: approve|deny`.
+The client polls `/auth/v1/device/token` with `client_id` and `device_code`.
+Handle `authorization_pending`, back off on `slow_down`, and terminate on
+`access_denied` or `expired_token`. `/device/cancel` cancels an unfinished flow.
+These POST routes retain the existing Origin and X-Nexa-Request checks.
+
+Apply migration `0025_device_authorization.sql` before deploying this code.
+Only hashes of codes are stored. Redemption is atomic and checks that the
+approving browser session and account remain active. The resulting bearer has
+`client=nexacl`; normal browser sessions default to `web`, and token renewal
+preserves provenance. This identifies the authorization flow, not attested
+hardware or a trusted binary. It is not an anti-bot or mTLS replacement.
