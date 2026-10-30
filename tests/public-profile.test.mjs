@@ -1,0 +1,30 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile, readdir } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import { Miniflare, convertV4MiniflareOptions } from 'miniflare';
+import { migrationStatements } from './sql-statements.mjs';
+
+test('public profile projection exposes only requested fields and binds owner labels to verified identity', async t => {
+  const root = new URL('../', import.meta.url), files = ['index.mjs',...(await readdir(new URL('src/',root),{recursive:true})).filter(f=>f.endsWith('.mjs')&&f!=='index.mjs')];
+  const mf = new Miniflare(convertV4MiniflareOptions({modulesRoot:fileURLToPath(root),modules:files.map(f=>({type:'ESModule',path:fileURLToPath(new URL('src/'+f,root))})),compatibilityDate:'2026-09-26',compatibilityFlags:['nodejs_compat'],d1Databases:{DB:'public-profile'},bindings:{WEB_ORIGIN:'https://web.test',STORE_ACCOUNT_SOURCE_ENABLED:'true',SERVICE_TOKEN:'public-profile-fixture'}}));
+  t.after(()=>mf.dispose());const db=await mf.getD1Database('DB');
+  for(const name of(await readdir(new URL('migrations/',root))).filter(f=>f.endsWith('.sql')).sort())await db.batch(migrationStatements(await readFile(new URL('migrations/'+name,root),'utf8')).map(s=>db.prepare(s)));
+  const at=new Date().toISOString();
+  for(const [id,uid]of[['impostor','muxue1230'],['owner','renamedowner']])await db.prepare('INSERT INTO users(id,name,display_name,user_handle,email,password_hash,staff,developer,trusted_developer,creator,confirmed_at,created_at) VALUES(?,?,?,?,?,?,1,1,1,1,?,?)').bind(id,'private-provider-name-'+id,'Public name',uid,'private@example.test','private-password-hash',at,at).run();
+  await db.prepare("INSERT INTO user_levels(user_id,xp,launched,updated_at) VALUES('owner',12500,1,?)").bind(at).run();
+  await db.prepare("INSERT INTO user_level_display(user_id,badge_id,updated_at) VALUES('owner','administrator',?)").bind(at).run();
+  await db.prepare("INSERT INTO oauth_identities(provider,subject,user_id,created_at,updated_at) VALUES('github','196047672','owner',?,?)").bind(at,at).run();
+  const call=(uid,token='public-profile-fixture',extra={})=>mf.dispatchFetch('https://auth.internal/internal/v1/store/public-identities',{method:'POST',headers:{authorization:'Bearer '+token,'content-type':'application/json'},body:JSON.stringify({uids:[uid],includeProfile:true,...extra})});
+  assert.equal((await call('renamedowner','not-service')).status,401);
+  const response=await call('renamedowner');assert.equal(response.status,200);const data=await response.json(),profile=data.data[0].profile;
+  assert.equal(profile.accountId,'owner');assert.equal(profile.level,4);assert.equal(profile.roles.siteOwner,true);assert.equal(profile.roles.admin,true);assert.equal(profile.roles.trustedDeveloper,true);assert.equal(profile.roles.creator,true);assert.equal(profile.display.label,'Lv-1');assert.deepEqual(profile.badges,[{id:'administrator',name:'Lv-1',replacesLevel:true}]);
+  assert.deepEqual(Object.keys(profile).sort(),['accountId','badges','display','level','roles']);
+  for(const secret of['private@example.test','private-password-hash','private-provider-name','196047672','gameSeconds','donation_cents'])assert.equal(JSON.stringify(data).includes(secret),false);
+  assert.equal((await(await call('muxue1230')).json()).data[0].profile.roles.siteOwner,false);
+  await db.prepare("UPDATE users SET confirmed_at=NULL WHERE id='impostor'").run();assert.deepEqual((await(await call('muxue1230')).json()).data,[]);
+  assert.equal((await call('renamedowner',undefined,{uids:['renamedowner','muxue1230']})).status,400);
+  await db.prepare("UPDATE users SET user_handle='currentowner' WHERE id='owner'").run();assert.deepEqual((await(await call('renamedowner')).json()).data,[]);
+  assert.equal((await(await call('currentowner')).json()).data[0].profile.roles.siteOwner,true);
+  await db.prepare("UPDATE users SET disabled=1 WHERE id='owner'").run();const disabled=(await(await call('currentowner')).json()).data[0];assert.equal(disabled.state,'disabled');assert.equal(disabled.profile,undefined);assert.equal(disabled.uid,null);
+});

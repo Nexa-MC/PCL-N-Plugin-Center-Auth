@@ -1,3 +1,4 @@
+import { publicAccountProfile } from './public-profile.mjs';
 import {requestEmailBinding,verifyEmailBinding} from './email-binding.mjs';
 import { deviceFlow } from './device-flow.mjs';
 import { randomBytes, createHash } from 'node:crypto';
@@ -816,11 +817,12 @@ export default {
       }
       if(path==='/internal/v1/store/public-identities'){
         if(env.STORE_ACCOUNT_SOURCE_ENABLED!=='true')fail(503,'账户持续同步来源尚未启用');serviceAuth(request,env);if(request.method!=='POST')fail(405,'方法不支持');
-        const input=await body(request,16384),ids=input?.ids||[],uids=input?.uids||[];
+        const input=await body(request,16384),ids=input?.ids||[],uids=input?.uids||[],includeProfile=input?.includeProfile===true;
+        if(includeProfile&&ids.length+uids.length!==1)fail(400,'详细公开资料一次仅查询一个账户');
         if(!Array.isArray(ids)||!Array.isArray(uids)||ids.length+uids.length<1||ids.length+uids.length>50||ids.some(id=>typeof id!=='string'||!id||id.length>200)||uids.some(uid=>typeof uid!=='string'||!normalizeHandle(uid)))fail(400,'公开身份查询无效');
         const where=[...(ids.length?[`u.id IN (${ids.map(()=>'?').join(',')})`]:[]),...(uids.length?[`u.user_handle IN (${uids.map(()=>'?').join(',')})`]:[])].join(' OR ');
-        const rows=(await env.DB.prepare(`SELECT u.id AS userId,COALESCE(u.display_name,u.name) AS name,u.user_handle AS uid,COALESCE(c.state,CASE WHEN u.disabled=1 THEN 'disabled' ELSE 'active' END) AS state FROM users u LEFT JOIN account_lifecycle_current c ON c.user_id=u.id WHERE ${where}`).bind(...ids,...uids.map(uid=>uid.toLowerCase())).all()).results;
-        return json(env,{data:rows.map(row=>({...row,name:row.state==='active'?row.name:'Ghost',uid:row.state==='active'?row.uid:null}))});
+        const rows=(await env.DB.prepare(`SELECT u.id AS userId,COALESCE(u.display_name,u.name) AS name,u.user_handle AS uid,COALESCE(c.state,CASE WHEN u.disabled=1 THEN 'disabled' ELSE 'active' END) AS state${includeProfile?',u.staff,u.creator,u.developer,u.trusted_developer AS trustedDeveloper':''} FROM users u LEFT JOIN account_lifecycle_current c ON c.user_id=u.id WHERE (${where})${includeProfile?' AND u.confirmed_at IS NOT NULL':''}`).bind(...ids,...uids.map(uid=>uid.toLowerCase())).all()).results;
+        return json(env,{data:await Promise.all(rows.map(async row=>({userId:row.userId,name:row.state==='active'?row.name:'Ghost',uid:row.state==='active'?row.uid:null,state:row.state,...(includeProfile&&row.state==='active'?{profile:await publicAccountProfile(env,row)}:{})})))});
       }
       if (path === '/internal/v1/store/accounts/events' || path === '/internal/v1/store/accounts/snapshot') {
         if (env.STORE_ACCOUNT_SOURCE_ENABLED !== 'true') fail(503, '账户持续同步来源尚未启用');
