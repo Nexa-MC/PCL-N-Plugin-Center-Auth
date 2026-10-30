@@ -26,6 +26,7 @@ function nullMailer() {
   const log = (kind, to) => console.info(JSON.stringify({ mail: kind, to: Boolean(to) }));
   return {
     send: async (to, subject) => log(subject, to),
+    emailBindingCode: async () => { throw new Error('Email provider is not configured'); },
     loginCode: async () => { throw new Error('Email provider is not configured'); },
     accountDeletionRequested: (to, at) => log(`account.deletion.requested:${at}`, to),
     accountDeletionCancelled: to => log('account.deletion.cancelled', to),
@@ -43,6 +44,7 @@ export function createMailer(env) {
   };
   return {
     send,
+    emailBindingCode: (to,code,isOld) => sendEmail(env,{to,subject:isOld?'确认更换 NexaMC 账户邮箱':'验证 NexaMC 账户邮箱',text:`${isOld?'你正在更换账户邮箱。原邮箱确认码':'你的邮箱绑定验证码'}：${code}。5分钟内有效，请勿转发。如非本人操作，请忽略并检查账户安全。`}),
     loginCode: (to, code) => sendEmail(env, { to, ...loginCodeTemplate(code) }),
     accountDeletionRequested: (to, at) => send(to, '你的 Nexa Cloud 账户注销申请已收到', `我们已收到你的注销申请，将于 ${at} 生效。在此期间登录账户即可撤销注销。`),
     accountDeletionCancelled: to => send(to, '你的 Nexa Cloud 账户注销已撤销', '你已撤销注销申请，账户继续保持正常可用。'),
