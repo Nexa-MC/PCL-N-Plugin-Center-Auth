@@ -95,6 +95,31 @@ test('Microsoft website identity and Xbox authorization stay separate in the Wor
     return { url, row, code };
   }
   const callback = (authorization, extra = '') => mf.dispatchFetch('https://web.test/auth/v1/oauth/microsoft/callback?state=' + authorization.row.state + '&code=' + authorization.code + extra, { redirect: 'manual', headers: { cookie: 'nexa_oauth_state=' + authorization.row.state } });
+  await t.test('anonymous policy discovery follows the active D1 version and preserves OAuth version checks', async () => {
+    const discover = () => mf.dispatchFetch('https://web.test/auth/v1/policies/current', { headers: { origin: 'https://web.test' } });
+    const response = await discover();
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get('cache-control'), 'no-store');
+    assert.equal(response.headers.get('access-control-allow-origin'), 'https://web.test');
+    assert.deepEqual(await response.json(), { terms: { version: '1.2' }, privacy: { version: '1.2' } });
+    await DB.prepare("UPDATE policy_documents SET current=CASE WHEN version='1.1' THEN 1 ELSE 0 END WHERE kind IN ('terms','privacy')").run();
+    try {
+      const policies = await (await discover()).json();
+      assert.equal(policies.terms.version, '1.1');
+      assert.equal(policies.privacy.version, '1.1');
+      const stale = await api('/auth/v1/oauth/microsoft/start?tos=1.2', '', 'GET');
+      assert.equal(stale.status, 400);
+      const missing = await api('/auth/v1/oauth/microsoft/start', '', 'GET');
+      assert.equal(missing.status, 400);
+      const accepted = await api('/auth/v1/oauth/microsoft/start?tos=' + policies.terms.version, '', 'GET');
+      assert.equal(accepted.status, 302);
+      const state = new URL(accepted.headers.get('location')).searchParams.get('state');
+      const row = await DB.prepare('SELECT terms_policy_id FROM oauth_states WHERE state=?').bind(state).first();
+      assert.equal(row.terms_policy_id, 'terms-1.1');
+    } finally {
+      await DB.prepare("UPDATE policy_documents SET current=CASE WHEN version='1.2' THEN 1 ELSE 0 END WHERE kind IN ('terms','privacy')").run();
+    }
+  });
   await t.test('ordinary Microsoft sign-in still creates a setup session and the shown policy receipts', async () => {
     const response = await api('/auth/v1/oauth/microsoft/start?tos=1.2', '', 'GET'); assert.equal(response.status, 302);
     const url = new URL(response.headers.get('location')); assert.equal(url.searchParams.get('scope'), 'openid profile email');

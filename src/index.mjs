@@ -403,6 +403,10 @@ export default {
         if (!webOrigins(env).includes(origin)) fail(403, '请求来源无效');
         return new Response(null, { status: 204, headers: { ...cors(env), 'access-control-allow-methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS', 'access-control-allow-headers': 'content-type, x-nexa-request, authorization', 'access-control-max-age': '600' } });
       }
+      if (path === '/auth/v1/policies/current' && request.method === 'GET') {
+        const [terms, privacy] = await Promise.all([currentPolicy(env, 'terms'), currentPolicy(env, 'privacy')]);
+        return json(env, { terms: { version: terms.version }, privacy: { version: privacy.version } });
+      }
       // /internal/* 为服务间通道,以 SERVICE_TOKEN 鉴权,不适用浏览器 Origin 检查。
       if (!path.startsWith('/internal/') && !['GET', 'HEAD'].includes(request.method) && (!webOrigins(env).includes(origin) || request.headers.get('x-nexa-request') !== '1')) fail(403, '请求来源无效');
       const deviceResponse = await deviceFlow(request, env, { body, user: () => sessionUser(env, request, 'console'), rateLimit, fail, json });
