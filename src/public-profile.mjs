@@ -2,7 +2,7 @@ import { loadProgression } from './progression.mjs';
 
 // Same verified GitHub subject used by the existing owner-maintenance workflow.
 // A mutable display name or handle cannot confer the site-owner label.
-const SITE_OWNER_GITHUB_SUBJECT = '196047672';
+export const SITE_OWNER_GITHUB_SUBJECT = '196047672';
 export async function publicAccountProfile(env, user) {
   const [progression, owner] = await Promise.all([
     loadProgression(env, { id: user.userId, staff: user.staff }),

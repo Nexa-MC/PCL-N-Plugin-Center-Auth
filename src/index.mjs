@@ -1,4 +1,4 @@
-import { publicAccountProfile } from './public-profile.mjs';
+import { publicAccountProfile, SITE_OWNER_GITHUB_SUBJECT } from './public-profile.mjs';
 import {requestEmailBinding,verifyEmailBinding} from './email-binding.mjs';
 import { deviceFlow } from './device-flow.mjs';
 import { randomBytes, createHash } from 'node:crypto';
@@ -136,8 +136,9 @@ async function sessionUser(env, request, scope) {
   const value = credential(request, scope);
   if (!value) fail(401, '请先登录');
   const user = await env.DB.prepare(`SELECT s.client,u.id,COALESCE(u.display_name,u.name) AS name,u.email,u.staff,u.creator,u.developer,u.trusted_developer AS trustedDeveloper,u.user_handle AS handle,(u.confirmed_at IS NULL) AS setupRequired,
-    EXISTS(SELECT 1 FROM terms_acceptances ta JOIN policy_documents pd ON pd.id=ta.policy_id AND pd.kind='terms' AND pd.current=1 WHERE ta.user_id=u.id) AS termsAccepted
-    FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=? AND s.scope=? AND s.expires>? AND u.disabled=0 AND (?=0 OR u.staff=1)`).bind(digest(value), scope, Date.now(), scope === 'operations' ? 1 : 0).first();
+    EXISTS(SELECT 1 FROM terms_acceptances ta JOIN policy_documents pd ON pd.id=ta.policy_id AND pd.kind='terms' AND pd.current=1 WHERE ta.user_id=u.id) AS termsAccepted,
+    (u.staff=1 AND EXISTS(SELECT 1 FROM oauth_identities oi WHERE oi.user_id=u.id AND oi.provider='github' AND oi.subject=?)) AS canSelfReviewContent
+    FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=? AND s.scope=? AND s.expires>? AND u.disabled=0 AND (?=0 OR u.staff=1)`).bind(SITE_OWNER_GITHUB_SUBJECT, digest(value), scope, Date.now(), scope === 'operations' ? 1 : 0).first();
   if (!user) fail(401, '请先登录');
   const level = await loadLevel(env, user.id);
   return { ...user, level: level.level, xp: level.xp };

@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { readFile, readdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { Miniflare, convertV4MiniflareOptions } from 'miniflare';
@@ -15,6 +16,19 @@ test('public profile projection exposes only requested fields and binds owner la
   await db.prepare("INSERT INTO user_levels(user_id,xp,launched,updated_at) VALUES('owner',12500,1,?)").bind(at).run();
   await db.prepare("INSERT INTO user_level_display(user_id,badge_id,updated_at) VALUES('owner','administrator',?)").bind(at).run();
   await db.prepare("INSERT INTO oauth_identities(provider,subject,user_id,created_at,updated_at) VALUES('github','196047672','owner',?,?)").bind(at,at).run();
+  for (const id of ['owner','impostor']) {
+    await db.prepare('INSERT INTO sessions(token_hash,user_id,scope,expires) VALUES(?,?,?,?)')
+      .bind(createHash('sha256').update('session-'+id).digest('hex'),id,'console',Date.now()+60000).run();
+  }
+  const session = async id => {
+    const response = await mf.dispatchFetch('https://auth.internal/auth/v1/sessions/current?scope=console', {headers:{authorization:'Bearer session-'+id}});
+    assert.equal(response.status,200);return response.json();
+  };
+  assert.equal((await session('owner')).canSelfReviewContent,1);
+  assert.equal((await session('impostor')).canSelfReviewContent,0);
+  await db.prepare("UPDATE users SET staff=0 WHERE id='owner'").run();
+  assert.equal((await session('owner')).canSelfReviewContent,0);
+  await db.prepare("UPDATE users SET staff=1 WHERE id='owner'").run();
   const call=(uid,token='public-profile-fixture',extra={})=>mf.dispatchFetch('https://auth.internal/internal/v1/store/public-identities',{method:'POST',headers:{authorization:'Bearer '+token,'content-type':'application/json'},body:JSON.stringify({uids:[uid],includeProfile:true,...extra})});
   assert.equal((await call('renamedowner','not-service')).status,401);
   const response=await call('renamedowner');assert.equal(response.status,200);const data=await response.json(),profile=data.data[0].profile;
@@ -26,5 +40,11 @@ test('public profile projection exposes only requested fields and binds owner la
   assert.equal((await call('renamedowner',undefined,{uids:['renamedowner','muxue1230']})).status,400);
   await db.prepare("UPDATE users SET user_handle='currentowner' WHERE id='owner'").run();assert.deepEqual((await(await call('renamedowner')).json()).data,[]);
   assert.equal((await(await call('currentowner')).json()).data[0].profile.roles.siteOwner,true);
+  assert.equal((await session('owner')).canSelfReviewContent,1);
+  await db.prepare("UPDATE oauth_identities SET subject='other-subject' WHERE user_id='owner'").run();
+  assert.equal((await session('owner')).canSelfReviewContent,0);
+  await db.prepare("UPDATE oauth_identities SET subject='196047672',provider='microsoft' WHERE user_id='owner'").run();
+  assert.equal((await session('owner')).canSelfReviewContent,0);
   await db.prepare("UPDATE users SET disabled=1 WHERE id='owner'").run();const disabled=(await(await call('currentowner')).json()).data[0];assert.equal(disabled.state,'disabled');assert.equal(disabled.profile,undefined);assert.equal(disabled.uid,null);
+  assert.equal((await mf.dispatchFetch('https://auth.internal/auth/v1/sessions/current?scope=console',{headers:{authorization:'Bearer session-owner'}})).status,401);
 });
